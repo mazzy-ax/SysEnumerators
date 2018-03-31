@@ -1,0 +1,137 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int64
+{
+	#AviFiles
+
+	RunbaseProgress base;
+
+    public RunbaseProgress base()
+    {
+        return base;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super();
+    
+        if( ret )
+        {
+            this.base().reset();
+        }
+    
+        return ret;
+    }
+
+    public RunbaseProgress defaultProgress(Caption caption = '', int64 total = 0, Filename animation = #AviStopwatch, Runbase runbase = null)
+    {
+        RunbaseProgress progress;
+    ;
+        if(runbase != null)
+        {
+            runbase.progressInit(caption, total, animation);
+            progress = runbase.parmProgress();
+        }
+        else
+        {
+            RunbaseProgress::construct(1);
+            progress.setCaption(caption);
+            progress.setTotal(total);
+            progress.setAnimation(animation);
+        }
+    
+        return progress;
+    
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret;
+    
+        if( estimatedIterations >= 0 )
+        {
+            this.base().setTotal(estimatedIterations);
+        }
+    
+        ret = this.base().getTotal();
+    
+        if( ret == 0 )
+        {
+            ret = super();
+        }
+    
+        return ret;
+    }
+
+    public void new(RunbaseProgress _base = null)
+    {
+        if( _base == null )
+        {
+            _base = this.defaultProgress();
+        }
+    
+        base = _base;
+    
+        if( base.getTotal() )
+        {
+            super(SysSequenceInt64::construct(1, base.getTotal()));
+        }
+        else
+        {
+            super();
+        }
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+    
+        if( ret )
+        {
+            this.base().incCount();
+        }
+    
+        return ret;
+    }
+
+    public static SysEnumerator_RunBaseProgress construct(RunbaseProgress base = null)
+    {
+        SysEnumerator_RunBaseProgress enumerator = new SysEnumerator_RunBaseProgress(base);
+    
+        return enumerator;
+    }
+
+    #AviFiles
+    public static SysEnumerator_RunBaseProgress newFromRunBase( Runbase   runbase    = null
+                                                              , int64     total      = 0
+                                                              , Caption   caption    = ''
+                                                              , Filename  animation  = #AviStopwatch
+                                                              )
+    {
+        SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(runbase.parmProgress());
+        RunbaseProgress progress = enumerator.base();
+    
+        progress.setAnimation(animation);
+        progress.setCaption(caption);
+        progress.setTotal(total);
+    
+        return enumerator;
+    }
+
+    public static SysEnumerator_RunBaseProgress newGeneral(
+        Filename    animation = #AviStopwatch,
+        Caption     caption = '',
+        int64       total = 0)
+    {
+        SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct();
+        RunbaseProgress progress = enumerator.base();
+    ;
+        progress.setAnimation(animation);
+        progress.setCaption(caption);
+        progress.setTotal(total);
+    
+        return enumerator;
+    
+    }
+}

@@ -1,0 +1,168 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_XmlNodeListIndexTest extends SysTestCase
+{
+
+    void testChildNodes()
+    {
+        str xmlStr = @'
+            <root>
+                <element id="1">
+                    <sub>1.1</sub>
+                    <sub>1.2</sub>
+                    <sub>1.3</sub>
+                    <sub>1.4</sub>
+                </element>
+                <ххх>
+                    <sub>х.1</sub>
+                    <sub>х.2</sub>
+                    <sub>х.3</sub>
+                </ххх>
+                <element id="2">
+                    <sub>2.1</sub>
+                    <sub>2.2</sub>
+                    <sub>2.3</sub>
+                </element>
+            </root>
+        ';
+        XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
+        SysEnumerator_XmlNodeListIndex se = SysEnumerator_XmlNodeListIndex::construct(xmlDoc.root().childNodes());
+        int64 zero64;
+    
+        this.assertNotNull(se);
+        this.assertEquals(zero64 + 3, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('element', se.current().name());
+        this.assertEquals('element', se.currentValue().name());
+        this.assertEquals(0, se.currentIdx());
+        this.assertEquals(0, se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('ххх', se.current().name());
+        this.assertEquals('ххх', se.currentValue().name());
+        this.assertEquals(1, se.currentIdx());
+        this.assertEquals(1, se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('element', se.current().name());
+        this.assertEquals('element', se.currentValue().name());
+        this.assertEquals(2, se.currentIdx());
+        this.assertEquals(2, se.currentKey());
+    
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(zero64 + 3, se.estimatedIterations());
+    }
+
+    void testEmpty()
+    {
+        XmlDocument xmlDoc = XmlDocument::newBlank();
+        SysEnumerator_XmlNodeListIndex se = SysEnumerator_XmlNodeListIndex::construct(xmlDoc.childNodes());
+        int64 zero64;
+    
+        this.assertNotNull(se);
+        this.assertEquals(zero64 + 1, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('xml', se.current().name());
+        this.assertEquals('xml', se.currentValue().name());
+        this.assertEquals(0, se.currentIdx());
+        this.assertEquals(0, se.currentKey());
+    
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(zero64 + 1, se.estimatedIterations());
+    }
+
+    void testXPath()
+    {
+        str xmlStr = @'
+            <root>
+                <element id="1">
+                    <sub>1.1</sub>
+                    <sub>1.2</sub>
+                    <sub>1.3</sub>
+                    <sub>1.4</sub>
+                </element>
+                <ххх>
+                    <sub>х.1</sub>
+                    <sub>х.2</sub>
+                    <sub>х.3</sub>
+                </ххх>
+                <element id="2">
+                    <sub>2.1</sub>
+                    <sub>2.2</sub>
+                    <sub>2.3</sub>
+                </element>
+            </root>
+        ';
+        XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
+        SysEnumerator_XmlNodeListIndex se = SysEnumerator_XmlNodeListIndex::construct(xmlDoc.selectNodes('root/element/sub'));
+        int64 zero64;
+    
+        this.assertNotNull(se);
+        this.assertEquals(zero64 + 7, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('1.1', se.current().text());
+        this.assertEquals('1.1', se.currentValue().text());
+        this.assertEquals(0, se.currentIdx());
+        this.assertEquals(0, se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('1.2', se.current().text());
+        this.assertEquals('1.2', se.currentValue().text());
+        this.assertEquals(1, se.currentIdx());
+        this.assertEquals(1, se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('1.3', se.current().text());
+        this.assertEquals('1.3', se.currentValue().text());
+        this.assertEquals(2, se.currentIdx());
+        this.assertEquals(2, se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('1.4', se.current().text());
+        this.assertEquals('1.4', se.currentValue().text());
+        this.assertEquals(3, se.currentIdx());
+        this.assertEquals(3, se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('2.1', se.current().text());
+        this.assertEquals('2.1', se.currentValue().text());
+        this.assertEquals(4, se.currentIdx());
+        this.assertEquals(4, se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('2.2', se.current().text());
+        this.assertEquals('2.2', se.currentValue().text());
+        this.assertEquals(5, se.currentIdx());
+        this.assertEquals(5, se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('2.3', se.current().text());
+        this.assertEquals('2.3', se.currentValue().text());
+        this.assertEquals(6, se.currentIdx());
+        this.assertEquals(6, se.currentKey());
+    
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(zero64 + 7, se.estimatedIterations());
+    }
+}

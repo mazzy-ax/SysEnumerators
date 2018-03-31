@@ -1,0 +1,69 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+
+/// <summary>
+/// Возвращает порядковый номер текущего элемента.
+/// После выхода из цикла итерации, содержит общее число проитерированных элементов.
+/// </summary>
+public class SysEnumerator_Counter64 extends xSysEnumerator
+{
+	int64 counter;
+
+    public int64 current()
+    {
+        return counter;
+    }
+
+    public int64 currentIdx()
+    {
+        return this.current();
+    }
+
+    public int64 currentKey()
+    {
+        return this.current();
+    }
+
+    public int64 currentValue()
+    {
+        return this.current();
+    }
+
+    protected void init()
+    {;
+        counter = 0;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+    
+        if( ret )
+        {
+            ++counter;
+        }
+    
+        return ret;
+    }
+
+    /// <summary>
+    /// Метод возвращает число выполненных итераций
+    /// </summary>
+    /// <remarks>
+    /// Метод можно вызвать и в цикле, и после завершения цикла
+    /// </remarks>
+    public int64 parmCounter(int64 _counter = counter)
+    {;
+        counter = _counter;
+        return counter;
+    }
+
+    public static SysEnumerator_Counter64 construct()
+    {
+        SysEnumerator_Counter64 enumerator = new SysEnumerator_Counter64();
+    
+        return enumerator;
+    }
+}

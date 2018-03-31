@@ -1,0 +1,335 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: PerfSysEnumerator_XmlTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #PerfSysEnumerator_XmlTest
+    PROPERTIES
+      Name                #PerfSysEnumerator_XmlTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #class PerfSysEnumerator_XmlTest extends SysTestCase
+        #{
+        #    #define.loopCount(1000)
+        #}
+      ENDSOURCE
+      SOURCE #testXml
+        #void testXml()
+        #{
+        #    str xmlStr = @'
+        #        <root>
+        #            <element id="1">
+        #                <sub>1.1</sub>
+        #                <sub>1.2</sub>
+        #                <sub>1.3</sub>
+        #                <sub>1.4</sub>
+        #            </element>
+        #            <ххх>
+        #                <sub>х.1</sub>
+        #                <sub>х.2</sub>
+        #                <sub>х.3</sub>
+        #            </ххх>
+        #            <element id="2">
+        #                <sub>2.1</sub>
+        #                <sub>2.2</sub>
+        #                <sub>2.3</sub>
+        #            </element>
+        #        </root>
+        #    ';
+        #    XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
+        #    SysEnumerator_XmlNodeList se;
+        #    int64 zero64;
+        #
+        #    SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        #    while(loop.moveNext())
+        #    {
+        #        se = SysEnumerator_XmlNodeList::construct(xmlDoc.selectNodes('root/element[1]/sub'));
+        #        this.assertNotNull(se);
+        #        this.assertEquals(zero64 + 4, se.estimatedIterations());
+        #        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.1', se.current().text());
+        #        this.assertEquals(0, se.currentKey());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.2', se.current().text());
+        #        this.assertEquals(1, se.currentKey());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.3', se.current().text());
+        #        this.assertEquals(2, se.currentKey());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.4', se.current().text());
+        #        this.assertEquals(3, se.currentKey());
+        #
+        #        this.assertFalse(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #        this.assertEquals(zero64 + 4, se.estimatedIterations());
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #testXmlIndex
+        #void testXmlIndex()
+        #{
+        #    str xmlStr = @'
+        #        <root>
+        #            <element id="1">
+        #                <sub>1.1</sub>
+        #                <sub>1.2</sub>
+        #                <sub>1.3</sub>
+        #                <sub>1.4</sub>
+        #            </element>
+        #            <ххх>
+        #                <sub>х.1</sub>
+        #                <sub>х.2</sub>
+        #                <sub>х.3</sub>
+        #            </ххх>
+        #            <element id="2">
+        #                <sub>2.1</sub>
+        #                <sub>2.2</sub>
+        #                <sub>2.3</sub>
+        #            </element>
+        #        </root>
+        #    ';
+        #    XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
+        #    SysEnumerator_XmlNodeListIndex se;
+        #    int64 zero64;
+        #
+        #    SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        #    while(loop.moveNext())
+        #    {
+        #        se = SysEnumerator_XmlNodeListIndex::construct(xmlDoc.selectNodes('root/element[1]/sub'));
+        #        this.assertNotNull(se);
+        #        this.assertEquals(zero64 + 4, se.estimatedIterations());
+        #        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.1', se.current().text());
+        #        this.assertEquals(0, se.currentKey());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.2', se.current().text());
+        #        this.assertEquals(1, se.currentKey());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.3', se.current().text());
+        #        this.assertEquals(2, se.currentKey());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.4', se.current().text());
+        #        this.assertEquals(3, se.currentKey());
+        #
+        #        this.assertFalse(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #        this.assertEquals(zero64 + 4, se.estimatedIterations());
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #testXmlSibling
+        #void testXmlSibling()
+        #{
+        #    str xmlStr = @'
+        #        <root>
+        #            <element id="1">
+        #                <sub>1.1</sub>
+        #                <sub>1.2</sub>
+        #                <sub>1.3</sub>
+        #                <sub>1.4</sub>
+        #            </element>
+        #            <ххх>
+        #                <sub>х.1</sub>
+        #                <sub>х.2</sub>
+        #                <sub>х.3</sub>
+        #            </ххх>
+        #            <element id="2">
+        #                <sub>2.1</sub>
+        #                <sub>2.2</sub>
+        #                <sub>2.3</sub>
+        #            </element>
+        #        </root>
+        #    ';
+        #    XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
+        #    SysEnumerator_XmlSibling se;
+        #    int64 zero64;
+        #
+        #    SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        #    while(loop.moveNext())
+        #    {
+        #        se = SysEnumerator_XmlSibling::construct(xmlDoc.root().firstChild().firstChild());
+        #        this.assertNotNull(se);
+        #        this.assertEquals(int64Max(), se.estimatedIterations());
+        #        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.1', se.current().text());
+        #        this.assertEquals(0, se.currentKey());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.2', se.current().text());
+        #        this.assertEquals(1, se.currentKey());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.3', se.current().text());
+        #        this.assertEquals(2, se.currentKey());
+        #
+        #        this.assertTrue(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #        this.assertEquals('1.4', se.current().text());
+        #        this.assertEquals(3, se.currentKey());
+        #
+        #        this.assertFalse(se.moveNext());
+        #        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #        this.assertEquals(int64Max(), se.estimatedIterations());
+        #    }
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: PerfSysEnumeratorTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #PerfSysEnumeratorTest
+    PROPERTIES
+      Name                #PerfSysEnumeratorTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #class PerfSysEnumeratorTest extends SysTestCase
+        #{
+        #    #define.loopCount(5000)
+        #}
+      ENDSOURCE
+      SOURCE #testEnumerator
+        #void testEnumerator()
+        #{
+        #    int dummy;
+        #    SysEnumerator se = SysSequenceInt::construct(1, #loopCount).getEnumerator();
+        #
+        #    while(se.moveNext())
+        #    {
+        #        dummy = se.current();
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #testEnumeratorDriver
+        #void testEnumeratorDriver()
+        #{
+        #    int dummy;
+        #    SysEnumerator_Int se = SysEnumerator_Int::construct(SysSequenceInt::construct(1, #loopCount));
+        #
+        #    while(se.moveNext())
+        #    {
+        #        dummy = se.current();
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #testFor
+        #void testFor()
+        #{
+        #    int dummy;
+        #    int i;
+        #
+        #    for(i=1; i<=#loopCount; i++)
+        #    {
+        #        dummy = i;
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #testWhile
+        #void testWhile()
+        #{
+        #    int dummy;
+        #    int i = 1;
+        #
+        #    while(i<=#loopCount)
+        #    {
+        #        dummy = i;
+        #        i++;
+        #    }
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: PRN
+
+; Microsoft Dynamics AX Project : mazzyEnumeratorsPerfTest unloaded
+; --------------------------------------------------------------------------------
+  PROJECTVERSION 2
+  
+  PROJECT #mazzyEnumeratorsPerfTest
+   SHARED
+  PROPERTIES
+    Name                #mazzyEnumeratorsPerfTest
+  ENDPROPERTIES
+  
+    PROJECTCLASS SysTestProject
+    APPDATAEXPORT
+    SOURCE #mazzyEnumeratorsPerfTest
+      #<APPDATA><info><version>2</version><onErrorAction>0</onErrorAction><codeCoverage>0</codeCoverage><listeners><name>SysTestListenerDB</name><name>SysTestListenerProgressbar</name></listeners></info></APPDATA>
+    ENDSOURCE
+    ENDAPPDATAEXPORT
+    GROUP #PerfSysEnumerators
+      PROPERTIES
+        Name                #PerfSysEnumerators
+        ProjectGroupType    #Classes
+        GroupMask           #<PerfSysEnumerator.*Test>
+        PreventEditProperties #No
+      ENDPROPERTIES
+      
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50155
+        NODETYPE 329
+        NAME #PerfSysEnumerator_XmlTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50058
+        NODETYPE 329
+        NAME #PerfSysEnumeratorTest
+      ENDNODE
+      ENDGROUP
+      
+  ENDPROJECT
+  
+
+***Element: END

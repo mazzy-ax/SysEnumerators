@@ -1,0 +1,45 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_EnumTest extends SysTestCase
+{
+
+    void testEnum()
+    {
+        DictEnum dictEnum = new DictEnum(enumnum(ABC));
+        SysEnumerator_Enum se = SysEnumerator_Enum::construct(dictEnum);
+        int64 zero64;
+    
+        this.assertNotNull(se);
+        this.assertEquals(zero64 + 4, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(0, se.current());
+        this.assertEquals('None', se.currentKey());
+        this.assertEquals(0+ABC::None, se.currentValue());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(1, se.current());
+        this.assertEquals('A', se.currentKey());
+        this.assertEquals(0+ABC::A, se.currentValue());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(2, se.current());
+        this.assertEquals('B', se.currentKey());
+        this.assertEquals(0+ABC::B, se.currentValue());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(3, se.current());
+        this.assertEquals('C', se.currentKey());
+        this.assertEquals(0+ABC::C, se.currentValue());
+    
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(zero64 + 4, se.estimatedIterations());
+    }
+}

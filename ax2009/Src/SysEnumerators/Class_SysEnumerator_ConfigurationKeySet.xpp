@@ -1,0 +1,59 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
+{
+	ConfigurationKeySet base;
+
+    public ConfigurationKeySet base()
+    {
+        return base;
+    }
+
+    public configurationKeyId current()
+    {
+        int idx = this.currentIdx();
+        configurationKeyId ret = this.base().cnt2Id(idx);
+    
+        return ret;
+    }
+
+    public int currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public SysDictConfigurationKey currentValue()
+    {
+        SysDictConfigurationKey configurationKey = new SysDictConfigurationKey(this.current());
+    
+        return configurationKey;
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().cnt();
+    
+        return ret;
+    }
+
+    public void new(ConfigurationKeySet _base, SysSequenceInt _idx = null)
+    {;
+        Debug::assert(_base != null);
+    
+        base = _base;
+        super(_idx);
+    }
+
+    public static SysEnumerator_ConfigurationKeySet construct(ConfigurationKeySet base, SysRangeInt idx = null)
+    {
+        SysEnumerator_ConfigurationKeySet enumerator = new SysEnumerator_ConfigurationKeySet(base, idx);
+    
+        return enumerator;
+    }
+}

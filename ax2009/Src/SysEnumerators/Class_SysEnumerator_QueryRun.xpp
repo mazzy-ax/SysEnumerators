@@ -1,0 +1,78 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_QueryRun extends xSysEnumerator
+{
+	QueryRun base;
+	int64 countLoops;
+
+    public QueryRun base()
+    {
+        return base;
+    }
+
+    public Common current(int dataSourceNo = 1)
+    {
+        anytype ret = base.getNo(dataSourceNo);
+    
+        return ret;
+    }
+
+    public Common currentIdx()
+    {
+        return this.current();
+    }
+
+    public Common currentKey()
+    {
+        return this.current();
+    }
+
+    public Common currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        if( countLoops == 0 )
+        {
+            countLoops = SysQuery::countLoops(this.base());
+        }
+    
+        return countLoops;
+    }
+
+    public void new(QueryRun _base)
+    {;
+        Debug::assert(_base != null);
+    
+        base = _base;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super() && base.next();
+    
+        return ret;
+    }
+
+    public void reset()
+    {
+        base.reset();
+        super();
+    }
+
+    public static SysEnumerator_QueryRun construct(QueryRun base)
+    {
+        SysEnumerator_QueryRun enumerator = new SysEnumerator_QueryRun(base);
+    
+        return enumerator;
+    }
+}

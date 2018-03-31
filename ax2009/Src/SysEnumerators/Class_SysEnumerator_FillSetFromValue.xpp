@@ -1,0 +1,29 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_FillSetFromValue extends SysEnumerator_FillSet
+{
+
+    protected boolean moveNextPost(boolean ret)
+    {
+        anytype value;
+    
+        if( ret && enumeratorGroup )
+        {
+            value = enumeratorGroup.currentValue();
+            ret = this.base(typeof(value)).add(value);
+        }
+
+    
+        ret = super(ret);
+    
+        return ret;
+    }
+
+    public static SysEnumerator_FillSetFromValue construct()
+    {
+        SysEnumerator_FillSetFromValue enumerator = new SysEnumerator_FillSetFromValue();
+    
+        return enumerator;
+    }
+}

@@ -1,0 +1,251 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public abstract class xSysEnumerator implements ISysEnumerator
+{
+	SysEnumeratorPosition position;
+	
+    /// <remarks>
+    /// <remarks>
+    /// Предполагается, что класс потомок может реализовать достаточно тяжеловесную бизнес-логику.
+    /// Поэтому необходимо минимизировать число действий в классе-потомке.
+    ///
+    /// Поэтому в классе-потомке сначала должен вызываться super().
+    /// Свои действия класс-потомок должен выполнять только если super возвратил true.
+    ///
+    /// Первый вариант реализации:
+    ///     protected boolean begin()
+    ///     {
+    ///         return super() && this.myBeginAction();
+    ///     }
+    ///
+    /// Второй вариант реализации:
+    ///     protected boolean begin()
+    ///     {
+    ///         boolean ret = super();
+    ///
+    ///         if( ret )
+    ///         {
+    ///             // myBeginActions
+    ///         }
+    ///
+    ///         return ret;
+    ///     }
+    /// </remarks>
+    protected boolean begin()
+    {
+        return true;
+    }
+
+    protected boolean currentIdxProvided()
+    {
+        return false;
+    }
+
+    protected boolean currentKeyProvided()
+    {
+        return false;
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return false;
+    }
+
+    public str definitionString()
+    {
+        //TODO mazzy
+        return '';
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = int64Max();
+    
+        return ret;
+    }
+
+    protected void eventAddedToGroup(SysEnumeratorGroup enumeratorGroup)
+    {
+    }
+
+    /// <remarks>
+    /// может вызываться повторно. например, из reset();
+    /// </remarks>
+    protected void init()
+    {;
+        position = SysEnumeratorPosition::BeforeFirstElement;
+    }
+
+    protected boolean more()
+    {
+        return position != SysEnumeratorPosition::Outside;
+    }
+
+    public boolean moveNext()
+    {
+        boolean ret = this.moveNextPre();
+    
+        if( ret )
+        {
+            switch(this.position())
+            {
+                case SysEnumeratorPosition::Inside:
+                    ret = this.next();
+                    ret = ret && this.more();
+                    this.setPosition(ret);
+                    break;
+    
+                case SysEnumeratorPosition::BeforeFirstElement:
+                    ret = this.begin();
+                    ret = ret && this.more();
+                    this.setPosition(ret);
+                    break;
+    
+                case SysEnumeratorPosition::Outside:
+                    ret = false;
+                    break;
+    
+                default:
+                    throw error(Error::wrongUseOfFunction(funcname()));
+            }
+
+        }
+
+    
+        ret = this.moveNextPost(ret);
+    
+        return ret;
+    }
+
+    protected boolean moveNextPost(boolean ret)
+    {
+        return ret;
+    }
+
+    protected boolean moveNextPre()
+    {
+        return true;
+    }
+
+    /// <remarks>
+    /// в new() потомков рекомендуется вызывать super() после всех инициализаций.
+    /// </remarks>
+    public void new()
+    {
+        this.init();
+    }
+
+    /// <remarks>
+    /// Предполагается, что класс потомок может реализовать достаточно тяжеловесную бизнес-логику.
+    /// Поэтому необходимо минимизировать число действий в классе-потомке.
+    ///
+    /// Поэтому в классе-потомке сначала должен вызываться super().
+    /// Свои действия класс-потомок должен выполнять только если super возвратил true.
+    ///
+    /// Первый вариант реализации:
+    ///     protected boolean next()
+    ///     {
+    ///         boolean ret = super() && this.myNextAction();
+    ///
+    ///         return ret;
+    ///     }
+
+    ///
+    /// Второй вариант реализации:
+    ///     protected boolean begin()
+    ///     {
+    ///         boolean ret = super();
+    ///
+    ///         if( ret )
+    ///         {
+    ///             // myNextActions
+    ///         }
+
+    ///
+    ///         return ret;
+    ///     }
+
+    /// </remarks>
+    protected boolean next()
+    {
+        return true;
+    }
+
+    public SysEnumeratorPosition position()
+    {
+        return position;
+    }
+
+    public void reset()
+    {
+        boolean ret = this.resetPre();
+    
+        if( ret )
+        {
+            this.init();
+        }
+
+    
+        this.resetPost(ret);
+    }
+
+    protected boolean resetPost(boolean ret)
+    {
+        return ret;
+    }
+
+    protected boolean resetPre()
+    {
+        return true;
+    }
+
+    protected void setPosition(boolean moveNextResult)
+    {
+        if( moveNextResult )
+        {
+            position = SysEnumeratorPosition::Inside;
+        }
+
+        else
+        {
+            position = SysEnumeratorPosition::Outside;
+        }
+
+    }
+
+    public boolean skip(int items = 1)
+    {
+        boolean ret = this.skipPre();
+    
+        if( ret )
+        {
+            while((items > 0) && this.moveNext())
+            {
+                items--;
+            }
+
+        }
+
+    
+        ret = this.skipPost(ret);
+    
+        return ret && (items == 0);
+    }
+
+    protected boolean skipPost(boolean ret)
+    {
+        return ret;
+    }
+
+    protected boolean skipPre()
+    {
+        return true;
+    }
+
+    public str toString()
+    {
+        //TODO mazzy
+        return '';
+    }
+}

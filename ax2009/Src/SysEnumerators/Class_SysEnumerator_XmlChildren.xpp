@@ -1,0 +1,23 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_XmlChildren extends SysEnumerator_XmlSibling
+{
+
+    public void new(XmlNode _node = null)
+    {
+        if( _node )
+        {
+            _node = _node.firstChild();
+        }
+    
+        super(_node);
+    }
+
+    public static SysEnumerator_XmlChildren construct(XmlNode node = null)
+    {
+        SysEnumerator_XmlChildren enumerator = new SysEnumerator_XmlChildren(node);
+    
+        return enumerator;
+    }
+}

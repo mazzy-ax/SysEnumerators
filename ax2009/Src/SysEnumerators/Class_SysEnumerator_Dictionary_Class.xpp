@@ -1,0 +1,49 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Dictionary_Class extends SysEnumerator_Dictionary
+{
+
+    public classId current()
+    {
+        int idx = this.currentIdx();
+        classId ret = this.base().classCnt2Id(idx);
+    
+        return ret;
+    }
+
+    public str currentKey()
+    {
+        return this.base().className(this.current());
+    }
+
+    protected boolean currentKeyProvided()
+    {
+        return true;
+    }
+
+    //TODO mazzy: SysDictClass??
+    public DictClass currentValue()
+    {
+        return this.base().classObject(this.current());
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().classCnt();
+    
+        return ret;
+    }
+
+    public static SysEnumerator_Dictionary_Class construct(Dictionary base, SysRangeInt idx = null)
+    {
+        SysEnumerator_Dictionary_Class enumerator = new SysEnumerator_Dictionary_Class(base, idx);
+    
+        return enumerator;
+    }
+}

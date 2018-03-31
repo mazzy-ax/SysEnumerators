@@ -1,0 +1,44 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictTable_ObjectMethod extends SysEnumerator_DictTable
+{
+
+    public str current()
+    {
+        int idx = this.currentIdx();
+        str ret = this.base().objectMethod(idx);
+    
+        return ret;
+    }
+
+    public str currentKey()
+    {
+        return this.current();
+    }
+
+    //TODO mazzy: SysDictField??
+    public DictMethod currentValue()
+    {
+        return this.base().objectMethodObject(this.currentIdx());
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().objectMethodCnt();
+    
+        return ret;
+    }
+
+    public static SysEnumerator_DictTable_ObjectMethod construct(DictTable base, SysRangeInt idx = null)
+    {
+        SysEnumerator_DictTable_ObjectMethod enumerator = new SysEnumerator_DictTable_ObjectMethod(base, idx);
+    
+        return enumerator;
+    }
+}

@@ -1,0 +1,27 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_ContainerClass extends SysEnumerator_Container
+{
+	ContainerClass baseClass;
+
+    public ContainerClass containerClass()
+    {
+        return baseClass;
+    }
+
+    public void new(ContainerClass _baseClass, SysSequenceInt _idx = null)
+    {;
+        Debug::assert(_baseClass != null);
+    
+        baseClass = _baseClass;
+        super(baseClass.value(), _idx);
+    }
+
+    public static SysEnumerator_ContainerClass construct(ContainerClass base, SysRangeInt idx = null)
+    {
+        SysEnumerator_ContainerClass enumerator = new SysEnumerator_ContainerClass(base, idx);
+    
+        return enumerator;
+    }
+}

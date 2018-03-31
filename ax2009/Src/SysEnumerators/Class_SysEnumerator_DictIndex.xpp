@@ -1,0 +1,52 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictIndex extends SysEnumerator_Indexed
+{
+	DictIndex base;
+
+    public DictIndex base()
+    {
+        return base;
+    }
+
+    public fieldId current()
+    {
+        int idx = this.currentIdx();
+        fieldId ret = this.base().field(idx);
+    
+        return ret;
+    }
+
+    public fieldId currentKey()
+    {
+        return this.current();
+    }
+
+    public fieldId currentValue()
+    {
+        return this.current();
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().numberOfFields();
+    
+        return ret;
+    }
+
+    public void new(DictIndex _base, SysSequenceInt _idx = null)
+    {;
+        Debug::assert(_base != null);
+    
+        base = _base;
+        super(_idx);
+    }
+
+    public static SysEnumerator_DictIndex construct(DictIndex base, SysRangeInt idx = null)
+    {
+        SysEnumerator_DictIndex enumerator = new SysEnumerator_DictIndex(base, idx);
+    
+        return enumerator;
+    }
+}

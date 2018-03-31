@@ -1,0 +1,55 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Container extends SysEnumerator_Indexed
+{
+	container base;
+
+    public container base()
+    {
+        return base;
+    }
+
+    public anytype current()
+    {
+        int idx = this.currentIdx();
+        anytype ret = conpeek(this.base(), idx);
+    
+        return ret;
+    }
+
+    public int currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = conlen(this.base());
+    
+        return ret;
+    }
+
+    public void new(container _base, SysSequenceInt _idx = null)
+    {
+        base = _base;
+        super(_idx);
+    }
+
+    public static SysEnumerator_Container construct(container base, SysRangeInt idx = null)
+    {
+        SysEnumerator_Container enumerator = new SysEnumerator_Container(base, idx);
+    
+        return enumerator;
+    }
+}

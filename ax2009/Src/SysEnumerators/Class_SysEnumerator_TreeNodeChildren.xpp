@@ -1,0 +1,60 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_TreeNodeChildren extends SysEnumerator_TreeNodeSibling
+{
+	str startFromName;
+
+    protected boolean begin()
+    {
+        boolean ret = super();
+    
+        if( ret && this.origin() )
+        {
+            if( this.startFromName() )
+            {
+                node = this.origin().AOTfindChild(this.startFromName());
+            }
+            else
+            {
+                node = this.origin().AOTfirstChild();
+            }
+        }
+        else
+        {
+            node = null;
+        }
+    
+        return ret;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = 0;
+    
+        if( this.origin() )
+        {
+            ret = this.origin().AOTchildNodeCount();
+        }
+    
+        return ret;
+    }
+
+    public void new(TreeNode _node = null, str _startFromName = '')
+    {
+        startFromName = _startFromName;
+        super(_node);
+    }
+
+    public str startFromName()
+    {
+        return startFromName;
+    }
+
+    public static SysEnumerator_TreeNodeChildren construct(TreeNode node = null, str startFromName = '')
+    {
+        SysEnumerator_TreeNodeChildren enumerator = new SysEnumerator_TreeNodeChildren(node, startFromName);
+    
+        return enumerator;
+    }
+}

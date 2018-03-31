@@ -1,0 +1,44 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+abstract public class SysEnumerator_Keywords extends xSysEnumerator
+{
+	Keywords base;
+	str current;
+
+    public Keywords base()
+    {
+        return base;
+    }
+
+    public str current()
+    {
+        return current;
+    }
+
+    public str currentIdx()
+    {
+        return this.current();
+    }
+
+    public str currentKey()
+    {
+        return this.current();
+    }
+
+    public str currentValue()
+    {
+        return this.current();
+    }
+
+    public void new(Keywords _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new Keywords();
+        }
+    
+        base = _base;
+        super();
+    }
+}

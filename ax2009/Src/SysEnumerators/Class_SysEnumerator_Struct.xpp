@@ -1,0 +1,72 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Struct extends SysEnumerator_Indexed
+{
+	struct base;
+
+    public Struct base()
+    {
+        return base;
+    }
+
+    public anytype current()
+    {
+        int idx = this.currentIdx();
+        anytype ret = this.base().valueIndex(idx);
+    
+        return ret;
+    }
+
+    public str currentKey()
+    {
+        int idx = this.currentIdx();
+        str ret = this.base().fieldName(idx);
+    
+        return ret;
+    }
+
+    protected boolean currentKeyProvided()
+    {
+        return true;
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().fields();
+    
+        return ret;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = this.base().fields();
+    
+        return ret;
+    }
+
+    public void new(Struct _base, SysSequenceInt _idx = null)
+    {;
+        Debug::assert(_base != null);
+    
+        base = _base;
+        super(_idx);
+    }
+
+    public static SysEnumerator_Struct construct(Struct base, SysRangeInt idx = null)
+    {
+        SysEnumerator_Struct enumerator = new SysEnumerator_Struct(base, idx);
+    
+        return enumerator;
+    }
+}

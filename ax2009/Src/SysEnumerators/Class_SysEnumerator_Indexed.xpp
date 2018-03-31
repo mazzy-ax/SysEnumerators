@@ -1,0 +1,99 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+abstract public class SysEnumerator_Indexed extends xSysEnumerator
+{
+	SysSequenceInt sequence;
+	int currentIdx;
+
+    public int currentIdx()
+    {
+        return currentIdx;
+    }
+
+    protected boolean currentIdxProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        return 0;
+    }
+
+    protected SysSequenceInt defaultSequence()
+    {
+        SysSequenceInt seq = SysSequenceInt::construct(this.defaultStart(), this.defaultEnd(), this.defaultStep());
+    
+        return seq;
+    }
+
+    protected int defaultStart()
+    {
+        return 1;
+    }
+
+    protected int defaultStep()
+    {
+        return 1;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = 0)
+    {
+        int64 ret = this.sequence().estimatedIterations();
+    
+        return ret;
+    }
+
+    protected void init()
+    {
+        currentIdx = this.sequence().start();
+    }
+
+    protected boolean more()
+    {
+        boolean ret = super();
+        int idx;
+    
+        if( ret )
+        {
+            idx = this.currentIdx();
+            ret = this.sequence().contains(idx);
+        }
+
+    
+        return ret;
+    }
+
+    public void new(SysSequenceInt _sequence = null)
+    {
+        if( _sequence == null )
+        {
+            _sequence = this.defaultSequence();
+        }
+
+    
+        sequence = _sequence;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+        int idx;
+    
+        if( ret )
+        {
+            idx = this.currentIdx();
+            currentIdx = this.sequence().getNext(idx);
+        }
+
+    
+        return ret;
+    }
+
+    public SysSequenceInt sequence()
+    {
+        return sequence;
+    }
+}

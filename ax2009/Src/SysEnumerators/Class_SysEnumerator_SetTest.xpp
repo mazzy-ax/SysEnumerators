@@ -1,0 +1,78 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_SetTest extends SysTestCase
+{
+
+    void testSet()
+    {
+        Set s = new Set(Types::String);
+        SysEnumerator_Set se;
+        int64 zero64;
+    
+        s.add('a');
+        s.add('e');
+        s.add('b');
+        s.add('c');
+        s.add('d');
+    
+        se = SysEnumerator_Set::construct(s);
+    
+        this.assertNotNull(se);
+        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('a', se.current());
+        this.assertEquals('a', se.currentValue());
+        this.assertEquals('a', se.current());
+        this.assertEquals('a', se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('b', se.current());
+        this.assertEquals('b', se.currentValue());
+        this.assertEquals('b', se.current());
+        this.assertEquals('b', se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('c', se.current());
+        this.assertEquals('c', se.currentValue());
+        this.assertEquals('c', se.current());
+        this.assertEquals('c', se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('d', se.current());
+        this.assertEquals('d', se.currentValue());
+        this.assertEquals('d', se.current());
+        this.assertEquals('d', se.currentKey());
+    
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('e', se.current());
+        this.assertEquals('e', se.currentValue());
+        this.assertEquals('e', se.current());
+        this.assertEquals('e', se.currentKey());
+    
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(zero64 + 5, se.estimatedIterations());
+    }
+
+    void testSetEmpty()
+    {
+        Set s = new Set(Types::String);
+        SysEnumerator_Set se = SysEnumerator_Set::construct(s);
+    
+        this.assertNotNull(se);
+        this.assertEquals(0, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+    
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(0, se.estimatedIterations());
+    }
+}

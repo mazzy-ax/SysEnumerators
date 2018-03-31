@@ -1,0 +1,56 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+abstract public class SysEnumerator_FillSet extends xSysEnumerator
+{
+	SysSet values;
+	SysEnumeratorGroup enumeratorGroup;
+
+    /// <summary>
+    /// Метод возвращает Set
+    /// </summary>
+    /// <remarks>
+    /// Метод можно вызвать и в цикле, и после завершения цикла
+    /// </remarks>
+    public SysSet base(types type = types::AnyType)
+    {
+        if( values == null )
+        {
+            values = new SysSet(type);
+        }
+    
+        return values;
+    }
+	
+    public SysSet current()
+    {
+        return values;
+    }
+
+    public SysSet currentIdx()
+    {
+        return this.current();
+    }
+
+    public SysSet currentKey()
+    {
+        return this.current();
+    }
+
+    public SysSet currentValue()
+    {
+        return this.current();
+    }
+
+    protected void eventAddedToGroup(SysEnumeratorGroup _enumeratorGroup)
+    {;
+        enumeratorGroup = _enumeratorGroup;
+        super(enumeratorGroup);
+    }
+
+    protected void init()
+    {;
+        values = null;
+        super();
+    }
+}

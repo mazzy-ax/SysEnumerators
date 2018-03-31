@@ -1,0 +1,52 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictView_Datasource extends SysEnumerator_Indexed
+{
+	DictView base;
+
+    public DictView base()
+    {
+        return base;
+    }
+
+    public tableId current()
+    {
+        int idx = this.currentIdx();
+        tableId ret = this.base().datasourceTableId(idx);
+    
+        return ret;
+    }
+
+    public tableId currentKey()
+    {
+        return this.current();
+    }
+
+    public tableId currentValue()
+    {
+        return this.current();
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().datasourceCnt();
+    
+        return ret;
+    }
+
+    public void new(DictView _base, SysSequenceInt _idx = null)
+    {;
+        Debug::assert(_base != null);
+    
+        base = _base;
+        super(_idx);
+    }
+
+    public static SysEnumerator_DictView_Datasource construct(DictView base, SysRangeInt idx = null)
+    {
+        SysEnumerator_DictView_Datasource enumerator = new SysEnumerator_DictView_Datasource(base, idx);
+    
+        return enumerator;
+    }
+}

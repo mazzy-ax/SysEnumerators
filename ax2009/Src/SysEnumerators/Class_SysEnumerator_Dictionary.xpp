@@ -1,0 +1,20 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+abstract public class SysEnumerator_Dictionary extends SysEnumerator_Indexed
+{
+	Dictionary base;
+
+    public Dictionary base()
+    {
+        return base;
+    }
+
+    public void new(Dictionary _base, SysSequenceInt _idx = null)
+    {;
+        Debug::assert(_base != null);
+    
+        base = _base;
+        super(_idx);
+    }
+}

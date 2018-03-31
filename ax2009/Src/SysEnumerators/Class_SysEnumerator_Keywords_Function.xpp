@@ -1,0 +1,37 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Keywords_Function extends SysEnumerator_Keywords
+{
+
+    protected boolean begin()
+    {
+        boolean ret = super();
+    
+        if( ret )
+        {
+            current = this.base().firstFunction();
+        }
+    
+        return ret;
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+    
+        if( ret )
+        {
+            current = this.base().nextFunction();
+        }
+    
+        return ret;
+    }
+
+    public static SysEnumerator_Keywords_Function construct(Keywords base = null)
+    {
+        SysEnumerator_Keywords_Function enumerator = new SysEnumerator_Keywords_Function(base);
+    
+        return enumerator;
+    }
+}

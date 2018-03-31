@@ -1,0 +1,236 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+abstract public class SysEnumeratorGroup extends xSysEnumerator
+{
+	Set enumerators;
+	ISysEnumerator currentEnumerator;
+	ISysEnumerator currentIdxEnumerator;
+	ISysEnumerator currentKeyEnumerator;
+	ISysEnumerator currentValueEnumerator;
+
+    public SysEnumeratorGroup add(xSysEnumerator enumerator)
+    {
+        // Circular references are not checked
+        if( !this.isNotMe(enumerator) )
+        {
+            throw error(Error::wrongUseOfFunction(funcname()));
+        }
+    
+        if( !this.enumerators().add(enumerator) )
+        {
+            throw error(Error::wrongUseOfFunction(funcname()));
+        }
+    
+        this.currentEnumerator(enumerator);
+        this.currentIdxEnumerator(enumerator);
+        this.currentKeyEnumerator(enumerator);
+        this.currentValueEnumerator(enumerator);
+    
+        this.estimatedIterations(this.estimatedIterations());
+    
+        enumerator.eventAddedToGroup(this);
+    
+        return this;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super() && this.next();
+    
+        return ret;
+    }
+
+    public anytype current()
+    {
+        anytype ret = this.currentEnumerator().current();
+    
+        return ret;
+    }
+
+    protected ISysEnumerator currentEnumerator(SysEnumerator enumerator = null)
+    {
+        if( !prmisdefault(enumerator) )
+        {
+            currentEnumerator = enumerator;
+        }
+    
+        Debug::assert(this.isNotMe(currentEnumerator));
+    
+        return currentEnumerator;
+    }
+
+    
+    public anytype currentIdx()
+    {
+        anytype ret = this.currentIdxEnumerator().currentIdx();
+    
+        return ret;
+    }
+
+    protected ISysEnumerator currentIdxEnumerator(SysEnumerator enumerator = null)
+    {
+        if( !prmisdefault(enumerator)
+         && (enumerator.currentIdxProvided() || (currentIdxEnumerator == null)) )
+        {
+            currentIdxEnumerator = enumerator;
+        }
+    
+        Debug::assert(this.isNotMe(currentIdxEnumerator));
+    
+        return currentKeyEnumerator;
+    }
+    
+    public anytype currentKey()
+    {
+        anytype ret = this.currentKeyEnumerator().currentKey();
+    
+        return ret;
+    }
+
+    protected ISysEnumerator currentKeyEnumerator(SysEnumerator enumerator = null)
+    {
+        if( !prmisdefault(enumerator)
+         && (enumerator.currentKeyProvided() || (currentKeyEnumerator == null)) )
+        {
+            currentKeyEnumerator = enumerator;
+        }
+    
+        Debug::assert(this.isNotMe(currentKeyEnumerator));
+    
+        return currentKeyEnumerator;
+    }
+    
+    public anytype currentValue()
+    {
+        anytype ret = this.currentValueEnumerator().currentValue();
+    
+        return ret;
+    }
+
+    protected ISysEnumerator currentValueEnumerator(SysEnumerator enumerator = null)
+    {
+        if( !prmisdefault(enumerator)
+         && (enumerator.currentValueProvided() || (currentValueEnumerator == null)) )
+        {
+            currentValueEnumerator = enumerator;
+        }
+    
+        Debug::assert(this.isNotMe(currentValueEnumerator));
+    
+        return currentValueEnumerator;
+    }
+    
+    public str definitionString()
+    {
+        //TODO mazzy
+        return classid2name(classidget(this));
+    }
+
+    public Set enumerators()
+    {
+        return enumerators;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = super();
+        SetEnumerator se = this.enumerators().getEnumerator();
+        xSysEnumerator enumerator;
+    
+        while(se.moveNext())
+        {
+            enumerator = se.current();
+            if( this.isNotMe(enumerator) )
+            {
+                ret = min(enumerator.estimatedIterations(estimatedIterations), ret);
+            }
+        }
+    
+        return ret;
+    }
+
+    protected boolean isNotMe(ISysEnumerator enumerator)
+    {
+        ISysEnumerator self = this;
+        boolean ret = (enumerator && (enumerator != self));
+    
+        return ret;
+    }
+
+    protected boolean more()
+    {
+        boolean ret = super() && !this.enumerators().empty();
+    
+        return ret;
+    }
+
+    public void new()
+    {
+        enumerators = new Set(Types::Class);
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super() && this.more();
+        SetEnumerator se;
+        xSysEnumerator enumerator;
+    
+        if( ret )
+        {
+            se = this.enumerators().getEnumerator();
+            while(se.moveNext())
+            {
+                enumerator = se.current();
+                if( this.isNotMe(enumerator) )
+                {
+                    ret = enumerator.moveNext() && ret; // It calls all hooks anyway.
+                }
+            }
+        }
+    
+        return ret;
+    }
+
+    public void reset()
+    {
+        SetEnumerator se = this.enumerators().getEnumerator();
+        xSysEnumerator enumerator;
+    
+        while(se.moveNext())
+        {
+            enumerator = se.current();
+            if( this.isNotMe(enumerator) )
+            {
+                enumerator.reset();
+            }
+
+        }
+    
+        super();
+    }
+
+    public str toString()
+    {
+        str ret;
+    
+        //TODO mazzy
+        if( this.position() == SysEnumeratorPosition::Inside )
+        {
+            ret = strfmt('[%2,%3,%4]:{%1}',
+                this.enumerators().elements(),
+                this.currentEnumerator() ? this.current() : '',
+                this.currentKeyEnumerator() ? this.currentKey() : '',
+                this.currentValueEnumerator() ? this.currentValue() : '');
+        }
+        else
+        {
+            ret = strfmt('[%2]:{%1}',
+                this.enumerators().elements(),
+                this.position());
+        }
+    
+        return ret;
+    }
+}

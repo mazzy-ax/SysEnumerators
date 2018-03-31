@@ -1,0 +1,49 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Dictionary_SecurityKey extends SysEnumerator_Dictionary
+{
+
+    public securityKeyId current()
+    {
+        int idx = this.currentIdx();
+        configurationKeyId ret = this.base().securityKeyCnt2Id(idx);
+    
+        return ret;
+    }
+
+    public str currentKey()
+    {
+        return this.base().securityKeyName(this.current());
+    }
+
+    protected boolean currentKeyProvided()
+    {
+        return true;
+    }
+
+    //TODO mazzy: SysDictClass??
+    public DictSecurityKey currentValue()
+    {
+        return this.base().securityKeyObject(this.current());
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().securityKeyCnt();
+    
+        return ret;
+    }
+
+    public static SysEnumerator_Dictionary_SecurityKey construct(Dictionary base, SysRangeInt idx = null)
+    {
+        SysEnumerator_Dictionary_SecurityKey enumerator = new SysEnumerator_Dictionary_SecurityKey(base, idx);
+    
+        return enumerator;
+    }
+}

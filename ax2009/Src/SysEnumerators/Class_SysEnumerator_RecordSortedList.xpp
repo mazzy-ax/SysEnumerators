@@ -1,0 +1,101 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_RecordSortedList extends xSysEnumerator
+{
+	RecordSortedList base;
+	Common record;
+	Common startFrom;
+
+    public RecordSortedList base()
+    {
+        return base;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super();
+    
+        if( ret )
+        {
+            if( this.parmStartFrom() == null )
+            {
+                ret = this.base().first(record);
+            }
+            else
+            {
+                record.data(startFrom);
+                ret = this.base().find(record);
+            }
+        }
+    
+        return ret;
+    }
+
+    public Common current()
+    {
+        return record;
+    }
+
+    public Common currentIdx()
+    {
+        return this.current();
+    }
+
+    public Common currentKey()
+    {
+        return this.current();
+    }
+
+    public Common currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = this.base().len();
+    
+        return ret;
+    }
+
+    public void new(RecordSortedList _base, Common _startFrom = null)
+    {;
+        Debug::assert(_base != null);
+        //Debug::assert(_startFrom.TableId == _base.tableId);
+    
+        base = _base;
+        startFrom = _startFrom;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super() && this.base().next(record);
+    
+        return ret;
+    }
+
+    public common parmStartFrom(common _startFrom = startFrom)
+    {
+        startFrom = _startFrom;
+        return startFrom;
+    }
+
+    public common record()
+    {
+        return record;
+    }
+
+    public static SysEnumerator_RecordSortedList construct(RecordSortedList base, Common startFrom = null)
+    {
+        SysEnumerator_RecordSortedList enumerator = new SysEnumerator_RecordSortedList(base, startFrom);
+    
+        return enumerator;
+    }
+}
