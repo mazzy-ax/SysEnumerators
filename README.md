@@ -16,8 +16,6 @@
 * файлам (`CommaIo`, `AsciiIo`, `BinaryIo`, `TextIo`);
 * и прочим системным коллекциям Аксапты.
 
-*SysEnumerators* также позволяет группировать несколько энумераторов.
-
 Подробнее о *SysEnumerators* для [Microsoft Dynamics AX 2009](/ax2009) можно почитать в каталоге [ax2009](/ax2009).
 
 ## Пример использования SysEnumerators
