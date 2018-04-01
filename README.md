@@ -18,7 +18,7 @@
 
 *SysEnumerators* также позволяет группировать несколько энумераторов.
 
-Подробнее о [*SysEnumerators* для [Microsoft Dynamics AX 2009](/ax2009) можно почитать в каталоге [ax2009](/ax2009).
+Подробнее о *SysEnumerators* для [Microsoft Dynamics AX 2009](/ax2009) можно почитать в каталоге [ax2009](/ax2009).
 
 ## Пример использования SysEnumerators
 
@@ -50,4 +50,6 @@ while( se.moveNext() )
 
 ## Помощь проекту
 
-Автор будет признателен за ваши замечания, предложения, советы в разделе [Issues](https://github.com/mazzy-ax/SysEnumerators/issues) и [Pull requests](https://github.com/mazzy-ax/SysEnumerators/pulls) по проекту, а также в виде письма на адрес [mazzy@mazzy.ru](mailto:mazzy@mazzy.ru)
+Буду признателен за ваши замечания, предложения, советы в разделе [Issues](https://github.com/mazzy-ax/SysEnumerators/issues) и [Pull requests](https://github.com/mazzy-ax/SysEnumerators/pulls) по проекту, а также в виде письма на адрес [mazzy@mazzy.ru](mailto:mazzy@mazzy.ru)
+
+Мазуркин Сергей (mazzy)

@@ -54,7 +54,7 @@ while( se.moveNext() )
 }
 ```
 
-### 5. [Пробежать по полям таблицы](Job_SysEnumeratorExample05_Fields.xpp)
+## 5. [Пробежать по полям таблицы](Job_SysEnumeratorExample05_Fields.xpp)
 
 ![SysEnumeratorExample05_Fields](../../Media/example05.png)
 
@@ -68,7 +68,7 @@ while( se.moveNext() )
 }
 ```
 
-### 6. [Пробежать по CSV-файлу](Job_SysEnumeratorExample06_File.xpp)
+## 6. [Пробежать по CSV-файлу](Job_SysEnumeratorExample06_File.xpp)
 
 ![SysEnumeratorExample06_File](../../Media/example06.png)
 
@@ -84,12 +84,12 @@ while( se.moveNext() )
 }
 ```
 
-### 7. [Работа с группой энумераторов](Job_SysEnumeratorExample06_File.xpp)
+## 7. [Работа с группой энумераторов](Job_SysEnumeratorExample06_File.xpp)
 
 ![SysEnumeratorExample07_Group](../../Media/example07.png)
 
 ```java
-    SysEnumera=tor_SysOperationProgress progress = SysEnumerator_SysOperationProgress::construct();
+    SysEnumerator_SysOperationProgress progress = SysEnumerator_SysOperationProgress::construct();
     SysEnumerator_FillSetFromValue values2set = SysEnumerator_FillSetFromValue::construct();
 
     SysEnumerator se = SysEnumerator::construct()
