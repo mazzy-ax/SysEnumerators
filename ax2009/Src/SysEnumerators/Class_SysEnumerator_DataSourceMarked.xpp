@@ -3,8 +3,8 @@
 //
 public class SysEnumerator_DataSourceMarked extends xSysEnumerator
 {
-	FormDataSource base;
-	Common record;
+    FormDataSource base;
+    Common record;
 
     public FormDataSource base()
     {
@@ -14,8 +14,8 @@ public class SysEnumerator_DataSourceMarked extends xSysEnumerator
     protected boolean begin()
     {
         boolean ret = super();
-    
-        if( ret )
+
+        if( ret && this.base() )
         {
             record = this.base().getFirst(true);
             if( !record )
@@ -23,7 +23,7 @@ public class SysEnumerator_DataSourceMarked extends xSysEnumerator
                 record = this.base().cursor();
             }
         }
-    
+
         return ret;
     }
 
@@ -49,13 +49,20 @@ public class SysEnumerator_DataSourceMarked extends xSysEnumerator
 
     public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int64 ret = 1;
-    
-        if( base.anyMarked() )
+        int64 ret = 0;
+
+        if( this.base() )
         {
-            ret = super();
+            if( this.base().anyMarked() )
+            {
+                ret = super(estimatedIterations);
+            }
+            else
+            {
+                ret = 1;
+            }
         }
-    
+
         return ret;
     }
 
@@ -67,7 +74,7 @@ public class SysEnumerator_DataSourceMarked extends xSysEnumerator
     public void new(FormDataSource _base)
     {;
         Debug::assert(_base != null);
-    
+
         base = _base;
         super();
     }
@@ -75,12 +82,12 @@ public class SysEnumerator_DataSourceMarked extends xSysEnumerator
     protected boolean next()
     {
         boolean ret = super();
-    
+
         if( ret )
         {
-            record = base.getNext();
+            record = this.base().getNext();
         }
-    
+
         return ret;
     }
 
@@ -92,7 +99,8 @@ public class SysEnumerator_DataSourceMarked extends xSysEnumerator
     public static SysEnumerator_DataSourceMarked construct(FormDataSource base)
     {
         SysEnumerator_DataSourceMarked enumerator = new SysEnumerator_DataSourceMarked(base);
-    
+
         return enumerator;
     }
+
 }

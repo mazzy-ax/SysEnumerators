@@ -3,12 +3,22 @@
 //
 abstract public class SysEnumerator_Keywords extends xSysEnumerator
 {
-	Keywords base;
-	str current;
+    Keywords base;
+    str current;
 
     public Keywords base()
     {
         return base;
+    }
+
+    protected Keywords baseOrDefault(Keywords _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new Keywords();
+        }
+
+        return _base;
     }
 
     public str current()
@@ -33,12 +43,7 @@ abstract public class SysEnumerator_Keywords extends xSysEnumerator
 
     public void new(Keywords _base = null)
     {
-        if( _base == null )
-        {
-            _base = new Keywords();
-        }
-    
-        base = _base;
+        base = this.baseOrDefault(_base);
         super();
     }
 }

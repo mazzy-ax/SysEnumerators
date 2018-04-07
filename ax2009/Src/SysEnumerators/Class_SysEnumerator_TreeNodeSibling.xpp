@@ -3,8 +3,8 @@
 //
 public class SysEnumerator_TreeNodeSibling extends xSysEnumerator
 {
-	TreeNode node;
-	TreeNode origin;
+    TreeNode node;
+    TreeNode origin;
 
     public TreeNode base()
     {
@@ -33,8 +33,8 @@ public class SysEnumerator_TreeNodeSibling extends xSysEnumerator
 
     protected boolean more()
     {
-        boolean ret = super() && (node != null);
-    
+        boolean ret = super() && this.base();
+
         return ret;
     }
 
@@ -48,7 +48,7 @@ public class SysEnumerator_TreeNodeSibling extends xSysEnumerator
     protected boolean next()
     {
         boolean ret = super();
-    
+
         if( ret && this.base() )
         {
             node = this.base().AOTnextSibling();
@@ -57,7 +57,7 @@ public class SysEnumerator_TreeNodeSibling extends xSysEnumerator
         {
             node = null;
         }
-    
+
         return ret;
     }
 
@@ -75,7 +75,7 @@ public class SysEnumerator_TreeNodeSibling extends xSysEnumerator
     public static SysEnumerator_TreeNodeSibling construct(TreeNode node = null)
     {
         SysEnumerator_TreeNodeSibling enumerator = new SysEnumerator_TreeNodeSibling(node);
-    
+
         return enumerator;
     }
 }

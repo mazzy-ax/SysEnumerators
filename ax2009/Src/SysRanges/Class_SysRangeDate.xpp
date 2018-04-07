@@ -3,13 +3,13 @@
 //
 public class SysRangeDate implements ISysRange
 {
-	date start;
-	date end;
+    date start;
+    date end;
 
     public SysRangeDate clone()
     {
         SysRangeDate range = SysRangeDate::construct(this.start(), this.end());
-    
+
         return range;
     }
 
@@ -29,7 +29,7 @@ public class SysRangeDate implements ISysRange
     public int distance()
     {
         int ret = this.end() - this.start();
-    
+
         return ret;
     }
 
@@ -64,25 +64,23 @@ public class SysRangeDate implements ISysRange
     public SysRangeDate normalize()
     {
         SysRangeDate range;
-    
+
         if( this.reversed() )
         {
             range = this.reverse();
         }
-
         else
         {
             range = this.clone();
         }
 
-    
         return range;
     }
 
     public SysRangeDate reverse()
     {
         SysRangeDate range = SysRangeDate::construct(this.end(), this.start());
-    
+
         return range;
     }
 
@@ -106,7 +104,7 @@ public class SysRangeDate implements ISysRange
     public static SysRangeDate construct(Date start = dateNull(), date end = dateMax())
     {
         SysRangeDate range = new SysRangeDate(start, end);
-    
+
         return range;
     }
 }

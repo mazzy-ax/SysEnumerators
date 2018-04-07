@@ -8,7 +8,7 @@ public class SysEnumerator_DictClass_StaticMethod extends SysEnumerator_DictClas
     {
         int idx = this.currentIdx();
         str ret = this.base().staticMethod(idx);
-    
+
         return ret;
     }
 
@@ -22,7 +22,7 @@ public class SysEnumerator_DictClass_StaticMethod extends SysEnumerator_DictClas
     {
         int idx = this.currentIdx();
         DictMethod ret = this.base().staticMethodObject(idx);
-    
+
         return ret;
     }
 
@@ -34,14 +34,14 @@ public class SysEnumerator_DictClass_StaticMethod extends SysEnumerator_DictClas
     protected int defaultEnd()
     {
         int ret = this.base().staticMethodCnt();
-    
+
         return ret;
     }
 
     public static SysEnumerator_DictClass_StaticMethod construct(DictClass base, SysRangeInt idx = null)
     {
         SysEnumerator_DictClass_StaticMethod enumerator = new SysEnumerator_DictClass_StaticMethod(base, idx);
-    
+
         return enumerator;
     }
 }

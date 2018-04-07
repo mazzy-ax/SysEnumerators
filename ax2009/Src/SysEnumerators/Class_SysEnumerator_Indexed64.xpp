@@ -3,8 +3,8 @@
 //
 abstract public class SysEnumerator_Indexed64 extends xSysEnumerator
 {
-	SysSequenceInt64 sequence;
-	int64 currentIdx;
+    SysSequenceInt64 sequence;
+    int64 currentIdx;
 
     public int64 currentIdx()
     {
@@ -21,13 +21,6 @@ abstract public class SysEnumerator_Indexed64 extends xSysEnumerator
         return 0;
     }
 
-    protected SysSequenceInt64 defaultSequence()
-    {
-        SysSequenceInt64 seq = SysSequenceInt64::construct(this.defaultStart(), this.defaultEnd(), this.defaultStep());
-    
-        return seq;
-    }
-
     protected int64 defaultStart()
     {
         return 1;
@@ -41,7 +34,7 @@ abstract public class SysEnumerator_Indexed64 extends xSysEnumerator
     public int64 estimatedIterations(int64 estimatedIterations = 0)
     {
         int64 ret = this.sequence().estimatedIterations();
-    
+
         return ret;
     }
 
@@ -54,26 +47,19 @@ abstract public class SysEnumerator_Indexed64 extends xSysEnumerator
     {
         boolean ret = super();
         int64 idx;
-    
+
         if( ret )
         {
             idx = this.currentIdx();
             ret = this.sequence().contains(idx);
         }
 
-    
         return ret;
     }
 
     public void new(SysSequenceInt64 _sequence = null)
-    {
-        if( _sequence == null )
-        {
-            _sequence = this.defaultSequence();
-        }
-
-    
-        sequence = _sequence;
+    {;
+        sequence = this.sequenceOrDefault(_sequence);
         super();
     }
 
@@ -81,12 +67,22 @@ abstract public class SysEnumerator_Indexed64 extends xSysEnumerator
     {
         int64 idx = this.currentIdx();
         currentIdx = this.sequence().getNext(idx);
-    
+
         return super();
     }
 
     public SysSequenceInt64 sequence()
     {
         return sequence;
+    }
+
+    protected SysSequenceInt64 sequenceOrDefault(SysSequenceInt64 _sequence = null)
+    {
+        if( _sequence == null )
+        {
+            _sequence = SysSequenceInt64::construct(this.defaultStart(), this.defaultEnd(), this.defaultStep());
+        }
+
+        return _sequence;
     }
 }

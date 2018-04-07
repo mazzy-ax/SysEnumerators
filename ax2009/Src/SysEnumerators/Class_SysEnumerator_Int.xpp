@@ -9,6 +9,7 @@ public class SysEnumerator_Int extends SysEnumerator_Indexed
         return sequence;
     }
 
+
     public int current()
     {
         return this.currentIdx();
@@ -37,7 +38,7 @@ public class SysEnumerator_Int extends SysEnumerator_Indexed
     public static SysEnumerator_Int construct(SysSequenceInt sequence = null)
     {
         SysEnumerator_Int enumerator = new SysEnumerator_Int(sequence);
-    
+
         return enumerator;
     }
 
@@ -45,7 +46,7 @@ public class SysEnumerator_Int extends SysEnumerator_Indexed
     {
         SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
         SysEnumerator_Int enumerator = SysEnumerator_Int::construct(sequence);
-    
+
         return enumerator;
     }
 }

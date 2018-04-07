@@ -17,7 +17,8 @@ public class SysEnumerator_CommaTextIo extends SysEnumerator_Io
     public static SysEnumerator_CommaTextIo construct(CommaTextIo base = null)
     {
         SysEnumerator_CommaTextIo enumerator = new SysEnumerator_CommaTextIo(base);
-    
+
         return enumerator;
     }
+
 }

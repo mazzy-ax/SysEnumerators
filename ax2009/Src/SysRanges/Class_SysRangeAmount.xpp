@@ -3,13 +3,13 @@
 //
 public class SysRangeAmount implements ISysRange
 {
-	amount start;
-	amount end;
+    amount start;
+    amount end;
 
     public SysRangeAmount clone()
     {
         SysRangeAmount range = SysRangeAmount::construct(this.start(), this.end());
-    
+
         return range;
     }
 
@@ -29,7 +29,7 @@ public class SysRangeAmount implements ISysRange
     public amount distance()
     {
         amount ret = this.end() - this.start();
-    
+
         return ret;
     }
 
@@ -64,25 +64,23 @@ public class SysRangeAmount implements ISysRange
     public SysRangeAmount normalize()
     {
         SysRangeAmount range;
-    
+
         if( this.reversed() )
         {
             range = this.reverse();
         }
-
         else
         {
             range = this.clone();
         }
 
-    
         return range;
     }
 
     public SysRangeAmount reverse()
     {
         SysRangeAmount range = SysRangeAmount::construct(this.end(), this.start());
-    
+
         return range;
     }
 
@@ -106,7 +104,7 @@ public class SysRangeAmount implements ISysRange
     public static SysRangeAmount construct(amount start = 0, amount end = RealMax())
     {
         SysRangeAmount range = new SysRangeAmount(start, end);
-    
+
         return range;
     }
 }

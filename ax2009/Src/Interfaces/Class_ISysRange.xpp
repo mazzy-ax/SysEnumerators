@@ -3,6 +3,7 @@
 //
 public interface ISysRange
 {
+
     public ISysRange clone()
     {
     }

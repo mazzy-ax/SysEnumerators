@@ -3,7 +3,7 @@
 //
 static void SysEnumeratorExample06_File(Args _args)
 {
-WinAPI
+    #WinAPI
 
     FileName myDocumentsFolder = WinAPI::getFolderPath(#CSIDL_Personal);
     Filename fileName = myDocumentsFolder + @'\test.csv';

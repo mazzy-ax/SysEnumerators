@@ -3,8 +3,8 @@
 //
 public abstract class xSysEnumerator implements ISysEnumerator
 {
-	SysEnumeratorPosition position;
-	
+    SysEnumeratorPosition position;
+
     /// <remarks>
     /// <remarks>
     /// Предполагается, что класс потомок может реализовать достаточно тяжеловесную бизнес-логику.
@@ -61,7 +61,7 @@ public abstract class xSysEnumerator implements ISysEnumerator
     public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
         int64 ret = int64Max();
-    
+
         return ret;
     }
 
@@ -85,7 +85,7 @@ public abstract class xSysEnumerator implements ISysEnumerator
     public boolean moveNext()
     {
         boolean ret = this.moveNextPre();
-    
+
         if( ret )
         {
             switch(this.position())
@@ -95,26 +95,24 @@ public abstract class xSysEnumerator implements ISysEnumerator
                     ret = ret && this.more();
                     this.setPosition(ret);
                     break;
-    
+
                 case SysEnumeratorPosition::BeforeFirstElement:
                     ret = this.begin();
                     ret = ret && this.more();
                     this.setPosition(ret);
                     break;
-    
+
                 case SysEnumeratorPosition::Outside:
                     ret = false;
                     break;
-    
+
                 default:
                     throw error(Error::wrongUseOfFunction(funcname()));
             }
-
         }
 
-    
         ret = this.moveNextPost(ret);
-    
+
         return ret;
     }
 
@@ -150,7 +148,6 @@ public abstract class xSysEnumerator implements ISysEnumerator
     ///
     ///         return ret;
     ///     }
-
     ///
     /// Второй вариант реализации:
     ///     protected boolean begin()
@@ -161,11 +158,9 @@ public abstract class xSysEnumerator implements ISysEnumerator
     ///         {
     ///             // myNextActions
     ///         }
-
     ///
     ///         return ret;
     ///     }
-
     /// </remarks>
     protected boolean next()
     {
@@ -180,13 +175,12 @@ public abstract class xSysEnumerator implements ISysEnumerator
     public void reset()
     {
         boolean ret = this.resetPre();
-    
+
         if( ret )
         {
             this.init();
         }
 
-    
         this.resetPost(ret);
     }
 
@@ -206,30 +200,26 @@ public abstract class xSysEnumerator implements ISysEnumerator
         {
             position = SysEnumeratorPosition::Inside;
         }
-
         else
         {
             position = SysEnumeratorPosition::Outside;
         }
-
     }
 
     public boolean skip(int items = 1)
     {
         boolean ret = this.skipPre();
-    
+
         if( ret )
         {
             while((items > 0) && this.moveNext())
             {
                 items--;
             }
-
         }
 
-    
         ret = this.skipPost(ret);
-    
+
         return ret && (items == 0);
     }
 

@@ -3,19 +3,31 @@
 //
 public class SysEnumerator_RecordSortedList extends xSysEnumerator
 {
-	RecordSortedList base;
-	Common record;
-	Common startFrom;
+    RecordSortedList base;
+    Common record;
+    Common startFrom;
 
     public RecordSortedList base()
     {
         return base;
     }
 
+    protected RecordSortedList baseOrDefault(RecordSortedList _base = null)
+    {
+        TmpTree tmp;
+
+        if( !_base )
+        {
+            _base = new RecordSortedList(tmp.TableId);
+        }
+
+        return _base;
+    }
+
     protected boolean begin()
     {
         boolean ret = super();
-    
+
         if( ret )
         {
             if( this.parmStartFrom() == null )
@@ -28,7 +40,7 @@ public class SysEnumerator_RecordSortedList extends xSysEnumerator
                 ret = this.base().find(record);
             }
         }
-    
+
         return ret;
     }
 
@@ -60,16 +72,13 @@ public class SysEnumerator_RecordSortedList extends xSysEnumerator
     public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
         int64 ret = this.base().len();
-    
+
         return ret;
     }
 
-    public void new(RecordSortedList _base, Common _startFrom = null)
-    {;
-        Debug::assert(_base != null);
-        //Debug::assert(_startFrom.TableId == _base.tableId);
-    
-        base = _base;
+    public void new(RecordSortedList _base = null, Common _startFrom = null)
+    {
+        base = this.baseOrDefault(_base);
         startFrom = _startFrom;
         super();
     }
@@ -77,7 +86,7 @@ public class SysEnumerator_RecordSortedList extends xSysEnumerator
     protected boolean next()
     {
         boolean ret = super() && this.base().next(record);
-    
+
         return ret;
     }
 
@@ -95,7 +104,8 @@ public class SysEnumerator_RecordSortedList extends xSysEnumerator
     public static SysEnumerator_RecordSortedList construct(RecordSortedList base, Common startFrom = null)
     {
         SysEnumerator_RecordSortedList enumerator = new SysEnumerator_RecordSortedList(base, startFrom);
-    
+
         return enumerator;
     }
+
 }

@@ -3,13 +3,13 @@
 //
 public class SysRangeInt implements ISysRange
 {
-	int start;
-	int end;
+    int start;
+    int end;
 
     public SysRangeInt clone()
     {
         SysRangeInt range = SysRangeInt::construct(this.start(), this.end());
-    
+
         return range;
     }
 
@@ -29,7 +29,7 @@ public class SysRangeInt implements ISysRange
     public int distance()
     {
         int ret = this.end() - this.start();
-    
+
         return ret;
     }
 
@@ -64,25 +64,23 @@ public class SysRangeInt implements ISysRange
     public SysRangeInt normalize()
     {
         SysRangeInt range;
-    
+
         if( this.reversed() )
         {
             range = this.reverse();
         }
-
         else
         {
             range = this.clone();
         }
 
-    
         return range;
     }
 
     public SysRangeInt reverse()
     {
         SysRangeInt range = SysRangeInt::construct(this.end(), this.start());
-    
+
         return range;
     }
 
@@ -106,7 +104,7 @@ public class SysRangeInt implements ISysRange
     public static SysRangeInt construct(int _start = 1, int _end = maxint())
     {
         SysRangeInt range = new SysRangeInt(_start, _end);
-    
+
         return range;
     }
 }

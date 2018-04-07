@@ -9,11 +9,11 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertEquals(start, range.start());
         this.assertEquals(end, range.end());
     }
@@ -22,9 +22,9 @@ class SysRangeInt64Test extends SysTestCase
     {
         SysRangeInt64 range = SysRangeInt64::construct();
         int64 zero64;
-    
+
         this.assertNotNull(range);
-    
+
         this.assertEquals(zero64 + 1, range.start());
         this.assertEquals(int64Max(), range.end());
     }
@@ -34,13 +34,13 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
         SysRangeInt64 clone = range.clone();
-    
+
         this.assertNotNull(range);
         this.assertNotNull(clone);
-    
+
         this.assertEquals(range.start(), clone.start());
         this.assertEquals(range.end(), clone.end());
         this.assertEquals(range.distance(), clone.distance());
@@ -52,11 +52,11 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertTrue(range.contains(start));
         this.assertTrue(range.contains(end));
         this.assertTrue(range.contains(middle));
@@ -69,11 +69,11 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 5;
         Int64 end = 2;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertFalse(range.contains(start));
         this.assertFalse(range.contains(end));
         this.assertFalse(range.contains(middle));
@@ -86,11 +86,11 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = -5;
         Int64 end = 2;
         Int64 middle = 0;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertTrue(range.contains(start));
         this.assertTrue(range.contains(end));
         this.assertTrue(range.contains(middle));
@@ -103,11 +103,11 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertFalse(range.cover(start));
         this.assertFalse(range.cover(end));
         this.assertTrue(range.cover(middle));
@@ -120,11 +120,11 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 5;
         Int64 end = 2;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertFalse(range.cover(start));
         this.assertFalse(range.cover(end));
         this.assertFalse(range.cover(middle));
@@ -137,11 +137,11 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = -5;
         Int64 end = 2;
         Int64 middle = 0;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertFalse(range.cover(start));
         this.assertFalse(range.cover(end));
         this.assertTrue(range.cover(middle));
@@ -154,20 +154,20 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertEquals(end - start, range.distance());
     }
 
     void testDistanceDefault()
     {
         SysRangeInt64 range = SysRangeInt64::construct();
-    
+
         this.assertNotNull(range);
-    
+
         this.assertEquals(int64Max()-1, range.distance());
     }
 
@@ -176,11 +176,11 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 5;
         Int64 end = 2;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertEquals(end - start, range.distance());
     }
 
@@ -188,9 +188,9 @@ class SysRangeInt64Test extends SysTestCase
     {
         SysRangeInt64 range = SysRangeInt64::construct(int64Max(), int64Min());
         int64 zero64;
-    
+
         this.assertNotNull(range);
-    
+
         this.assertEquals(zero64 + 1, range.distance());
     }
 
@@ -198,9 +198,9 @@ class SysRangeInt64Test extends SysTestCase
     {
         SysRangeInt64 range = SysRangeInt64::construct(int64Min(), int64Max());
         int64 zero64;
-    
+
         this.assertNotNull(range);
-    
+
         this.assertEquals(zero64 -1, range.distance());
     }
 
@@ -209,13 +209,13 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
         SysRangeInt64 middleRange = SysRangeInt64::construct(middle, end);
-    
+
         this.assertNotNull(range);
         this.assertNotNull(middleRange);
-    
+
         this.assertTrue(range.equal(range));
         this.assertTrue(range.equal(range.clone()));
         this.assertTrue(range.equal(range.reverse().reverse()));
@@ -228,13 +228,13 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
         SysRangeInt64 middleRange = SysRangeInt64::construct(middle, end);
-    
+
         this.assertNotNull(range);
         this.assertNotNull(middleRange);
-    
+
         this.assertTrue(range.in(range));
         this.assertTrue(middleRange.in(range));
         this.assertFalse(range.in(middleRange));
@@ -246,11 +246,11 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
-    
+
         this.assertTrue(range.isBoundary(start));
         this.assertTrue(range.isBoundary(end));
         this.assertFalse(range.isBoundary(middle));
@@ -261,13 +261,13 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
         SysRangeInt64 reverseRange = range.reverse();
-    
+
         this.assertNotNull(range);
         this.assertNotNull(reverseRange);
-    
+
         this.assertFalse(range.reversed());
         this.assertTrue(reverseRange.reversed());
         this.assertEquals(range.start(), reverseRange.end());
@@ -280,9 +280,9 @@ class SysRangeInt64Test extends SysTestCase
         Int64 start = 2;
         Int64 end = 5;
         Int64 middle = 3;
-    
+
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
-    
+
         this.assertNotNull(range);
         this.assertEquals(strfmt('%1..%2', start, end), range.toString());
     }

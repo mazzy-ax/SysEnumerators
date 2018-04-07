@@ -7,11 +7,11 @@ public class SysEnumerator_EmptyTest extends SysTestCase
     void testEmpty()
     {
         SysEnumerator_Empty se = SysEnumerator_Empty::construct();
-    
+
         this.assertNotNull(se);
         this.assertEquals(0, se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
-    
+
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
         this.assertEquals(0, se.estimatedIterations());

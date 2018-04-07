@@ -3,7 +3,7 @@
 //
 abstract public class SysEnumerator_Dictionary extends SysEnumerator_Indexed
 {
-	Dictionary base;
+    Dictionary base;
 
     public Dictionary base()
     {
@@ -13,7 +13,7 @@ abstract public class SysEnumerator_Dictionary extends SysEnumerator_Indexed
     public void new(Dictionary _base, SysSequenceInt _idx = null)
     {;
         Debug::assert(_base != null);
-    
+
         base = _base;
         super(_idx);
     }

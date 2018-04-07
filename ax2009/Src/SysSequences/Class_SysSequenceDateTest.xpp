@@ -9,18 +9,18 @@ class SysSequenceDateTest extends SysTestCase
         Date start = 20\01\2017;
         Date end = 31\12\2017;
         int step = 1;
-    
+
         Date current;
         int64 iterations;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         current = start;
         while( current <= end )
         {
@@ -28,7 +28,6 @@ class SysSequenceDateTest extends SysTestCase
             ++iterations;
         }
 
-    
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -37,18 +36,18 @@ class SysSequenceDateTest extends SysTestCase
         Date start = 20\01\2017;
         Date end = 31\12\2017;
         int step = 3;
-    
+
         Date current;
         int64 iterations;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         current = start;
         while( current <= end )
         {
@@ -56,7 +55,6 @@ class SysSequenceDateTest extends SysTestCase
             ++iterations;
         }
 
-    
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -65,18 +63,18 @@ class SysSequenceDateTest extends SysTestCase
         Date start = 20\01\2017;
         Date end = 31\12\2017;
         int step = 9;
-    
+
         Date current;
         int64 iterations;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         current = start;
         while( current <= end )
         {
@@ -84,20 +82,19 @@ class SysSequenceDateTest extends SysTestCase
             ++iterations;
         }
 
-    
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
     void testDefault()
     {
         SysSequenceDate sequence = SysSequenceDate::construct();
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(DateNull(), sequence.start());
         this.assertEquals(DateMax(), sequence.end());
         this.assertEquals(any2int(DateMax() - DateNull()), sequence.distance());
         this.assertEquals(1, sequence.step());
-    
+
         this.assertEquals(any2int64(DateMax() - DateNull() + 1), sequence.estimatedIterations());
     }
 
@@ -107,15 +104,15 @@ class SysSequenceDateTest extends SysTestCase
         Date end = 20\012\2017;
         int step = 1;
         int64 iterations = 0;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -124,10 +121,10 @@ class SysSequenceDateTest extends SysTestCase
         Date start = 20\01\2017;
         Date end = 31\12\2017;
         int step = 1;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
         SysEnumerator se = sequence.getEnumerator();
-    
+
         this.assertNotNull(se);
         this.assertNotNull(se.enumerators());
     }
@@ -137,9 +134,9 @@ class SysSequenceDateTest extends SysTestCase
         Date start = 20\01\2017;
         Date end = 31\12\2017;
         int step = 1;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertEquals(start + step, sequence.getNext(start));
         this.assertEquals(end + step, sequence.getNext(end));
     }
@@ -150,15 +147,15 @@ class SysSequenceDateTest extends SysTestCase
         Date end = DateNull();
         int step = 1;
         int64 iterations = 0;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -168,15 +165,15 @@ class SysSequenceDateTest extends SysTestCase
         Date end = DateNull();
         int step = 2;
         int64 iterations = 0;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -186,15 +183,15 @@ class SysSequenceDateTest extends SysTestCase
         Date end = DateNull();
         int step = 3;
         int64 iterations = 0;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -204,15 +201,15 @@ class SysSequenceDateTest extends SysTestCase
         Date end = DateMax();
         int step = 1;
         int64 iterations = 93137;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -222,15 +219,15 @@ class SysSequenceDateTest extends SysTestCase
         Date end = DateMax();
         int step = 2;
         int64 iterations = 46569;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -240,15 +237,15 @@ class SysSequenceDateTest extends SysTestCase
         Date end = DateMax();
         int step = 3;
         int64 iterations = 31046;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
         this.assertEquals(end - start, sequence.distance());
         this.assertEquals(step, sequence.step());
-    
+
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -257,18 +254,18 @@ class SysSequenceDateTest extends SysTestCase
         Date start = 20\01\2017;
         Date end = 31\12\2017;
         int step = 1;
-    
+
         Date current;
         int64 iterations;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step).reverse();
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
         this.assertEquals(start - end, sequence.distance());
         this.assertEquals(-step, sequence.step());
-    
+
         current = start;
         while( current <= end )
         {
@@ -276,7 +273,6 @@ class SysSequenceDateTest extends SysTestCase
             ++iterations;
         }
 
-    
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -285,18 +281,18 @@ class SysSequenceDateTest extends SysTestCase
         Date start = 20\01\2017;
         Date end = 31\12\2017;
         int step = 3;
-    
+
         Date current;
         int64 iterations;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step).reverse();
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
         this.assertEquals(start - end, sequence.distance());
         this.assertEquals(-step, sequence.step());
-    
+
         current = start;
         while( current <= end )
         {
@@ -304,7 +300,6 @@ class SysSequenceDateTest extends SysTestCase
             ++iterations;
         }
 
-    
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -313,18 +308,18 @@ class SysSequenceDateTest extends SysTestCase
         Date start = 20\01\2017;
         Date end = 31\12\2017;
         int step = 9;
-    
+
         Date current;
         int64 iterations;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step).reverse();
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
         this.assertEquals(start - end, sequence.distance());
         this.assertEquals(-step, sequence.step());
-    
+
         current = start;
         while( current <= end )
         {
@@ -332,7 +327,6 @@ class SysSequenceDateTest extends SysTestCase
             ++iterations;
         }
 
-    
         this.assertEquals(iterations, sequence.estimatedIterations());
     }
 
@@ -341,9 +335,9 @@ class SysSequenceDateTest extends SysTestCase
         Date start = 20\01\2017;
         Date end = 31\12\2017;
         int step = 1;
-    
+
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-    
+
         this.assertNotNull(sequence);
         this.assertEquals(strfmt('%3:[%1..%2]', start, end, step), sequence.toString());
     }

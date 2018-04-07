@@ -9,6 +9,7 @@ public class SysEnumerator_Int64 extends SysEnumerator_Indexed64
         return sequence;
     }
 
+
     public int64 current()
     {
         return this.currentIdx();
@@ -37,7 +38,7 @@ public class SysEnumerator_Int64 extends SysEnumerator_Indexed64
     public static SysEnumerator_Int64 construct(SysRangeInt64 range = null)
     {
         SysEnumerator_Int64 enumerator = new SysEnumerator_Int64(range);
-    
+
         return enumerator;
     }
 
@@ -45,7 +46,7 @@ public class SysEnumerator_Int64 extends SysEnumerator_Indexed64
     {
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
         SysEnumerator_Int64 enumerator = SysEnumerator_Int64::construct(sequence);
-    
+
         return enumerator;
     }
 }

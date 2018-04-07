@@ -8,7 +8,7 @@ public class SysEnumerator_DictTable_Field extends SysEnumerator_DictTable
     {
         int idx = this.currentIdx();
         fieldId ret = this.base().fieldCnt2Id(idx);
-    
+
         return ret;
     }
 
@@ -36,14 +36,14 @@ public class SysEnumerator_DictTable_Field extends SysEnumerator_DictTable
     protected int defaultEnd()
     {
         int ret = this.base().fieldCnt();
-    
+
         return ret;
     }
 
     public static SysEnumerator_DictTable_Field construct(DictTable base, SysRangeInt idx = null)
     {
         SysEnumerator_DictTable_Field enumerator = new SysEnumerator_DictTable_Field(base, idx);
-    
+
         return enumerator;
     }
 }

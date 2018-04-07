@@ -7,18 +7,18 @@ public class SysEnumerator_Keywords_FunctionTest extends SysTestCase
     void testKeywordsFunction()
     {
         SysEnumerator_Keywords_Function se = SysEnumerator_Keywords_Function::construct();
-    
+
         this.assertNotNull(se);
         this.assertEquals(int64Max(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
-    
+
         this.assertTrue(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Inside, se.position());
         this.assertEquals('abs', se.current());
         this.assertEquals('abs', se.currentIdx());
         this.assertEquals('abs', se.currentKey());
         this.assertEquals('abs', se.currentValue());
-    
+
         this.assertTrue(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Inside, se.position());
         this.assertEquals('acos', se.current());

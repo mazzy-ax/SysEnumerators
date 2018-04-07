@@ -3,7 +3,7 @@
 //
 abstract public class SysEnumerator_DictClass extends SysEnumerator_Indexed
 {
-	DictClass base;
+    DictClass base;
 
     public DictClass base()
     {
@@ -13,7 +13,7 @@ abstract public class SysEnumerator_DictClass extends SysEnumerator_Indexed
     public void new(DictClass _base, SysSequenceInt _idx = null)
     {;
         Debug::assert(_base != null);
-    
+
         base = _base;
         super(_idx);
     }

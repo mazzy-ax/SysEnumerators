@@ -8,7 +8,7 @@
 /// </summary>
 public class SysEnumerator_Counter64 extends xSysEnumerator
 {
-	int64 counter;
+    int64 counter;
 
     public int64 current()
     {
@@ -39,12 +39,12 @@ public class SysEnumerator_Counter64 extends xSysEnumerator
     protected boolean next()
     {
         boolean ret = super();
-    
+
         if( ret )
         {
             ++counter;
         }
-    
+
         return ret;
     }
 
@@ -63,7 +63,7 @@ public class SysEnumerator_Counter64 extends xSysEnumerator
     public static SysEnumerator_Counter64 construct()
     {
         SysEnumerator_Counter64 enumerator = new SysEnumerator_Counter64();
-    
+
         return enumerator;
     }
 }

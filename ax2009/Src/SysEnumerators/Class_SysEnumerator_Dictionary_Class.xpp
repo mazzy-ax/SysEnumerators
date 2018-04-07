@@ -8,7 +8,7 @@ public class SysEnumerator_Dictionary_Class extends SysEnumerator_Dictionary
     {
         int idx = this.currentIdx();
         classId ret = this.base().classCnt2Id(idx);
-    
+
         return ret;
     }
 
@@ -36,14 +36,14 @@ public class SysEnumerator_Dictionary_Class extends SysEnumerator_Dictionary
     protected int defaultEnd()
     {
         int ret = this.base().classCnt();
-    
+
         return ret;
     }
 
     public static SysEnumerator_Dictionary_Class construct(Dictionary base, SysRangeInt idx = null)
     {
         SysEnumerator_Dictionary_Class enumerator = new SysEnumerator_Dictionary_Class(base, idx);
-    
+
         return enumerator;
     }
 }

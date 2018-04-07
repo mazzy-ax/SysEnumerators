@@ -3,12 +3,12 @@
 //
 class SysSequenceAmount extends SysRangeAmount implements ISysSequence, Enumerable
 {
-	amount step;
+    amount step;
 
     public SysSequenceAmount clone()
     {
         SysSequenceAmount range = SysSequenceAmount::construct(this.start(), this.end(), this.step());
-    
+
         return range;
     }
 
@@ -23,34 +23,29 @@ class SysSequenceAmount extends SysRangeAmount implements ISysSequence, Enumerab
         int64 ret = int64Max();
         Amount distance = this.distance();
         boolean overflow = this.cover(0) && (distance <= 0.0001);
-    
+
         if( overflow )
         {
             ret = int64Max();
         }
-
         else if( distance == 0 )
         {
             ret = 1;
         }
-
         else if( ((distance < 0) && (this.step() > 0))
               || ((distance > 0) && (this.step() < 0)) )
         {
             ret = 0;
         }
-
         else if( step == 1 )
         {
             ret = any2int64(distance + 1.0);
         }
-
         else
         {
             ret = any2int64(distance / this.step() + 1.0);
         }
 
-    
         return ret;
     }
 
@@ -67,7 +62,7 @@ class SysSequenceAmount extends SysRangeAmount implements ISysSequence, Enumerab
     public void new(amount _start = 1, amount _end = RealMax(), amount _step = 1)
     {;
         Debug::assert(_step != 0.0);
-    
+
         super(_start, _end);
         step = _step;
     }
@@ -75,7 +70,7 @@ class SysSequenceAmount extends SysRangeAmount implements ISysSequence, Enumerab
     public SysSequenceAmount reverse()
     {
         SysSequenceAmount sequence = SysSequenceAmount::construct(this.end(), this.start(), -this.step());
-    
+
         return sequence;
     }
 
@@ -92,7 +87,7 @@ class SysSequenceAmount extends SysRangeAmount implements ISysSequence, Enumerab
     public static SysSequenceAmount construct(amount _start = 1, amount _end = RealMax(), amount _step = 1)
     {
         SysSequenceAmount sequence = new SysSequenceAmount(_start, _end, _step);
-    
+
         return sequence;
     }
 }

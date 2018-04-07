@@ -8,7 +8,7 @@ public class SysEnumerator_DictTable_Relation extends SysEnumerator_DictTable
     {
         int idx = this.currentIdx();
         str ret = this.base().relation(idx);
-    
+
         return ret;
     }
 
@@ -23,7 +23,7 @@ public class SysEnumerator_DictTable_Relation extends SysEnumerator_DictTable
         DictRelation dictRelation = new DictRelation(this.base().id());
     ;
         dictRelation.loadNameRelation(this.current());
-    
+
         return dictRelation;
     }
 
@@ -35,14 +35,14 @@ public class SysEnumerator_DictTable_Relation extends SysEnumerator_DictTable
     protected int defaultEnd()
     {
         int ret = this.base().relationCnt();
-    
+
         return ret;
     }
 
     public static SysEnumerator_DictTable_Relation construct(DictTable base, SysRangeInt idx = null)
     {
         SysEnumerator_DictTable_Relation enumerator = new SysEnumerator_DictTable_Relation(base, idx);
-    
+
         return enumerator;
     }
 }

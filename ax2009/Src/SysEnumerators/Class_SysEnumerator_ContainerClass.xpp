@@ -3,25 +3,41 @@
 //
 public class SysEnumerator_ContainerClass extends SysEnumerator_Container
 {
-	ContainerClass baseClass;
+    ContainerClass baseClass;
 
-    public ContainerClass containerClass()
+    public ContainerClass baseClass()
     {
         return baseClass;
     }
 
-    public void new(ContainerClass _baseClass, SysSequenceInt _idx = null)
-    {;
-        Debug::assert(_baseClass != null);
-    
-        baseClass = _baseClass;
+    protected ContainerClass baseClassOrDefault(ContainerClass _baseClass = null)
+    {
+        if( !_baseClass )
+        {
+            _baseClass = new ContainerClass(connull());
+        }
+
+        return _baseClass;
+    }
+
+    public void new(ContainerClass _baseClass = null, SysSequenceInt _idx = null)
+    {
+        baseClass = this.baseClassOrDefault(_baseClass);
         super(baseClass.value(), _idx);
     }
 
-    public static SysEnumerator_ContainerClass construct(ContainerClass base, SysRangeInt idx = null)
+    public static SysEnumerator_ContainerClass construct(ContainerClass base = null, SysRangeInt idx = null)
     {
         SysEnumerator_ContainerClass enumerator = new SysEnumerator_ContainerClass(base, idx);
-    
+
+        return enumerator;
+    }
+
+    public static SysEnumerator_ContainerClass newFromContainer(Container con, SysRangeInt idx = null)
+    {
+        ContainerClass conClass = new ContainerClass(con);
+        SysEnumerator_ContainerClass enumerator = new SysEnumerator_ContainerClass(conClass, idx);
+
         return enumerator;
     }
 }

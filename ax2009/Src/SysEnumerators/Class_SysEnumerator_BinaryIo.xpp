@@ -17,7 +17,8 @@ public class SysEnumerator_BinaryIo extends SysEnumerator_Io
     public static SysEnumerator_BinaryIo construct(BinaryIo base = null)
     {
         SysEnumerator_BinaryIo enumerator = new SysEnumerator_BinaryIo(base);
-    
+
         return enumerator;
     }
+
 }

@@ -6521,6 +6521,17 @@ ENDDOC
         #    return base;
         #}
       ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected Array baseOrDefault(Array _base = null)
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = new Array(Types::AnyType);
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
@@ -6566,16 +6577,14 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(Array _base, SysSequenceInt _idx = null)
-        #{;
-        #    Debug::assert(_base != null);
-        #
-        #    base = _base;
+        #public void new(Array _base = null, SysSequenceInt _idx = null)
+        #{
+        #    base = this.baseOrDefault(_base);
         #    super(_idx);
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_Array construct(Array base, SysRangeInt idx = null)
+        #public static SysEnumerator_Array construct(Array base = null, SysRangeInt idx = null)
         #{
         #    SysEnumerator_Array enumerator = new SysEnumerator_Array(base, idx);
         #
@@ -6674,6 +6683,22 @@ ENDDOC
         #    SysEnumerator_Array se = SysEnumerator_Array::construct(arr);
         #
         #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testArrayNull
+        #void testArrayNull()
+        #{
+        #    SysEnumerator_Array se = SysEnumerator_Array::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotNull(se.base());
+        #
         #    this.assertEquals(0, se.estimatedIterations());
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
         #
@@ -7015,22 +7040,30 @@ ENDDOC
       SOURCE #defaultEnd
         #protected int defaultEnd()
         #{
-        #    int ret = this.base().cnt();
+        #    int ret = 0;
+        #
+        #    if( this.base() )
+        #    {
+        #        ret = this.base().cnt();
+        #    }
         #
         #    return ret;
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(ConfigurationKeySet _base, SysSequenceInt _idx = null)
-        #{;
-        #    Debug::assert(_base != null);
+        #public void new(ConfigurationKeySet _base = null, SysSequenceInt _idx = null)
+        #{
+        #    if ( !_base )
+        #    {
+        #        _base = new ConfigurationKeySet();
+        #    }
         #
         #    base = _base;
         #    super(_idx);
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_ConfigurationKeySet construct(ConfigurationKeySet base, SysRangeInt idx = null)
+        #public static SysEnumerator_ConfigurationKeySet construct(ConfigurationKeySet base = null, SysRangeInt idx = null)
         #{
         #    SysEnumerator_ConfigurationKeySet enumerator = new SysEnumerator_ConfigurationKeySet(base, idx);
         #
@@ -7138,6 +7171,23 @@ ENDDOC
     
     METHODS
       Version: 3
+      SOURCE #baseClass
+        #public ContainerClass baseClass()
+        #{
+        #    return baseClass;
+        #}
+      ENDSOURCE
+      SOURCE #baseClassOrDefault
+        #protected ContainerClass baseClassOrDefault(ContainerClass _baseClass = null)
+        #{
+        #    if( !_baseClass )
+        #    {
+        #        _baseClass = new ContainerClass(connull());
+        #    }
+        #
+        #    return _baseClass;
+        #}
+      ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
@@ -7147,25 +7197,26 @@ ENDDOC
         #    ContainerClass baseClass;
         #}
       ENDSOURCE
-      SOURCE #containerClass
-        #public ContainerClass containerClass()
-        #{
-        #    return baseClass;
-        #}
-      ENDSOURCE
       SOURCE #new
-        #public void new(ContainerClass _baseClass, SysSequenceInt _idx = null)
-        #{;
-        #    Debug::assert(_baseClass != null);
-        #
-        #    baseClass = _baseClass;
+        #public void new(ContainerClass _baseClass = null, SysSequenceInt _idx = null)
+        #{
+        #    baseClass = this.baseClassOrDefault(_baseClass);
         #    super(baseClass.value(), _idx);
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_ContainerClass construct(ContainerClass base, SysRangeInt idx = null)
+        #public static SysEnumerator_ContainerClass construct(ContainerClass base = null, SysRangeInt idx = null)
         #{
         #    SysEnumerator_ContainerClass enumerator = new SysEnumerator_ContainerClass(base, idx);
+        #
+        #    return enumerator;
+        #}
+      ENDSOURCE
+      SOURCE #newFromContainer
+        #public static SysEnumerator_ContainerClass newFromContainer(Container con, SysRangeInt idx = null)
+        #{
+        #    ContainerClass conClass = new ContainerClass(con);
+        #    SysEnumerator_ContainerClass enumerator = new SysEnumerator_ContainerClass(conClass, idx);
         #
         #    return enumerator;
         #}
@@ -7196,8 +7247,8 @@ ENDDOC
         #{
         #}
       ENDSOURCE
-      SOURCE #testContainer
-        #void testContainer()
+      SOURCE #testContainerClass
+        #void testContainerClass()
         #{
         #    container con = ['a','b','c','d','e'];
         #    ContainerClass cc = new ContainerClass(con);
@@ -7251,10 +7302,30 @@ ENDDOC
       SOURCE #testContainerEmpty
         #void testContainerEmpty()
         #{
-        #    container con = connull();
-        #    SysEnumerator_Container se = SysEnumerator_Container::construct(con);
+        #    ContainerClass conClass = new ContainerClass(connull());
+        #    SysEnumerator_ContainerClass se = SysEnumerator_ContainerClass::construct(conClass);
         #
         #    this.assertNotNull(se);
+        #    this.assertNotNull(se.baseClass());
+        #    this.assertEquals(connull(), se.base());
+        #
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testContainerNull
+        #void testContainerNull()
+        #{
+        #    SysEnumerator_ContainerClass se = SysEnumerator_ContainerClass::construct();
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotNull(se.baseClass());
+        #    this.assertEquals(connull(), se.base());
+        #
         #    this.assertEquals(0, se.estimatedIterations());
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
         #
@@ -7267,7 +7338,7 @@ ENDDOC
         #void testContainerSkip()
         #{
         #    container con = ['a','b','c','d','e'];
-        #    SysEnumerator_Container se = SysEnumerator_Container::construct(con);
+        #    SysEnumerator_ContainerClass se = SysEnumerator_ContainerClass::newFromContainer(con);
         #    int64 zero64;
         #
         #    this.assertNotNull(se);
@@ -7646,7 +7717,7 @@ ENDDOC
         #{
         #    boolean ret = super();
         #
-        #    if( ret )
+        #    if( ret && this.base() )
         #    {
         #        record = this.base().getFirst(true);
         #        if( !record )
@@ -7695,11 +7766,18 @@ ENDDOC
       SOURCE #estimatedIterations
         #public int64 estimatedIterations(int64 estimatedIterations = -1)
         #{
-        #    int64 ret = 1;
+        #    int64 ret = 0;
         #
-        #    if( base.anyMarked() )
+        #    if( this.base() )
         #    {
-        #        ret = super();
+        #        if( this.base().anyMarked() )
+        #        {
+        #            ret = super(estimatedIterations);
+        #        }
+        #        else
+        #        {
+        #            ret = 1;
+        #        }
         #    }
         #
         #    return ret;
@@ -7727,7 +7805,7 @@ ENDDOC
         #
         #    if( ret )
         #    {
-        #        record = base.getNext();
+        #        record = this.base().getNext();
         #    }
         #
         #    return ret;
@@ -9943,12 +10021,13 @@ ENDDOC
         #/// Метод возвращает Set
         #/// </summary>
         #/// <remarks>
-        #/// Метод можно вызвать и в цикле, и после завершения цикла
+        #/// Тип реально хранимых значений мы узнаем только в moveNext. Поэтому инициализация выполняется здесь.
         #/// </remarks>
-        #public SysSet base(types t = types::AnyType)
+        #public Set base(types t = types::AnyType)
         #{
         #    if( values == null )
         #    {
+        #        Debug::assert(t != Types::AnyType);
         #        values = new Set(t);
         #    }
         #
@@ -9998,8 +10077,7 @@ ENDDOC
       ENDSOURCE
       SOURCE #init
         #protected void init()
-        #{;
-        #    values = null;
+        #{
         #    super();
         #}
       ENDSOURCE
@@ -10250,8 +10328,11 @@ ENDDOC
       ENDSOURCE
       SOURCE #new
         #public void new(int items = 1)
-        #{;
-        #    Debug::assert(items >= 0);
+        #{
+        #    if( items < 0 )
+        #    {
+        #        items = 0;
+        #    }
         #
         #    first = items;
         #    super();
@@ -10279,7 +10360,14 @@ ENDDOC
         #/// </remarks>
         #public int remains()
         #{
-        #    return remains;
+        #    int ret = 0;
+        #
+        #    if( this.position() != SysEnumeratorPosition::Outside )
+        #    {
+        #        ret = remains;
+        #    }
+        #
+        #    return ret;
         #}
       ENDSOURCE
       SOURCE #construct
@@ -10360,6 +10448,46 @@ ENDDOC
         #    this.assertEquals(zero64 + 3, se.estimatedIterations());
         #}
       ENDSOURCE
+      SOURCE #testFirstNegative
+        #void testFirstNegative()
+        #{
+        #    SysEnumerator_First se = SysEnumerator_First::construct(-2);
+        #    int64 zero64;
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #    this.assertEquals(0, se.remains());
+        #    this.assertEquals(0, se.first());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(zero64 + 0, se.estimatedIterations());
+        #
+        #    this.assertEquals(0, se.remains());
+        #    this.assertEquals(0, se.first());
+        #}
+      ENDSOURCE
+      SOURCE #testFirstNull
+        #void testFirstNull()
+        #{
+        #    SysEnumerator_First se = SysEnumerator_First::construct(0);
+        #    int64 zero64;
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #    this.assertEquals(0, se.remains());
+        #    this.assertEquals(0, se.first());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(zero64 + 0, se.estimatedIterations());
+        #
+        #    this.assertEquals(0, se.remains());
+        #    this.assertEquals(0, se.first());
+        #}
+      ENDSOURCE
     ENDMETHODS
   ENDCLASS
 
@@ -10406,14 +10534,6 @@ ENDDOC
         #    return 0;
         #}
       ENDSOURCE
-      SOURCE #defaultSequence
-        #protected SysSequenceInt defaultSequence()
-        #{
-        #    SysSequenceInt seq = SysSequenceInt::construct(this.defaultStart(), this.defaultEnd(), this.defaultStep());
-        #
-        #    return seq;
-        #}
-      ENDSOURCE
       SOURCE #defaultStart
         #protected int defaultStart()
         #{
@@ -10457,13 +10577,8 @@ ENDDOC
       ENDSOURCE
       SOURCE #new
         #public void new(SysSequenceInt _sequence = null)
-        #{
-        #    if( _sequence == null )
-        #    {
-        #        _sequence = this.defaultSequence();
-        #    }
-        #
-        #    sequence = _sequence;
+        #{;
+        #    sequence = this.sequenceOrDefault(_sequence);
         #    super();
         #}
       ENDSOURCE
@@ -10486,6 +10601,17 @@ ENDDOC
         #public SysSequenceInt sequence()
         #{
         #    return sequence;
+        #}
+      ENDSOURCE
+      SOURCE #sequenceOrDefault
+        #protected SysSequenceInt sequenceOrDefault(SysSequenceInt _sequence = null)
+        #{
+        #    if( _sequence == null )
+        #    {
+        #        _sequence = SysSequenceInt::construct(this.defaultStart(), this.defaultEnd(), this.defaultStep());
+        #    }
+        #
+        #    return _sequence;
         #}
       ENDSOURCE
     ENDMETHODS
@@ -10534,14 +10660,6 @@ ENDDOC
         #    return 0;
         #}
       ENDSOURCE
-      SOURCE #defaultSequence
-        #protected SysSequenceInt64 defaultSequence()
-        #{
-        #    SysSequenceInt64 seq = SysSequenceInt64::construct(this.defaultStart(), this.defaultEnd(), this.defaultStep());
-        #
-        #    return seq;
-        #}
-      ENDSOURCE
       SOURCE #defaultStart
         #protected int64 defaultStart()
         #{
@@ -10585,13 +10703,8 @@ ENDDOC
       ENDSOURCE
       SOURCE #new
         #public void new(SysSequenceInt64 _sequence = null)
-        #{
-        #    if( _sequence == null )
-        #    {
-        #        _sequence = this.defaultSequence();
-        #    }
-        #
-        #    sequence = _sequence;
+        #{;
+        #    sequence = this.sequenceOrDefault(_sequence);
         #    super();
         #}
       ENDSOURCE
@@ -10608,6 +10721,17 @@ ENDDOC
         #public SysSequenceInt64 sequence()
         #{
         #    return sequence;
+        #}
+      ENDSOURCE
+      SOURCE #sequenceOrDefault
+        #protected SysSequenceInt64 sequenceOrDefault(SysSequenceInt64 _sequence = null)
+        #{
+        #    if( _sequence == null )
+        #    {
+        #        _sequence = SysSequenceInt64::construct(this.defaultStart(), this.defaultEnd(), this.defaultStep());
+        #    }
+        #
+        #    return _sequence;
         #}
       ENDSOURCE
     ENDMETHODS
@@ -10966,9 +11090,9 @@ ENDDOC
       SOURCE #next
         #protected boolean next()
         #{
-        #    boolean ret = super() && this.base();
+        #    boolean ret = super();
         #
-        #    if( ret )
+        #    if( ret && this.base() )
         #    {
         #        current = this.base().read();
         #    }
@@ -11015,6 +11139,17 @@ ENDDOC
         #    return base;
         #}
       ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected Keywords baseOrDefault(Keywords _base = null)
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = new Keywords();
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
@@ -11052,12 +11187,7 @@ ENDDOC
       SOURCE #new
         #public void new(Keywords _base = null)
         #{
-        #    if( _base == null )
-        #    {
-        #        _base = new Keywords();
-        #    }
-        #
-        #    base = _base;
+        #    base = this.baseOrDefault(_base);
         #    super();
         #}
       ENDSOURCE
@@ -11084,7 +11214,7 @@ ENDDOC
         #{
         #    boolean ret = super();
         #
-        #    if( ret )
+        #    if( ret && this.base() )
         #    {
         #        current = this.base().firstFunction();
         #    }
@@ -11105,7 +11235,7 @@ ENDDOC
         #{
         #    boolean ret = super();
         #
-        #    if( ret )
+        #    if( ret && this.base() )
         #    {
         #        current = this.base().nextFunction();
         #    }
@@ -11194,7 +11324,7 @@ ENDDOC
         #{
         #    boolean ret = super();
         #
-        #    if( ret )
+        #    if( ret && this.base() )
         #    {
         #        current = this.base().firstSymbol();
         #    }
@@ -11215,7 +11345,7 @@ ENDDOC
         #{
         #    boolean ret = super();
         #
-        #    if( ret )
+        #    if( ret && this.base() )
         #    {
         #        current = this.base().nextSymbol();
         #    }
@@ -11428,6 +11558,17 @@ ENDDOC
         #    return baseEnumerator;
         #}
       ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected List baseOrDefault(List _base = null)
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = new List(Types::Integer);
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
       SOURCE #begin
         #protected boolean begin()
         #{
@@ -11485,12 +11626,10 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(List _base)
-        #{;
-        #    Debug::assert(_base != null);
-        #
-        #    base = _base;
-        #    baseEnumerator = _base.getEnumerator();
+        #public void new(List _base = null)
+        #{
+        #    base = this.baseOrDefault(_base);
+        #    baseEnumerator = base.getEnumerator();
         #    super();
         #}
       ENDSOURCE
@@ -11510,7 +11649,7 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_List construct(List base)
+        #public static SysEnumerator_List construct(List base = null)
         #{
         #    SysEnumerator_List enumerator = new SysEnumerator_List(base);
         #
@@ -11612,6 +11751,20 @@ ENDDOC
         #    this.assertEquals(0, se.estimatedIterations());
         #}
       ENDSOURCE
+      SOURCE #testListNull
+        #void testListNull()
+        #{
+        #    SysEnumerator_List se = SysEnumerator_List::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
     ENDMETHODS
   ENDCLASS
 
@@ -11640,6 +11793,17 @@ ENDDOC
         #public MapEnumerator baseEnumerator()
         #{
         #    return baseEnumerator;
+        #}
+      ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected Map baseOrDefault(Map _base = null)
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = new Map(Types::Integer, Types::Integer);
+        #    }
+        #
+        #    return _base;
         #}
       ENDSOURCE
       SOURCE #begin
@@ -11711,12 +11875,10 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(Map _base)
-        #{;
-        #    Debug::assert(_base != null);
-        #
-        #    base = _base;
-        #    baseEnumerator = _base.getEnumerator();
+        #public void new(Map _base = null)
+        #{
+        #    base = this.baseOrDefault(_base);
+        #    baseEnumerator = base.getEnumerator();
         #    super();
         #}
       ENDSOURCE
@@ -11736,7 +11898,7 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_Map construct(Map base)
+        #public static SysEnumerator_Map construct(Map base = null)
         #{
         #    SysEnumerator_Map enumerator = new SysEnumerator_Map(base);
         #
@@ -11850,14 +12012,14 @@ ENDDOC
 
 ***Element: CLS
 
-; Microsoft Dynamics AX Class: SysEnumerator_Query unloaded
+; Microsoft Dynamics AX Class: SysEnumerator_QueryDatasource unloaded
 ; --------------------------------------------------------------------------------
   CLSVERSION 1
   
-  CLASS #SysEnumerator_Query
+  CLASS #SysEnumerator_QueryDatasource
     PROPERTIES
-      Name                #SysEnumerator_Query
-      Extends             #SysEnumerator_QueryRun
+      Name                #SysEnumerator_QueryDatasource
+      Extends             #SysEnumerator_Indexed
       RunOn               #Called from
     ENDPROPERTIES
     
@@ -11866,37 +12028,63 @@ ENDDOC
       SOURCE #base
         #public Query base()
         #{
-        #    return query;
+        #    return base;
         #}
       ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #public class SysEnumerator_Query extends SysEnumerator_QueryRun
+        #public class SysEnumerator_QueryDatasource extends SysEnumerator_Indexed
         #{
-        #    Query query;
+        #    Query base;
+        #}
+      ENDSOURCE
+      SOURCE #current
+        #public QueryBuildDataSource current()
+        #{
+        #    int idx = this.currentIdx();
+        #    QueryBuildDataSource ret = this.base().dataSourceNo(idx);
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #currentKey
+        #public QueryBuildDataSource currentKey()
+        #{
+        #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #currentValue
+        #public QueryBuildDataSource currentValue()
+        #{
+        #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #defaultEnd
+        #protected int defaultEnd()
+        #{
+        #    int ret = this.base().dataSourceCount();
+        #
+        #    return ret;
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(Query _base)
-        #{;
-        #    Debug::assert(_base != null);
-        #
-        #    query = _base;
-        #    super(new QueryRun(_base));
-        #}
-      ENDSOURCE
-      SOURCE #queryRun
-        #public Queryrun queryRun()
+        #public void new(Query _base, SysSequenceInt _idx = null)
         #{
-        #    return base;
+        #    if( !_base )
+        #    {
+        #        _base = new Query();
+        #    }
+        #
+        #    base = _base;
+        #    super(_idx);
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_Query construct(Query base)
+        #public static SysEnumerator_QueryDatasource construct(Query base, SysRangeInt idx = null)
         #{
-        #    SysEnumerator_Query enumerator = new SysEnumerator_Query(base);
+        #    SysEnumerator_QueryDatasource enumerator = new SysEnumerator_QueryDatasource(base, idx);
         #
         #    return enumerator;
         #}
@@ -11913,7 +12101,7 @@ ENDDOC
   CLASS #SysEnumerator_QueryRun
     PROPERTIES
       Name                #SysEnumerator_QueryRun
-      Extends             #xSysEnumerator
+      Extends             #SysEnumerator_Indexed64
       RunOn               #Called from
     ENDPROPERTIES
     
@@ -11925,40 +12113,52 @@ ENDDOC
         #    return base;
         #}
       ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected QueryRun baseOrDefault(QueryRun _base = null)
+        #{
+        #    if( !_base )
+        #    {
+        #        _base = new QueryRun(new Query());
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #public class SysEnumerator_QueryRun extends xSysEnumerator
+        #public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
         #{
         #    QueryRun base;
-        #    int64 countLoops;
+        #    SysRangeInt dsRange;
+        #
+        #    int64 estimatedIterations;
         #}
       ENDSOURCE
       SOURCE #current
         #public Common current(int dataSourceNo = 1)
         #{
-        #    anytype ret = base.getNo(dataSourceNo);
+        #    Common ret;
+        #
+        #    if( dsRange.contains(dataSourceNo) )
+        #    {
+        #        ret = base.getNo(dataSourceNo);
+        #    }
         #
         #    return ret;
         #}
       ENDSOURCE
-      SOURCE #currentIdx
-        #public Common currentIdx()
-        #{
-        #    return this.current();
-        #}
-      ENDSOURCE
       SOURCE #currentKey
-        #public Common currentKey()
+        #public Common currentKey(int dataSourceNo = 1)
         #{
-        #    return this.current();
+        #    return this.current(dataSourceNo);
         #}
       ENDSOURCE
       SOURCE #currentValue
-        #public Common currentValue()
+        #public Common currentValue(int dataSourceNo = 1)
         #{
-        #    return this.current();
+        #    return this.current(dataSourceNo);
         #}
       ENDSOURCE
       SOURCE #currentValueProvided
@@ -11968,29 +12168,28 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #estimatedIterations
-        #public int64 estimatedIterations(int64 estimatedIterations = -1)
+        #public int64 estimatedIterations(int64 _estimatedIterations = -1)
         #{
-        #    if( countLoops == 0 )
+        #    if( estimatedIterations == 0 )
         #    {
-        #        countLoops = SysQuery::countLoops(this.base());
+        #        estimatedIterations = SysQuery::countLoops(this.base());
         #    }
         #
-        #    return countLoops;
+        #    return estimatedIterations;
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(QueryRun _base)
-        #{;
-        #    Debug::assert(_base != null);
-        #
-        #    base = _base;
+        #public void new(QueryRun _base = null)
+        #{
+        #    base = this.baseOrDefault(_base);
+        #    dsRange = SysRangeInt::construct(1, base.query().dataSourceCount());
         #    super();
         #}
       ENDSOURCE
       SOURCE #next
         #protected boolean next()
         #{
-        #    boolean ret = super() && base.next();
+        #    boolean ret = super() && this.base().next();
         #
         #    return ret;
         #}
@@ -11998,12 +12197,12 @@ ENDDOC
       SOURCE #reset
         #public void reset()
         #{
-        #    base.reset();
+        #    this.base().reset();
         #    super();
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_QueryRun construct(QueryRun base)
+        #public static SysEnumerator_QueryRun construct(QueryRun base = null)
         #{
         #    SysEnumerator_QueryRun enumerator = new SysEnumerator_QueryRun(base);
         #
@@ -12076,16 +12275,14 @@ ENDDOC
       SOURCE #more
         #protected boolean more()
         #{
-        #    boolean ret = (base.RecId != 0);
+        #    boolean ret = (this.base().RecId != 0);
         #
         #    return ret;
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(Common _base)
-        #{;
-        #    Debug::assert(_base != null);
-        #
+        #public void new(Common _base = null)
+        #{
         #    base = _base;
         #    super();
         #}
@@ -12095,7 +12292,7 @@ ENDDOC
         #{
         #    boolean ret = super();
         #
-        #    if( ret )
+        #    if( ret && this.base().TableId )
         #    {
         #        next base;
         #    }
@@ -12116,7 +12313,7 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_Record construct(Common base)
+        #public static SysEnumerator_Record construct(Common base = null)
         #{
         #    SysEnumerator_Record enumerator = new SysEnumerator_Record(base);
         #
@@ -12146,6 +12343,17 @@ ENDDOC
         #public RecordLinkList base()
         #{
         #    return base;
+        #}
+      ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected RecordLinkList baseOrDefault(RecordLinkList _base = null)
+        #{
+        #    if( !_base )
+        #    {
+        #        _base = new RecordLinkList();
+        #    }
+        #
+        #    return _base;
         #}
       ENDSOURCE
       SOURCE #begin
@@ -12205,11 +12413,9 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(RecordLinkList _base)
-        #{;
-        #    Debug::assert(_base != null);
-        #
-        #    base = _base;
+        #public void new(RecordLinkList _base = null)
+        #{
+        #    base = this.baseOrDefault(_base);
         #    super();
         #}
       ENDSOURCE
@@ -12228,7 +12434,7 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_RecordLinkList construct(RecordLinkList base)
+        #public static SysEnumerator_RecordLinkList construct(RecordLinkList base = null)
         #{
         #    SysEnumerator_RecordLinkList enumerator = new SysEnumerator_RecordLinkList(base);
         #
@@ -12258,6 +12464,19 @@ ENDDOC
         #public RecordSortedList base()
         #{
         #    return base;
+        #}
+      ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected RecordSortedList baseOrDefault(RecordSortedList _base = null)
+        #{
+        #    TmpTree tmp;
+        #
+        #    if( !_base )
+        #    {
+        #        _base = new RecordSortedList(tmp.TableId);
+        #    }
+        #
+        #    return _base;
         #}
       ENDSOURCE
       SOURCE #begin
@@ -12331,12 +12550,9 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(RecordSortedList _base, Common _startFrom = null)
-        #{;
-        #    Debug::assert(_base != null);
-        #    //Debug::assert(_startFrom.TableId == _base.tableId);
-        #
-        #    base = _base;
+        #public void new(RecordSortedList _base = null, Common _startFrom = null)
+        #{
+        #    base = this.baseOrDefault(_base);
         #    startFrom = _startFrom;
         #    super();
         #}
@@ -12421,16 +12637,23 @@ ENDDOC
       SOURCE #testRecordEmpty
         #void testRecordEmpty()
         #{
-        #    // see also combined Record + value2set
-        #
-        #    SysUserInfo sysUserInfo = SysUserInfo::find(); // first only, current user
+        #    SysUserInfo sysUserInfo;
         #    SysEnumerator_Record se = SysEnumerator_Record::construct(sysUserInfo);
         #
         #    this.assertNotNull(se);
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
         #
-        #    this.assertTrue(se.moveNext());
-        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testRecordNull
+        #void testRecordNull()
+        #{
+        #    SysEnumerator_Record se = SysEnumerator_Record::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
         #
         #    this.assertFalse(se.moveNext());
         #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
@@ -12474,15 +12697,29 @@ ENDDOC
         #    return base;
         #}
       ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected RunbaseProgress baseOrDefault( RunbaseProgress _base = null
+        #                                       , Caption caption = ''
+        #                                       , int64 total = 0
+        #                                       , Filename animation = #AviStopwatch
+        #                                       )
+        #
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = RunbaseProgress::construct(1);
+        #        _base.setCaption(caption);
+        #        _base.setTotal(total);
+        #        _base.setAnimation(animation);
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
       SOURCE #begin
         #protected boolean begin()
         #{
-        #    boolean ret = super();
-        #
-        #    if( ret )
-        #    {
-        #        this.base().reset();
-        #    }
+        #    boolean ret = super() && this.next();
         #
         #    return ret;
         #}
@@ -12496,28 +12733,6 @@ ENDDOC
         #    #AviFiles
         #
         #    RunbaseProgress base;
-        #}
-      ENDSOURCE
-      SOURCE #defaultProgress
-        #public RunbaseProgress defaultProgress(Caption caption = '', int64 total = 0, Filename animation = #AviStopwatch, Runbase runbase = null)
-        #{
-        #    RunbaseProgress progress;
-        #;
-        #    if(runbase != null)
-        #    {
-        #        runbase.progressInit(caption, total, animation);
-        #        progress = runbase.parmProgress();
-        #    }
-        #    else
-        #    {
-        #        RunbaseProgress::construct(1);
-        #        progress.setCaption(caption);
-        #        progress.setTotal(total);
-        #        progress.setAnimation(animation);
-        #    }
-        #
-        #    return progress;
-        #
         #}
       ENDSOURCE
       SOURCE #estimatedIterations
@@ -12541,23 +12756,14 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(RunbaseProgress _base = null)
+        #public void new( RunbaseProgress _base = null
+        #               , Caption caption = ''
+        #               , int64 total = 0
+        #               , Filename animation = #AviStopwatch
+        #               )
         #{
-        #    if( _base == null )
-        #    {
-        #        _base = this.defaultProgress();
-        #    }
-        #
-        #    base = _base;
-        #
-        #    if( base.getTotal() )
-        #    {
-        #        super(SysSequenceInt64::construct(1, base.getTotal()));
-        #    }
-        #    else
-        #    {
-        #        super();
-        #    }
+        #    base = this.baseOrDefault(_base, caption, total, animation);
+        #    super();
         #}
       ENDSOURCE
       SOURCE #next
@@ -12573,47 +12779,109 @@ ENDDOC
         #    return ret;
         #}
       ENDSOURCE
-      SOURCE #construct
-        #public static SysEnumerator_RunBaseProgress construct(RunbaseProgress base = null)
+      SOURCE #reset
+        #public void reset()
         #{
-        #    SysEnumerator_RunBaseProgress enumerator = new SysEnumerator_RunBaseProgress(base);
+        #    this.base().reset();
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #public static SysEnumerator_RunBaseProgress construct( RunbaseProgress base = null
+        #                                                     , Caption   caption    = ''
+        #                                                     , int64     total      = 0
+        #                                                     , Filename  animation  = #AviStopwatch
+        #                                                     )
+        #{
+        #    SysEnumerator_RunBaseProgress enumerator = new SysEnumerator_RunBaseProgress(base, caption, total, animation);
         #
         #    return enumerator;
         #}
       ENDSOURCE
       SOURCE #newFromRunBase
-        ##AviFiles
         #public static SysEnumerator_RunBaseProgress newFromRunBase( Runbase   runbase    = null
-        #                                                          , int64     total      = 0
         #                                                          , Caption   caption    = ''
+        #                                                          , int64     total      = 0
         #                                                          , Filename  animation  = #AviStopwatch
         #                                                          )
         #{
-        #    SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(runbase.parmProgress());
-        #    RunbaseProgress progress = enumerator.base();
+        #    RunbaseProgress progress;
+        #    SysEnumerator_RunBaseProgress enumerator;
         #
-        #    progress.setAnimation(animation);
-        #    progress.setCaption(caption);
-        #    progress.setTotal(total);
+        #    if( runbase )
+        #    {
+        #        runbase.progressInit(caption, total, animation);
+        #        progress = runbase.parmProgress();
+        #    }
         #
+        #    enumerator = SysEnumerator_RunBaseProgress::construct(progress, caption, total, animation);
         #    return enumerator;
         #}
       ENDSOURCE
       SOURCE #newGeneral
-        #public static SysEnumerator_RunBaseProgress newGeneral(
-        #    Filename    animation = #AviStopwatch,
-        #    Caption     caption = '',
-        #    int64       total = 0)
+        #public static SysEnumerator_RunBaseProgress newGeneral( Filename    animation = #AviStopwatch
+        #                                                      , Caption     caption = ''
+        #                                                      , int64       total = 0
+        #                                                      )
         #{
-        #    SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct();
-        #    RunbaseProgress progress = enumerator.base();
-        #;
-        #    progress.setAnimation(animation);
-        #    progress.setCaption(caption);
-        #    progress.setTotal(total);
+        #    SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(null, animation, total, caption);
         #
         #    return enumerator;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_RunBaseProgressTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_RunBaseProgressTest
+    PROPERTIES
+      Name                #SysEnumerator_RunBaseProgressTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_RunBaseProgressTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testEstimatedIterations
+        #void testEstimatedIterations()
+        #{
+        #    int64 estimated = 123;
+        #    SysEnumerator_RunBaseProgress se = SysEnumerator_RunBaseProgress::construct();
         #
+        #    this.assertNotNull(se);
+        #
+        #    this.assertEquals(int64Max(), se.estimatedIterations());    // total not defined
+        #    this.assertEquals(int64Max(), se.estimatedIterations(0));   // total = 0
+        #
+        #    this.assertEquals(estimated, se.estimatedIterations(estimated));
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(estimated, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testRunbase
+        #void testRunbase()
+        #{
+        #    RunBase runBase = Tutorial_RunbaseBatch::construct();
+        #    SysEnumerator_RunBaseProgress se = SysEnumerator_RunBaseProgress::newFromRunBase(runBase);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotNull(se.base());
+        #
+        #    this.assertEquals(runBase.parmProgress(), se.base());
         #}
       ENDSOURCE
     ENDMETHODS
@@ -12637,6 +12905,17 @@ ENDDOC
       SOURCE #base
         #public SecurityKeySet base()
         #{
+        #    return base;
+        #}
+      ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected SecurityKeySet baseOrDefault(SecurityKeySet _base = null)
+        #{
+        #    if( !_base )
+        #    {
+        #        _base = new SecurityKeySet();
+        #    }
+        #
         #    return base;
         #}
       ENDSOURCE
@@ -12687,16 +12966,14 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(SecurityKeySet _base, SysSequenceInt _idx = null)
-        #{;
-        #    Debug::assert(_base != null);
-        #
-        #    base = _base;
+        #public void new(SecurityKeySet _base = null, SysSequenceInt _idx = null)
+        #{
+        #    base = this.baseOrDefault(_base);
         #    super(_idx);
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_SecurityKeySet construct(SecurityKeySet base, SysRangeInt idx = null)
+        #public static SysEnumerator_SecurityKeySet construct(SecurityKeySet base = null, SysRangeInt idx = null)
         #{
         #    SysEnumerator_SecurityKeySet enumerator = new SysEnumerator_SecurityKeySet(base, idx);
         #
@@ -12725,6 +13002,18 @@ ENDDOC
         #public ISysSequence base()
         #{
         #    return sequence;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected ISysSequence baseOrDefault(ISysSequence _sequence = null)
+        #{
+        #    if( !_sequence )
+        #    {
+        #        _sequence = SysSequenceInt::construct(1, 0);
+        #    }
+        #
+        #    return _sequence;
         #}
         #
       ENDSOURCE
@@ -12792,11 +13081,9 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(ISysSequence _sequence)
+        #public void new(ISysSequence _sequence = null)
         #{;
-        #    Debug::assert(_sequence != null);
-        #
-        #    sequence = _sequence;
+        #    sequence = this.baseOrDefault(_sequence);
         #    super();
         #}
       ENDSOURCE
@@ -12814,7 +13101,7 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_Sequence construct(ISysSequence sequence)
+        #public static SysEnumerator_Sequence construct(ISysSequence sequence = null)
         #{
         #    SysEnumerator_Sequence enumerator = new SysEnumerator_Sequence(sequence);
         #
@@ -12889,6 +13176,20 @@ ENDDOC
         #{
         #    SysSequenceInt sequence = SysSequenceInt::construct(1, 0, 2);
         #    SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(sequence);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testSequenceNull
+        #void testSequenceNull()
+        #{
+        #    SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(null);
         #
         #    this.assertNotNull(se);
         #    this.assertEquals(0, se.estimatedIterations());
@@ -12984,6 +13285,17 @@ ENDDOC
         #    return baseEnumerator;
         #}
       ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected Set baseOrDefault(Set _base = null)
+        #{
+        #    if( !_base )
+        #    {
+        #        _base = new Set(Types::Integer);
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
       SOURCE #begin
         #protected boolean begin()
         #{
@@ -13043,12 +13355,10 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(Set _base)
-        #{;
-        #    Debug::assert(_base != null);
-        #
-        #    base = _base;
-        #    baseEnumerator = _base.getEnumerator();
+        #public void new(Set _base = null)
+        #{
+        #    base = this.baseOrDefault(_base);
+        #    baseEnumerator = base.getEnumerator();
         #    super();
         #}
       ENDSOURCE
@@ -13068,7 +13378,7 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_Set construct(Set base)
+        #public static SysEnumerator_Set construct(Set base = null)
         #{
         #    SysEnumerator_Set enumerator = new SysEnumerator_Set(base);
         #
@@ -13175,6 +13485,20 @@ ENDDOC
         #    this.assertEquals(0, se.estimatedIterations());
         #}
       ENDSOURCE
+      SOURCE #testSetNull
+        #void testSetNull()
+        #{
+        #    SysEnumerator_Set se = SysEnumerator_Set::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
     ENDMETHODS
   ENDCLASS
 
@@ -13197,6 +13521,17 @@ ENDDOC
         #public Struct base()
         #{
         #    return base;
+        #}
+      ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected Struct baseOrDefault(Struct _base = null)
+        #{
+        #    if( !_base )
+        #    {
+        #        _base = new Struct();
+        #    }
+        #
+        #    return _base;
         #}
       ENDSOURCE
       SOURCE #classDeclaration
@@ -13261,16 +13596,19 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(Struct _base, SysSequenceInt _idx = null)
-        #{;
-        #    Debug::assert(_base != null);
+        #public void new(Struct _base = null, SysSequenceInt _idx = null)
+        #{
+        #    if( !_base )
+        #    {
+        #        _base = new Struct();
+        #    }
         #
         #    base = _base;
         #    super(_idx);
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_Struct construct(Struct base, SysRangeInt idx = null)
+        #public static SysEnumerator_Struct construct(Struct base = null, SysRangeInt idx = null)
         #{
         #    SysEnumerator_Struct enumerator = new SysEnumerator_Struct(base, idx);
         #
@@ -13377,6 +13715,20 @@ ENDDOC
         #    this.assertEquals(0, se.estimatedIterations());
         #}
       ENDSOURCE
+      SOURCE #testStructNull
+        #void testStructNull()
+        #{
+        #    SysEnumerator_Struct se = SysEnumerator_Struct::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
     ENDMETHODS
   ENDCLASS
 
@@ -13401,15 +13753,21 @@ ENDDOC
         #    return base;
         #}
       ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected SysOperationProgress baseOrDefault(SysOperationProgress _base = null)
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = SysOperationProgress::newGeneral(#AviStopwatch, '', 0);
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
       SOURCE #begin
         #protected boolean begin()
         #{
-        #    boolean ret = super();
-        #
-        #    if( ret )
-        #    {
-        #        this.base().reset();
-        #    }
+        #    boolean ret = super() && this.next();
         #
         #    return ret;
         #}
@@ -13423,15 +13781,6 @@ ENDDOC
         #    #AviFiles
         #
         #    SysOperationProgress base;
-        #}
-      ENDSOURCE
-      SOURCE #defaultProgress
-        #public SysOperationProgress defaultProgress()
-        #{
-        #    SysOperationProgress progress = SysOperationProgress::newGeneral(#AviStopwatch, '', 0);
-        #
-        #    return progress;
-        #
         #}
       ENDSOURCE
       SOURCE #estimatedIterations
@@ -13457,12 +13806,7 @@ ENDDOC
       SOURCE #new
         #public void new(SysOperationProgressBase _base = null)
         #{
-        #    if( _base == null )
-        #    {
-        #        _base = this.defaultProgress();
-        #    }
-        #
-        #    base = _base;
+        #    base = this.baseOrDefault(_base);
         #
         #    if( base.getTotal() )
         #    {
@@ -13485,6 +13829,13 @@ ENDDOC
         #    }
         #
         #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #reset
+        #public void reset()
+        #{
+        #    this.base().reset();
+        #    super();
         #}
       ENDSOURCE
       SOURCE #construct
@@ -13545,6 +13896,17 @@ ENDDOC
         #    }
         #
         #    return baseEnumerator;
+        #}
+      ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected System.Collections.IEnumerable baseOrDefault(System.Collections.IEnumerable _base = null)
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = new System.Collections.ArrayList();
+        #    }
+        #
+        #    return _base;
         #}
       ENDSOURCE
       SOURCE #begin
@@ -13620,19 +13982,17 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(System.Collections.IEnumerable _base)
+        #public void new(System.Collections.IEnumerable _base = null)
         #{
         #    System.Type enumeratorType;
         #;
-        #    Debug::assert(_base != null);
+        #    base = this.baseOrDefault(_base);
         #
         #    nil = CLRInterop::Null('System.Object[]');
         #    enumeratorType = System.Type::GetType('System.Collections.IEnumerator');
         #    currentPropery = enumeratorType.GetProperty('Current');
         #    moveNextMethod = enumeratorType.GetMethod('MoveNext');
         #    resetMethod    = enumeratorType.GetMethod('Reset');
-        #
-        #    base = _base;
         #
         #    super();
         #}
@@ -13653,7 +14013,7 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_SystemCollection construct(System.Collections.IEnumerable base)
+        #public static SysEnumerator_SystemCollection construct(System.Collections.IEnumerable base = null)
         #{
         #    SysEnumerator_SystemCollection enumerator = new SysEnumerator_SystemCollection(base);
         #
@@ -13812,6 +14172,22 @@ ENDDOC
         #
         #    this.assertFalse(se.moveNext());
         #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testSystemNull
+        #void testSystemNull()
+        #{
+        #    SysEnumerator_SystemCollection se = SysEnumerator_SystemCollection::construct(null);
+        #;
+        #    this.assertNotNull(se);
+        #    this.assertNotNull(se.base());
+        #
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
         #}
       ENDSOURCE
     ENDMETHODS
@@ -13975,7 +14351,7 @@ ENDDOC
       SOURCE #testChildNodes
         #void testChildNodes()
         #{
-        #    SysDictTable    sysDictTable = new SysDictTable(tablenum(CustTable));
+        #    SysDictTable sysDictTable = new SysDictTable(tablenum(CustTable));
         #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictTable.treeNode());
         #    int64 zero64;
         #
@@ -14033,7 +14409,8 @@ ENDDOC
       SOURCE #testEmpty
         #void testEmpty()
         #{
-        #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(null);
+        #    SysDictClass sysDictClass = new SysDictClass(classnum(Global));
+        #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictClass.treeNode().AOTfirstChild());
         #    int64 zero64;
         #
         #    this.assertNotNull(se);
@@ -14087,6 +14464,21 @@ ENDDOC
         #    this.assertFalse(se.moveNext());
         #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
         #    this.assertEquals(zero64 + 6, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testNull
+        #void testNull()
+        #{
+        #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(null);
+        #    int64 zero64;
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
         #}
       ENDSOURCE
     ENDMETHODS
@@ -14150,7 +14542,7 @@ ENDDOC
       SOURCE #more
         #protected boolean more()
         #{
-        #    boolean ret = super() && (node != null);
+        #    boolean ret = super() && this.base();
         #
         #    return ret;
         #}
@@ -14324,6 +14716,17 @@ ENDDOC
         #    return base;
         #}
       ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected XmlAttributeArray baseOrDefault(XmlAttributeArray _base = null)
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = new XmlAttributeArray(0);
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
@@ -14377,11 +14780,9 @@ ENDDOC
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(XmlAttributeArray _base, SysSequenceInt _idx = null)
-        #{;
-        #    Debug::assert(_base != null);
-        #
-        #    base = _base;
+        #public void new(XmlAttributeArray _base = null, SysSequenceInt _idx = null)
+        #{
+        #    base = this.baseOrDefault();
         #    super(_idx);
         #}
       ENDSOURCE
@@ -14411,6 +14812,23 @@ ENDDOC
     
     METHODS
       Version: 3
+      SOURCE #begin
+        #protected boolean begin()
+        #{
+        #    boolean ret = super();
+        #
+        #    if( ret && this.origin() )
+        #    {
+        #        node = this.origin().firstChild();
+        #    }
+        #    else
+        #    {
+        #        node = null;
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
@@ -14419,15 +14837,17 @@ ENDDOC
         #{
         #}
       ENDSOURCE
-      SOURCE #new
-        #public void new(XmlNode _node = null)
+      SOURCE #estimatedIterations
+        #public int64 estimatedIterations(int64 estimatedIterations = -1)
         #{
-        #    if( _node )
+        #    int64 ret = 0;
+        #
+        #    if( this.origin() && this.origin().hasChildNodes() )
         #    {
-        #        _node = _node.firstChild();
+        #        ret = super(estimatedIterations);
         #    }
         #
-        #    super(_node);
+        #    return ret;
         #}
       ENDSOURCE
       SOURCE #construct
@@ -14701,6 +15121,11 @@ ENDDOC
       SOURCE #new
         #public void new(XmlNodeList _base = null)
         #{
+        #    if( _base == null )
+        #    {
+        #        _base = XmlDocument::newBlank().root().selectNodes('');
+        #    }
+        #
         #    base = _base;
         #    super();
         #}
@@ -15259,6 +15684,7 @@ ENDDOC
         #public class SysEnumerator_XmlSibling extends xSysEnumerator
         #{
         #    XmlNode node;
+        #    XmlNode origin;
         #    int idx;
         #}
       ENDSOURCE
@@ -15305,6 +15731,7 @@ ENDDOC
         #public void new(XmlNode _node = null)
         #{
         #    node = _node;
+        #    origin = _node;
         #    super();
         #}
       ENDSOURCE
@@ -15313,26 +15740,30 @@ ENDDOC
         #{
         #    boolean ret = super();
         #
-        #    if( ret )
+        #    if( ret && this.base() )
         #    {
-        #        if( this.base() )
-        #        {
-        #            node = this.base().nextSibling();
-        #            idx++;
-        #        }
-        #        else
-        #        {
-        #            node = null;
-        #        }
+        #        node = this.base().nextSibling();
+        #        idx++;
+        #    }
+        #    else
+        #    {
+        #        node = null;
         #    }
         #
         #    return ret;
         #}
       ENDSOURCE
+      SOURCE #origin
+        #public XmlNode origin()
+        #{
+        #    return origin;
+        #}
+      ENDSOURCE
       SOURCE #reset
         #public void reset()
         #{
-        #    throw error(Error::wrongUseOfFunction(funcname()));
+        #    node = origin;
+        #    super();
         #}
       ENDSOURCE
       SOURCE #construct
@@ -17152,9 +17583,9 @@ ENDDOC
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50134
+        UTILOBJECTID 50220
         NODETYPE 329
-        NAME #SysEnumerator_Query
+        NAME #SysEnumerator_QueryDatasource
       ENDNODE
       BEGINNODE
         FILETYPE 0
@@ -17197,6 +17628,13 @@ ENDDOC
         UTILOBJECTID 50115
         NODETYPE 329
         NAME #SysEnumerator_RunBaseProgress
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50219
+        NODETYPE 329
+        NAME #SysEnumerator_RunBaseProgressTest
       ENDNODE
       BEGINNODE
         FILETYPE 0

@@ -7,23 +7,22 @@ public class SysEnumerator_FillSetFromCurrent extends SysEnumerator_FillSet
     protected boolean moveNextPost(boolean ret)
     {
         anytype value;
-    
+
         if( ret && enumeratorGroup )
         {
             value = enumeratorGroup.current();
             ret = this.base(typeof(value)).add(value);
         }
 
-    
         ret = super(ret);
-    
+
         return ret;
     }
 
     public static SysEnumerator_FillSetFromCurrent construct()
     {
         SysEnumerator_FillSetFromCurrent enumerator = new SysEnumerator_FillSetFromCurrent();
-    
+
         return enumerator;
     }
 }

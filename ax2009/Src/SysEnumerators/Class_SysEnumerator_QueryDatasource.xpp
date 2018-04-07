@@ -1,0 +1,55 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_QueryDatasource extends SysEnumerator_Indexed
+{
+    Query base;
+
+    public Query base()
+    {
+        return base;
+    }
+
+    public QueryBuildDataSource current()
+    {
+        int idx = this.currentIdx();
+        QueryBuildDataSource ret = this.base().dataSourceNo(idx);
+
+        return ret;
+    }
+
+    public QueryBuildDataSource currentKey()
+    {
+        return this.current();
+    }
+
+    public QueryBuildDataSource currentValue()
+    {
+        return this.current();
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().dataSourceCount();
+
+        return ret;
+    }
+
+    public void new(Query _base, SysSequenceInt _idx = null)
+    {
+        if( !_base )
+        {
+            _base = new Query();
+        }
+
+        base = _base;
+        super(_idx);
+    }
+
+    public static SysEnumerator_QueryDatasource construct(Query base, SysRangeInt idx = null)
+    {
+        SysEnumerator_QueryDatasource enumerator = new SysEnumerator_QueryDatasource(base, idx);
+
+        return enumerator;
+    }
+}

@@ -3,18 +3,28 @@
 //
 public class SysEnumerator_Array extends SysEnumerator_Indexed
 {
-	Array base;
+    Array base;
 
     public Array base()
     {
         return base;
     }
 
+    protected Array baseOrDefault(Array _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new Array(Types::AnyType);
+        }
+
+        return _base;
+    }
+
     public anytype current()
     {
         int idx = this.currentIdx();
         anytype ret = this.base().value(idx);
-    
+
         return ret;
     }
 
@@ -36,22 +46,20 @@ public class SysEnumerator_Array extends SysEnumerator_Indexed
     protected int defaultEnd()
     {
         int ret = this.base().lastIndex();
-    
+
         return ret;
     }
 
-    public void new(Array _base, SysSequenceInt _idx = null)
-    {;
-        Debug::assert(_base != null);
-    
-        base = _base;
+    public void new(Array _base = null, SysSequenceInt _idx = null)
+    {
+        base = this.baseOrDefault(_base);
         super(_idx);
     }
 
-    public static SysEnumerator_Array construct(Array base, SysRangeInt idx = null)
+    public static SysEnumerator_Array construct(Array base = null, SysRangeInt idx = null)
     {
         SysEnumerator_Array enumerator = new SysEnumerator_Array(base, idx);
-    
+
         return enumerator;
     }
 }

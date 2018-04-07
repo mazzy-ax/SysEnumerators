@@ -3,8 +3,8 @@
 //
 public class SysEnumerator_List extends xSysEnumerator
 {
-	List base;
-	ListEnumerator baseEnumerator;
+    List base;
+    ListEnumerator baseEnumerator;
 
     public List base()
     {
@@ -16,6 +16,16 @@ public class SysEnumerator_List extends xSysEnumerator
         return baseEnumerator;
     }
 
+    protected List baseOrDefault(List _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new List(Types::Integer);
+        }
+
+        return _base;
+    }
+
     protected boolean begin()
     {
         return super() && this.next();
@@ -24,7 +34,7 @@ public class SysEnumerator_List extends xSysEnumerator
     public anytype current()
     {
         anytype ret = baseEnumerator.current();
-    
+
         return ret;
     }
 
@@ -51,23 +61,21 @@ public class SysEnumerator_List extends xSysEnumerator
     public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
         int64 ret = this.base().elements();
-    
+
         return ret;
     }
 
-    public void new(List _base)
-    {;
-        Debug::assert(_base != null);
-    
-        base = _base;
-        baseEnumerator = _base.getEnumerator();
+    public void new(List _base = null)
+    {
+        base = this.baseOrDefault(_base);
+        baseEnumerator = base.getEnumerator();
         super();
     }
 
     protected boolean next()
     {
         boolean ret = super() && baseEnumerator.moveNext();
-    
+
         return ret;
     }
 
@@ -77,10 +85,10 @@ public class SysEnumerator_List extends xSysEnumerator
         super();
     }
 
-    public static SysEnumerator_List construct(List base)
+    public static SysEnumerator_List construct(List base = null)
     {
         SysEnumerator_List enumerator = new SysEnumerator_List(base);
-    
+
         return enumerator;
     }
 }

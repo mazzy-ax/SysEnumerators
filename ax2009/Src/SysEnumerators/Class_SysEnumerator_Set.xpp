@@ -3,8 +3,8 @@
 //
 public class SysEnumerator_Set extends xSysEnumerator
 {
-	Set base;
-	SetEnumerator baseEnumerator;
+    Set base;
+    SetEnumerator baseEnumerator;
 
     public Set base()
     {
@@ -16,17 +16,27 @@ public class SysEnumerator_Set extends xSysEnumerator
         return baseEnumerator;
     }
 
+    protected Set baseOrDefault(Set _base = null)
+    {
+        if( !_base )
+        {
+            _base = new Set(Types::Integer);
+        }
+
+        return _base;
+    }
+
     protected boolean begin()
     {
         boolean ret = super() && this.next();
-    
+
         return ret;
     }
 
     public anytype current()
     {
         anytype ret = baseEnumerator.current();
-    
+
         return ret;
     }
 
@@ -53,23 +63,21 @@ public class SysEnumerator_Set extends xSysEnumerator
     public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
         int64 ret = this.base().elements();
-    
+
         return ret;
     }
 
-    public void new(Set _base)
-    {;
-        Debug::assert(_base != null);
-    
-        base = _base;
-        baseEnumerator = _base.getEnumerator();
+    public void new(Set _base = null)
+    {
+        base = this.baseOrDefault(_base);
+        baseEnumerator = base.getEnumerator();
         super();
     }
 
     protected boolean next()
     {
         boolean ret = super() && baseEnumerator.moveNext();
-    
+
         return ret;
     }
 
@@ -79,10 +87,10 @@ public class SysEnumerator_Set extends xSysEnumerator
         super();
     }
 
-    public static SysEnumerator_Set construct(Set base)
+    public static SysEnumerator_Set construct(Set base = null)
     {
         SysEnumerator_Set enumerator = new SysEnumerator_Set(base);
-    
+
         return enumerator;
     }
 }

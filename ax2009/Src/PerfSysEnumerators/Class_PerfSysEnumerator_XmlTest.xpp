@@ -3,7 +3,7 @@
 //
 class PerfSysEnumerator_XmlTest extends SysTestCase
 {
-	#define.loopCount(1000)
+    #define.loopCount(1000)
 
     void testXml()
     {
@@ -30,7 +30,7 @@ class PerfSysEnumerator_XmlTest extends SysTestCase
         XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
         SysEnumerator_XmlNodeList se;
         int64 zero64;
-    
+
         SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
         while(loop.moveNext())
         {
@@ -38,32 +38,31 @@ class PerfSysEnumerator_XmlTest extends SysTestCase
             this.assertNotNull(se);
             this.assertEquals(zero64 + 4, se.estimatedIterations());
             this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.1', se.current().text());
             this.assertEquals(0, se.currentKey());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.2', se.current().text());
             this.assertEquals(1, se.currentKey());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.3', se.current().text());
             this.assertEquals(2, se.currentKey());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.4', se.current().text());
             this.assertEquals(3, se.currentKey());
-    
+
             this.assertFalse(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Outside, se.position());
             this.assertEquals(zero64 + 4, se.estimatedIterations());
         }
-
     }
 
     void testXmlIndex()
@@ -91,7 +90,7 @@ class PerfSysEnumerator_XmlTest extends SysTestCase
         XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
         SysEnumerator_XmlNodeListIndex se;
         int64 zero64;
-    
+
         SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
         while(loop.moveNext())
         {
@@ -99,32 +98,31 @@ class PerfSysEnumerator_XmlTest extends SysTestCase
             this.assertNotNull(se);
             this.assertEquals(zero64 + 4, se.estimatedIterations());
             this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.1', se.current().text());
             this.assertEquals(0, se.currentKey());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.2', se.current().text());
             this.assertEquals(1, se.currentKey());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.3', se.current().text());
             this.assertEquals(2, se.currentKey());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.4', se.current().text());
             this.assertEquals(3, se.currentKey());
-    
+
             this.assertFalse(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Outside, se.position());
             this.assertEquals(zero64 + 4, se.estimatedIterations());
         }
-
     }
 
     void testXmlSibling()
@@ -152,7 +150,7 @@ class PerfSysEnumerator_XmlTest extends SysTestCase
         XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
         SysEnumerator_XmlSibling se;
         int64 zero64;
-    
+
         SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
         while(loop.moveNext())
         {
@@ -160,31 +158,30 @@ class PerfSysEnumerator_XmlTest extends SysTestCase
             this.assertNotNull(se);
             this.assertEquals(int64Max(), se.estimatedIterations());
             this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.1', se.current().text());
             this.assertEquals(0, se.currentKey());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.2', se.current().text());
             this.assertEquals(1, se.currentKey());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.3', se.current().text());
             this.assertEquals(2, se.currentKey());
-    
+
             this.assertTrue(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Inside, se.position());
             this.assertEquals('1.4', se.current().text());
             this.assertEquals(3, se.currentKey());
-    
+
             this.assertFalse(se.moveNext());
             this.assertEquals(SysEnumeratorPosition::Outside, se.position());
             this.assertEquals(int64Max(), se.estimatedIterations());
         }
-
     }
 }

@@ -8,7 +8,7 @@ public class SysEnumerator_DictTable_FieldGroup extends SysEnumerator_DictTable
     {
         int idx = this.currentIdx();
         str ret = this.base().fieldGroup(idx);
-    
+
         return ret;
     }
 
@@ -21,7 +21,7 @@ public class SysEnumerator_DictTable_FieldGroup extends SysEnumerator_DictTable
     public DictFieldGroup currentValue()
     {
         DictFieldGroup dictFieldGroup = new DictFieldGroup(this.base().id(), this.current());
-    
+
         return dictFieldGroup;
     }
 
@@ -33,14 +33,14 @@ public class SysEnumerator_DictTable_FieldGroup extends SysEnumerator_DictTable
     protected int defaultEnd()
     {
         int ret = this.base().fieldGroupCnt();
-    
+
         return ret;
     }
 
     public static SysEnumerator_DictTable_FieldGroup construct(DictTable base, SysRangeInt idx = null)
     {
         SysEnumerator_DictTable_FieldGroup enumerator = new SysEnumerator_DictTable_FieldGroup(base, idx);
-    
+
         return enumerator;
     }
 }

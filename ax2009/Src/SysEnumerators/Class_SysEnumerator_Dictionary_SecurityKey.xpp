@@ -8,7 +8,7 @@ public class SysEnumerator_Dictionary_SecurityKey extends SysEnumerator_Dictiona
     {
         int idx = this.currentIdx();
         configurationKeyId ret = this.base().securityKeyCnt2Id(idx);
-    
+
         return ret;
     }
 
@@ -36,14 +36,14 @@ public class SysEnumerator_Dictionary_SecurityKey extends SysEnumerator_Dictiona
     protected int defaultEnd()
     {
         int ret = this.base().securityKeyCnt();
-    
+
         return ret;
     }
 
     public static SysEnumerator_Dictionary_SecurityKey construct(Dictionary base, SysRangeInt idx = null)
     {
         SysEnumerator_Dictionary_SecurityKey enumerator = new SysEnumerator_Dictionary_SecurityKey(base, idx);
-    
+
         return enumerator;
     }
 }

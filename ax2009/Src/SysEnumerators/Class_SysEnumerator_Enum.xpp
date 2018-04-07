@@ -3,7 +3,7 @@
 //
 public class SysEnumerator_Enum extends SysEnumerator_Indexed
 {
-	SysDictEnum base;
+    SysDictEnum base;
 
     public SysDictEnum base()
     {
@@ -19,7 +19,7 @@ public class SysEnumerator_Enum extends SysEnumerator_Indexed
     {
         int idx = this.currentIdx();
         str ret = this.base().index2Symbol(idx);
-    
+
         return ret;
     }
 
@@ -32,7 +32,7 @@ public class SysEnumerator_Enum extends SysEnumerator_Indexed
     {
         int idx = this.currentIdx();
         int ret = this.base().index2Value(idx);
-    
+
         return ret;
     }
 
@@ -44,7 +44,7 @@ public class SysEnumerator_Enum extends SysEnumerator_Indexed
     protected int defaultEnd()
     {
         int ret = this.base().values() - 1;
-    
+
         return ret;
     }
 
@@ -56,7 +56,7 @@ public class SysEnumerator_Enum extends SysEnumerator_Indexed
     public void new(SysDictEnum _base, SysSequenceInt _idx = null)
     {;
         Debug::assert(_base != null);
-    
+
         base = _base;
         super(_idx);
     }
@@ -64,11 +64,11 @@ public class SysEnumerator_Enum extends SysEnumerator_Indexed
     public static SysEnumerator_Enum construct(SysDictEnum base, SysRangeInt idx = null)
     {
         SysEnumerator_Enum enumerator = new SysEnumerator_Enum(base, idx);
-    
+
         return enumerator;
     }
 
-    
+
     public static SysEnumerator_Enum newFromTo(anytype startEnumValue, anytype endEnumValue = null)
     {
         SysEnumerator_Enum  enumerator;
@@ -81,7 +81,7 @@ public class SysEnumerator_Enum extends SysEnumerator_Indexed
         {
             startEnumIdx = base.value2Index(startEnumValue);
         }
-    
+
         if( typeof(startEnumValue) == types::Enum )
         {
             endEnumIdx = base.value2Index(endEnumValue);
@@ -90,10 +90,10 @@ public class SysEnumerator_Enum extends SysEnumerator_Indexed
         {
             endEnumIdx = base.values() - 1;
         }
-    
+
         sequence = new SysSequenceInt(startEnumIdx, endEnumIdx, 1);
         enumerator = new SysEnumerator_Enum(base, sequence);
-    
+
         return enumerator;
     }
 }

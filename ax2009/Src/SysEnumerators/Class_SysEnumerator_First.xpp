@@ -8,13 +8,13 @@
 /// </summary>
 public class SysEnumerator_First extends xSysEnumerator
 {
-	int first;
-	int remains;
+    int first;
+    int remains;
 
     protected boolean begin()
     {
         boolean ret = super() && this.next();
-    
+
         return ret;
     }
 
@@ -65,9 +65,12 @@ public class SysEnumerator_First extends xSysEnumerator
     }
 
     public void new(int items = 1)
-    {;
-        Debug::assert(items >= 0);
-    
+    {
+        if( items < 0 )
+        {
+            items = 0;
+        }
+
         first = items;
         super();
     }
@@ -75,13 +78,12 @@ public class SysEnumerator_First extends xSysEnumerator
     protected boolean next()
     {
         boolean ret = super();
-    
+
         if( ret )
         {
             --remains;
         }
 
-    
         return ret;
     }
 
@@ -93,13 +95,20 @@ public class SysEnumerator_First extends xSysEnumerator
     /// </remarks>
     public int remains()
     {
-        return remains;
+        int ret = 0;
+
+        if( this.position() != SysEnumeratorPosition::Outside )
+        {
+            ret = remains;
+        }
+
+        return ret;
     }
 
     public static SysEnumerator_First construct(int items = 1)
     {
         SysEnumerator_First enumerator = new SysEnumerator_First(items);
-    
+
         return enumerator;
     }
 }

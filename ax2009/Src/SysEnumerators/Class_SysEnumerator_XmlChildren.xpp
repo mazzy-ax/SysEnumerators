@@ -4,20 +4,38 @@
 public class SysEnumerator_XmlChildren extends SysEnumerator_XmlSibling
 {
 
-    public void new(XmlNode _node = null)
+    protected boolean begin()
     {
-        if( _node )
+        boolean ret = super();
+
+        if( ret && this.origin() )
         {
-            _node = _node.firstChild();
+            node = this.origin().firstChild();
         }
-    
-        super(_node);
+        else
+        {
+            node = null;
+        }
+
+        return ret;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = 0;
+
+        if( this.origin() && this.origin().hasChildNodes() )
+        {
+            ret = super(estimatedIterations);
+        }
+
+        return ret;
     }
 
     public static SysEnumerator_XmlChildren construct(XmlNode node = null)
     {
         SysEnumerator_XmlChildren enumerator = new SysEnumerator_XmlChildren(node);
-    
+
         return enumerator;
     }
 }

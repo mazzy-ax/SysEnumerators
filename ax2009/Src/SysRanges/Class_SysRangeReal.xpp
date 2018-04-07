@@ -3,13 +3,13 @@
 //
 public class SysRangeReal implements ISysRange
 {
-	real start;
-	real end;
+    real start;
+    real end;
 
     public SysRangeReal clone()
     {
         SysRangeReal range = SysRangeReal::construct(this.start(), this.end());
-    
+
         return range;
     }
 
@@ -29,7 +29,7 @@ public class SysRangeReal implements ISysRange
     public real distance()
     {
         real ret = this.end() - this.start();
-    
+
         return ret;
     }
 
@@ -64,25 +64,23 @@ public class SysRangeReal implements ISysRange
     public SysRangeReal normalize()
     {
         SysRangeReal range;
-    
+
         if( this.reversed() )
         {
             range = this.reverse();
         }
-
         else
         {
             range = this.clone();
         }
 
-    
         return range;
     }
 
     public SysRangeReal reverse()
     {
         SysRangeReal range = SysRangeReal::construct(end, start);
-    
+
         return range;
     }
 
@@ -106,7 +104,7 @@ public class SysRangeReal implements ISysRange
     public static SysRangeReal construct(real _start = 0, real _end = RealMax())
     {
         SysRangeReal range = new SysRangeReal(_start, _end);
-    
+
         return range;
     }
 }

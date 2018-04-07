@@ -8,7 +8,7 @@ public class SysEnumerator_DictTable_DeleteAction extends SysEnumerator_DictTabl
     {
         int idx = this.currentIdx();
         tableId ret = this.base().deleteActionTableId(idx);
-    
+
         return ret;
     }
 
@@ -21,7 +21,7 @@ public class SysEnumerator_DictTable_DeleteAction extends SysEnumerator_DictTabl
     {
         int idx = this.currentIdx();
         int ret = this.base().deleteActionType(idx);
-    
+
         return ret;
     }
 
@@ -33,14 +33,14 @@ public class SysEnumerator_DictTable_DeleteAction extends SysEnumerator_DictTabl
     protected int defaultEnd()
     {
         int ret = this.base().deleteActionCnt();
-    
+
         return ret;
     }
 
     public static SysEnumerator_DictTable_DeleteAction construct(DictTable base, SysRangeInt idx = null)
     {
         SysEnumerator_DictTable_DeleteAction enumerator = new SysEnumerator_DictTable_DeleteAction(base, idx);
-    
+
         return enumerator;
     }
 }

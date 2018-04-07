@@ -3,135 +3,124 @@
 //
 public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int64
 {
-	#AviFiles
+    #AviFiles
 
-	RunbaseProgress base;
+    RunbaseProgress base;
 
     public RunbaseProgress base()
     {
         return base;
     }
 
-    protected boolean begin()
+    protected RunbaseProgress baseOrDefault( RunbaseProgress _base = null
+                                           , Caption caption = ''
+                                           , int64 total = 0
+                                           , Filename animation = #AviStopwatch
+                                           )
+
     {
-        boolean ret = super();
-    
-        if( ret )
+        if( _base == null )
         {
-            this.base().reset();
+            _base = RunbaseProgress::construct(1);
+            _base.setCaption(caption);
+            _base.setTotal(total);
+            _base.setAnimation(animation);
         }
-    
-        return ret;
+
+        return _base;
     }
 
-    public RunbaseProgress defaultProgress(Caption caption = '', int64 total = 0, Filename animation = #AviStopwatch, Runbase runbase = null)
+    protected boolean begin()
     {
-        RunbaseProgress progress;
-    ;
-        if(runbase != null)
-        {
-            runbase.progressInit(caption, total, animation);
-            progress = runbase.parmProgress();
-        }
-        else
-        {
-            RunbaseProgress::construct(1);
-            progress.setCaption(caption);
-            progress.setTotal(total);
-            progress.setAnimation(animation);
-        }
-    
-        return progress;
-    
+        boolean ret = super() && this.next();
+
+        return ret;
     }
 
     public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
         int64 ret;
-    
+
         if( estimatedIterations >= 0 )
         {
             this.base().setTotal(estimatedIterations);
         }
-    
+
         ret = this.base().getTotal();
-    
+
         if( ret == 0 )
         {
             ret = super();
         }
-    
+
         return ret;
     }
 
-    public void new(RunbaseProgress _base = null)
+    public void new( RunbaseProgress _base = null
+                   , Caption caption = ''
+                   , int64 total = 0
+                   , Filename animation = #AviStopwatch
+                   )
     {
-        if( _base == null )
-        {
-            _base = this.defaultProgress();
-        }
-    
-        base = _base;
-    
-        if( base.getTotal() )
-        {
-            super(SysSequenceInt64::construct(1, base.getTotal()));
-        }
-        else
-        {
-            super();
-        }
+        base = this.baseOrDefault(_base, caption, total, animation);
+        super();
     }
 
     protected boolean next()
     {
         boolean ret = super();
-    
+
         if( ret )
         {
             this.base().incCount();
         }
-    
+
         return ret;
     }
 
-    public static SysEnumerator_RunBaseProgress construct(RunbaseProgress base = null)
+    public void reset()
     {
-        SysEnumerator_RunBaseProgress enumerator = new SysEnumerator_RunBaseProgress(base);
-    
+        this.base().reset();
+        super();
+    }
+
+    public static SysEnumerator_RunBaseProgress construct( RunbaseProgress base = null
+                                                         , Caption   caption    = ''
+                                                         , int64     total      = 0
+                                                         , Filename  animation  = #AviStopwatch
+                                                         )
+    {
+        SysEnumerator_RunBaseProgress enumerator = new SysEnumerator_RunBaseProgress(base, caption, total, animation);
+
         return enumerator;
     }
 
-    #AviFiles
     public static SysEnumerator_RunBaseProgress newFromRunBase( Runbase   runbase    = null
-                                                              , int64     total      = 0
                                                               , Caption   caption    = ''
+                                                              , int64     total      = 0
                                                               , Filename  animation  = #AviStopwatch
                                                               )
     {
-        SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(runbase.parmProgress());
-        RunbaseProgress progress = enumerator.base();
-    
-        progress.setAnimation(animation);
-        progress.setCaption(caption);
-        progress.setTotal(total);
-    
+        RunbaseProgress progress;
+        SysEnumerator_RunBaseProgress enumerator;
+
+        if( runbase )
+        {
+            runbase.progressInit(caption, total, animation);
+            progress = runbase.parmProgress();
+        }
+
+        enumerator = SysEnumerator_RunBaseProgress::construct(progress, caption, total, animation);
         return enumerator;
     }
 
-    public static SysEnumerator_RunBaseProgress newGeneral(
-        Filename    animation = #AviStopwatch,
-        Caption     caption = '',
-        int64       total = 0)
+    public static SysEnumerator_RunBaseProgress newGeneral( Filename    animation = #AviStopwatch
+                                                          , Caption     caption = ''
+                                                          , int64       total = 0
+                                                          )
     {
-        SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct();
-        RunbaseProgress progress = enumerator.base();
-    ;
-        progress.setAnimation(animation);
-        progress.setCaption(caption);
-        progress.setTotal(total);
-    
+        SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(null, animation, total, caption);
+
         return enumerator;
-    
     }
 }

@@ -17,7 +17,8 @@ public class SysEnumerator_AsciiIo extends SysEnumerator_Io
     public static SysEnumerator_AsciiIo construct(AsciiIo base = null)
     {
         SysEnumerator_AsciiIo enumerator = new SysEnumerator_AsciiIo(base);
-    
+
         return enumerator;
     }
+
 }

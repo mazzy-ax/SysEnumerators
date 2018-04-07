@@ -3,41 +3,42 @@
 //
 abstract public class SysEnumerator_FillSet extends xSysEnumerator
 {
-	SysSet values;
-	SysEnumeratorGroup enumeratorGroup;
+    Set values;
+    SysEnumeratorGroup enumeratorGroup;
 
     /// <summary>
     /// Метод возвращает Set
     /// </summary>
     /// <remarks>
-    /// Метод можно вызвать и в цикле, и после завершения цикла
+    /// Тип реально хранимых значений мы узнаем только в moveNext. Поэтому инициализация выполняется здесь.
     /// </remarks>
-    public SysSet base(types type = types::AnyType)
+    public Set base(types t = types::AnyType)
     {
         if( values == null )
         {
-            values = new SysSet(type);
+            Debug::assert(t != Types::AnyType);
+            values = new Set(t);
         }
-    
+
         return values;
     }
-	
-    public SysSet current()
+
+    public Set current()
     {
         return values;
     }
 
-    public SysSet currentIdx()
+    public Set currentIdx()
     {
         return this.current();
     }
 
-    public SysSet currentKey()
+    public Set currentKey()
     {
         return this.current();
     }
 
-    public SysSet currentValue()
+    public Set currentValue()
     {
         return this.current();
     }
@@ -49,8 +50,7 @@ abstract public class SysEnumerator_FillSet extends xSysEnumerator
     }
 
     protected void init()
-    {;
-        values = null;
+    {
         super();
     }
 }

@@ -3,62 +3,55 @@
 //
 public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
 {
-	#AviFiles
+    #AviFiles
 
-	SysOperationProgress base;
+    SysOperationProgress base;
 
     public SysOperationProgress base()
     {
         return base;
     }
 
-    protected boolean begin()
+    protected SysOperationProgress baseOrDefault(SysOperationProgress _base = null)
     {
-        boolean ret = super();
-    
-        if( ret )
+        if( _base == null )
         {
-            this.base().reset();
+            _base = SysOperationProgress::newGeneral(#AviStopwatch, '', 0);
         }
-    
-        return ret;
+
+        return _base;
     }
 
-    public SysOperationProgress defaultProgress()
+    protected boolean begin()
     {
-        SysOperationProgress progress = SysOperationProgress::newGeneral(#AviStopwatch, '', 0);
-    
-        return progress;
+        boolean ret = super() && this.next();
+
+        return ret;
     }
 
     public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
         int64 ret;
-    
+
         if( estimatedIterations >= 0 )
         {
             this.base().setTotal(estimatedIterations);
         }
-    
+
         ret = this.base().getTotal();
-    
+
         if( ret == 0 )
         {
             ret = super();
         }
-    
+
         return ret;
     }
 
     public void new(SysOperationProgressBase _base = null)
     {
-        if( _base == null )
-        {
-            _base = this.defaultProgress();
-        }
-    
-        base = _base;
-    
+        base = this.baseOrDefault(_base);
+
         if( base.getTotal() )
         {
             super(SysSequenceInt64::construct(_base.getCount_RU(), base.getTotal()));
@@ -72,19 +65,25 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
     protected boolean next()
     {
         boolean ret = super();
-    
+
         if( ret )
         {
             this.base().incCount();
         }
-    
+
         return ret;
+    }
+
+    public void reset()
+    {
+        this.base().reset();
+        super();
     }
 
     public static SysEnumerator_SysOperationProgress construct(SysOperationProgress base = null)
     {
         SysEnumerator_SysOperationProgress enumerator = new SysEnumerator_SysOperationProgress(base);
-    
+
         return enumerator;
     }
 
@@ -99,7 +98,8 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
         progress.setAnimation(animation);
         progress.setCaption(caption);
         progress.setTotal(total);
-    
+
         return enumerator;
+
     }
 }

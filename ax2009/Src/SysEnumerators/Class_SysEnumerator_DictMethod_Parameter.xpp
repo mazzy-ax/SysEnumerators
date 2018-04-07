@@ -8,7 +8,7 @@ public class SysEnumerator_DictMethod_Parameter extends SysEnumerator_DictMethod
     {
         int idx = this.currentIdx();
         str ret = this.base().parameterName(idx);
-    
+
         return ret;
     }
 
@@ -25,14 +25,14 @@ public class SysEnumerator_DictMethod_Parameter extends SysEnumerator_DictMethod
     protected int defaultEnd()
     {
         int ret = this.base().parameterCnt();
-    
+
         return ret;
     }
 
     public static SysEnumerator_DictMethod_Parameter construct(DictMethod base, SysRangeInt idx = null)
     {
         SysEnumerator_DictMethod_Parameter enumerator = new SysEnumerator_DictMethod_Parameter(base, idx);
-    
+
         return enumerator;
     }
 }

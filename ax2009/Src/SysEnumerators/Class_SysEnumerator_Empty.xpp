@@ -42,7 +42,7 @@ public class SysEnumerator_Empty extends xSysEnumerator
     public static SysEnumerator_Empty construct()
     {
         SysEnumerator_Empty enumerator = new SysEnumerator_Empty();
-    
+
         return enumerator;
     }
 }

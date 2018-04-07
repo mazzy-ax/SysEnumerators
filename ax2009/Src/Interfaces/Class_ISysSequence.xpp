@@ -3,6 +3,7 @@
 //
 interface ISysSequence extends ISysRange
 {
+
     public boolean equal(ISysSequence sequence)
     {
     }

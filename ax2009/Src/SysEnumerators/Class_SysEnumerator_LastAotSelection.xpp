@@ -3,8 +3,8 @@
 //
 public class SysEnumerator_LastAotSelection extends xSysEnumerator
 {
-	LastAotSelection base;
-	TreeNode current;
+    LastAotSelection base;
+    TreeNode current;
 
     public LastAotSelection base()
     {
@@ -14,12 +14,12 @@ public class SysEnumerator_LastAotSelection extends xSysEnumerator
     protected boolean begin()
     {
         boolean ret = super();
-    
+
         if( ret )
         {
             current = this.base().first();
         }
-    
+
         return ret;
     }
 
@@ -46,21 +46,21 @@ public class SysEnumerator_LastAotSelection extends xSysEnumerator
     public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
         int64 ret = this.base().selectionCount();
-    
+
         return ret;
     }
 
     protected boolean more()
     {
         boolean ret = super() && (current != null);
-    
+
         return ret;
     }
 
     public void new(LastAotSelection _base)
     {;
         Debug::assert(_base != null);
-    
+
         base = _base;
         super();
     }
@@ -68,19 +68,19 @@ public class SysEnumerator_LastAotSelection extends xSysEnumerator
     protected boolean next()
     {
         boolean ret = super();
-    
+
         if( ret )
         {
             current = this.base().next();
         }
-    
+
         return ret;
     }
 
     public static SysEnumerator_LastAotSelection construct(LastAotSelection base)
     {
         SysEnumerator_LastAotSelection enumerator = new SysEnumerator_LastAotSelection(base);
-    
+
         return enumerator;
     }
 }

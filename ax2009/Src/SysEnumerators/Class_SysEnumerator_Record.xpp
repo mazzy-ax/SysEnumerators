@@ -3,7 +3,12 @@
 //
 public class SysEnumerator_Record extends xSysEnumerator
 {
-	Common base;
+    Common base;
+
+    public Common base()
+    {
+        return base;
+    }
 
     public common current()
     {
@@ -32,15 +37,13 @@ public class SysEnumerator_Record extends xSysEnumerator
 
     protected boolean more()
     {
-        boolean ret = (base.RecId != 0);
-    
+        boolean ret = (this.base().RecId != 0);
+
         return ret;
     }
 
-    public void new(Common _base)
-    {;
-        Debug::assert(_base != null);
-    
+    public void new(Common _base = null)
+    {
         base = _base;
         super();
     }
@@ -48,12 +51,12 @@ public class SysEnumerator_Record extends xSysEnumerator
     protected boolean next()
     {
         boolean ret = super();
-    
-        if( ret )
+
+        if( ret && this.base().TableId )
         {
             next base;
         }
-    
+
         return ret;
     }
 
@@ -67,10 +70,11 @@ public class SysEnumerator_Record extends xSysEnumerator
         throw error(Error::wrongUseOfFunction(funcname()));
     }
 
-    public static SysEnumerator_Record construct(Common base)
+    public static SysEnumerator_Record construct(Common base = null)
     {
         SysEnumerator_Record enumerator = new SysEnumerator_Record(base);
-    
+
         return enumerator;
     }
+
 }

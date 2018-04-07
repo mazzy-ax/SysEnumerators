@@ -3,7 +3,7 @@
 //
 public class SysEnumerator_DictRelation extends SysEnumerator_Indexed
 {
-	DictRelation base;
+    DictRelation base;
 
     public DictRelation base()
     {
@@ -14,7 +14,7 @@ public class SysEnumerator_DictRelation extends SysEnumerator_Indexed
     {
         int idx = this.currentIdx();
         fieldId ret = this.base().lineTableValue(idx);
-    
+
         return ret;
     }
 
@@ -31,14 +31,14 @@ public class SysEnumerator_DictRelation extends SysEnumerator_Indexed
     protected int defaultEnd()
     {
         int ret = this.base().lines();
-    
+
         return ret;
     }
 
     public void new(DictRelation _base, SysSequenceInt _idx = null)
     {;
         Debug::assert(_base != null);
-    
+
         base = _base;
         super(_idx);
     }
@@ -46,7 +46,7 @@ public class SysEnumerator_DictRelation extends SysEnumerator_Indexed
     public static SysEnumerator_DictRelation construct(DictRelation base, SysRangeInt idx = null)
     {
         SysEnumerator_DictRelation enumerator = new SysEnumerator_DictRelation(base, idx);
-    
+
         return enumerator;
     }
 }

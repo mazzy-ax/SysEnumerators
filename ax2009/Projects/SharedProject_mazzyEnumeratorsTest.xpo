@@ -3795,6 +3795,22 @@ Formatversion: 1
         #    this.assertEquals(0, se.estimatedIterations());
         #}
       ENDSOURCE
+      SOURCE #testArrayNull
+        #void testArrayNull()
+        #{
+        #    SysEnumerator_Array se = SysEnumerator_Array::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotNull(se.base());
+        #
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
       SOURCE #testArraySkipUntilEnd
         #void testArraySkipUntilEnd()
         #{
@@ -3854,8 +3870,8 @@ Formatversion: 1
         #{
         #}
       ENDSOURCE
-      SOURCE #testContainer
-        #void testContainer()
+      SOURCE #testContainerClass
+        #void testContainerClass()
         #{
         #    container con = ['a','b','c','d','e'];
         #    ContainerClass cc = new ContainerClass(con);
@@ -3909,10 +3925,30 @@ Formatversion: 1
       SOURCE #testContainerEmpty
         #void testContainerEmpty()
         #{
-        #    container con = connull();
-        #    SysEnumerator_Container se = SysEnumerator_Container::construct(con);
+        #    ContainerClass conClass = new ContainerClass(connull());
+        #    SysEnumerator_ContainerClass se = SysEnumerator_ContainerClass::construct(conClass);
         #
         #    this.assertNotNull(se);
+        #    this.assertNotNull(se.baseClass());
+        #    this.assertEquals(connull(), se.base());
+        #
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testContainerNull
+        #void testContainerNull()
+        #{
+        #    SysEnumerator_ContainerClass se = SysEnumerator_ContainerClass::construct();
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotNull(se.baseClass());
+        #    this.assertEquals(connull(), se.base());
+        #
         #    this.assertEquals(0, se.estimatedIterations());
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
         #
@@ -3925,7 +3961,7 @@ Formatversion: 1
         #void testContainerSkip()
         #{
         #    container con = ['a','b','c','d','e'];
-        #    SysEnumerator_Container se = SysEnumerator_Container::construct(con);
+        #    SysEnumerator_ContainerClass se = SysEnumerator_ContainerClass::newFromContainer(con);
         #    int64 zero64;
         #
         #    this.assertNotNull(se);
@@ -4257,6 +4293,46 @@ Formatversion: 1
         #    this.assertEquals(zero64 + 3, se.estimatedIterations());
         #}
       ENDSOURCE
+      SOURCE #testFirstNegative
+        #void testFirstNegative()
+        #{
+        #    SysEnumerator_First se = SysEnumerator_First::construct(-2);
+        #    int64 zero64;
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #    this.assertEquals(0, se.remains());
+        #    this.assertEquals(0, se.first());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(zero64 + 0, se.estimatedIterations());
+        #
+        #    this.assertEquals(0, se.remains());
+        #    this.assertEquals(0, se.first());
+        #}
+      ENDSOURCE
+      SOURCE #testFirstNull
+        #void testFirstNull()
+        #{
+        #    SysEnumerator_First se = SysEnumerator_First::construct(0);
+        #    int64 zero64;
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #    this.assertEquals(0, se.remains());
+        #    this.assertEquals(0, se.first());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(zero64 + 0, se.estimatedIterations());
+        #
+        #    this.assertEquals(0, se.remains());
+        #    this.assertEquals(0, se.first());
+        #}
+      ENDSOURCE
     ENDMETHODS
   ENDCLASS
 
@@ -4554,6 +4630,20 @@ Formatversion: 1
         #    this.assertEquals(0, se.estimatedIterations());
         #}
       ENDSOURCE
+      SOURCE #testListNull
+        #void testListNull()
+        #{
+        #    SysEnumerator_List se = SysEnumerator_List::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
     ENDMETHODS
   ENDCLASS
 
@@ -4706,16 +4796,23 @@ Formatversion: 1
       SOURCE #testRecordEmpty
         #void testRecordEmpty()
         #{
-        #    // see also combined Record + value2set
-        #
-        #    SysUserInfo sysUserInfo = SysUserInfo::find(); // first only, current user
+        #    SysUserInfo sysUserInfo;
         #    SysEnumerator_Record se = SysEnumerator_Record::construct(sysUserInfo);
         #
         #    this.assertNotNull(se);
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
         #
-        #    this.assertTrue(se.moveNext());
-        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testRecordNull
+        #void testRecordNull()
+        #{
+        #    SysEnumerator_Record se = SysEnumerator_Record::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
         #
         #    this.assertFalse(se.moveNext());
         #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
@@ -4733,6 +4830,61 @@ Formatversion: 1
         #    this.parmExceptionExpected(true);
         #
         #    se.reset();
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_RunBaseProgressTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_RunBaseProgressTest
+    PROPERTIES
+      Name                #SysEnumerator_RunBaseProgressTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_RunBaseProgressTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testEstimatedIterations
+        #void testEstimatedIterations()
+        #{
+        #    int64 estimated = 123;
+        #    SysEnumerator_RunBaseProgress se = SysEnumerator_RunBaseProgress::construct();
+        #
+        #    this.assertNotNull(se);
+        #
+        #    this.assertEquals(int64Max(), se.estimatedIterations());    // total not defined
+        #    this.assertEquals(int64Max(), se.estimatedIterations(0));   // total = 0
+        #
+        #    this.assertEquals(estimated, se.estimatedIterations(estimated));
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(estimated, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testRunbase
+        #void testRunbase()
+        #{
+        #    RunBase runBase = Tutorial_RunbaseBatch::construct();
+        #    SysEnumerator_RunBaseProgress se = SysEnumerator_RunBaseProgress::newFromRunBase(runBase);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotNull(se.base());
+        #
+        #    this.assertEquals(runBase.parmProgress(), se.base());
         #}
       ENDSOURCE
     ENDMETHODS
@@ -4803,6 +4955,20 @@ Formatversion: 1
         #{
         #    SysSequenceInt sequence = SysSequenceInt::construct(1, 0, 2);
         #    SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(sequence);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testSequenceNull
+        #void testSequenceNull()
+        #{
+        #    SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(null);
         #
         #    this.assertNotNull(se);
         #    this.assertEquals(0, se.estimatedIterations());
@@ -4968,6 +5134,20 @@ Formatversion: 1
         #    this.assertEquals(0, se.estimatedIterations());
         #}
       ENDSOURCE
+      SOURCE #testSetNull
+        #void testSetNull()
+        #{
+        #    SysEnumerator_Set se = SysEnumerator_Set::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
     ENDMETHODS
   ENDCLASS
 
@@ -5058,6 +5238,20 @@ Formatversion: 1
         #{
         #    Struct s = new Struct();
         #    SysEnumerator_Struct se = SysEnumerator_Struct::construct(s);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testStructNull
+        #void testStructNull()
+        #{
+        #    SysEnumerator_Struct se = SysEnumerator_Struct::construct(null);
         #
         #    this.assertNotNull(se);
         #    this.assertEquals(0, se.estimatedIterations());
@@ -5222,6 +5416,22 @@ Formatversion: 1
         #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
         #}
       ENDSOURCE
+      SOURCE #testSystemNull
+        #void testSystemNull()
+        #{
+        #    SysEnumerator_SystemCollection se = SysEnumerator_SystemCollection::construct(null);
+        #;
+        #    this.assertNotNull(se);
+        #    this.assertNotNull(se.base());
+        #
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #}
+      ENDSOURCE
     ENDMETHODS
   ENDCLASS
 
@@ -5251,7 +5461,7 @@ Formatversion: 1
       SOURCE #testChildNodes
         #void testChildNodes()
         #{
-        #    SysDictTable    sysDictTable = new SysDictTable(tablenum(CustTable));
+        #    SysDictTable sysDictTable = new SysDictTable(tablenum(CustTable));
         #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictTable.treeNode());
         #    int64 zero64;
         #
@@ -5309,7 +5519,8 @@ Formatversion: 1
       SOURCE #testEmpty
         #void testEmpty()
         #{
-        #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(null);
+        #    SysDictClass sysDictClass = new SysDictClass(classnum(Global));
+        #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictClass.treeNode().AOTfirstChild());
         #    int64 zero64;
         #
         #    this.assertNotNull(se);
@@ -5363,6 +5574,21 @@ Formatversion: 1
         #    this.assertFalse(se.moveNext());
         #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
         #    this.assertEquals(zero64 + 6, se.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testNull
+        #void testNull()
+        #{
+        #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(null);
+        #    int64 zero64;
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
         #}
       ENDSOURCE
     ENDMETHODS
@@ -6666,6 +6892,13 @@ Formatversion: 1
         UTILOBJECTID 50146
         NODETYPE 329
         NAME #SysEnumerator_RecordTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50219
+        NODETYPE 329
+        NAME #SysEnumerator_RunBaseProgressTest
       ENDNODE
       BEGINNODE
         FILETYPE 0

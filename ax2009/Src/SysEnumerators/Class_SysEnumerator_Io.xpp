@@ -7,8 +7,8 @@
 /// </summary>
 public class SysEnumerator_Io extends xSysEnumerator
 {
-	Io base;
-	container current;
+    Io base;
+    container current;
 
     public Io base()
     {
@@ -18,7 +18,7 @@ public class SysEnumerator_Io extends xSysEnumerator
     protected boolean begin()
     {
         boolean ret = super() && this.next();
-    
+
         return ret;
     }
 
@@ -50,7 +50,7 @@ public class SysEnumerator_Io extends xSysEnumerator
     protected boolean more()
     {
         boolean ret = this.base() && (this.base().status() == IO_Status::Ok);
-    
+
         return ret;
     }
 
@@ -62,14 +62,13 @@ public class SysEnumerator_Io extends xSysEnumerator
 
     protected boolean next()
     {
-        boolean ret = super() && this.base();
-    
-        if( ret )
+        boolean ret = super();
+
+        if( ret && this.base() )
         {
             current = this.base().read();
         }
 
-    
         return ret;
     }
 
@@ -81,7 +80,8 @@ public class SysEnumerator_Io extends xSysEnumerator
     public static SysEnumerator_Io construct(Io base = null)
     {
         SysEnumerator_Io enumerator = new SysEnumerator_Io(base);
-    
+
         return enumerator;
     }
+
 }
