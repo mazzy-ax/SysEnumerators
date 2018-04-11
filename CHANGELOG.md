@@ -6,13 +6,13 @@ see also [Releases on GitHub](https://github.com/mazzy-ax/SysEnumerators/release
 
 * Fix SysEnumerator::newFromPackedContainer()
 * Add Caption value from runbase.caption() if Caption parameter is empty
-* Add unit tests for null-collections
 
 ## 0.2.0 - 2018-04-08
 
 * Redesign most of enumerators. It accept null as empty collections
 * Redesign RunbaseProgress and SysOperation enumerators
 * Redesign xpp-generator. It should not be differences between xpo and xpp files.
+* Add unit tests for null-collections
 
 ## 0.1.0 - 2018-04-01
 
