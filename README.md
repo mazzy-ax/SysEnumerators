@@ -48,7 +48,8 @@ while( se.moveNext() )
 
 ## ChangeLog
 
-[https://github.com/mazzy-ax/SysEnumerators/releases](https://github.com/mazzy-ax/SysEnumerators/releases)
+* [CHANGELOG.md](CHANGELOG.md)
+* [https://github.com/mazzy-ax/SysEnumerators/releases](https://github.com/mazzy-ax/SysEnumerators/releases)
 
 ## Помощь проекту
 
