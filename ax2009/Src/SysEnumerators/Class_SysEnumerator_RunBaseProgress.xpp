@@ -106,6 +106,11 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int64
 
         if( runbase )
         {
+            if( !caption )
+            {
+                caption = runbase.caption();
+            }
+
             runbase.progressInit(caption, total, animation);
             progress = runbase.parmProgress();
         }
@@ -119,7 +124,7 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int64
                                                           , int64       total = 0
                                                           )
     {
-        SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(null, animation, total, caption);
+        SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(null, caption, total, animation);
 
         return enumerator;
     }

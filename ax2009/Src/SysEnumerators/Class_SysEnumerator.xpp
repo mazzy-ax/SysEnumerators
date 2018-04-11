@@ -86,14 +86,9 @@ public class SysEnumerator extends SysEnumeratorGroup
 
     public static SysEnumerator newFromPackedContainer(container con, SysSequenceInt sequence = null)
     {
-        SysEnumerator enumerator;
-
-        if( !sequence )
-        {
-            sequence = SysSequenceInt::construct(2);
-        }
-
-        enumerator = SysEnumerator::construct().add(SysEnumerator_Container::construct(con, sequence));
+        SysEnumerator enumerator = SysEnumerator::newFromContainer(con, sequence);
+    ;
+        enumerator.skip(); // first value - version
 
         return enumerator;
     }

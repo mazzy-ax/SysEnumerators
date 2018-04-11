@@ -6314,14 +6314,9 @@ ENDDOC
       SOURCE #newFromPackedContainer
         #public static SysEnumerator newFromPackedContainer(container con, SysSequenceInt sequence = null)
         #{
-        #    SysEnumerator enumerator;
-        #
-        #    if( !sequence )
-        #    {
-        #        sequence = SysSequenceInt::construct(2);
-        #    }
-        #
-        #    enumerator = SysEnumerator::construct().add(SysEnumerator_Container::construct(con, sequence));
+        #    SysEnumerator enumerator = SysEnumerator::newFromContainer(con, sequence);
+        #;
+        #    enumerator.skip(); // first value - version
         #
         #    return enumerator;
         #}
@@ -12810,6 +12805,11 @@ ENDDOC
         #
         #    if( runbase )
         #    {
+        #        if( !caption )
+        #        {
+        #            caption = runbase.caption();
+        #        }
+        #
         #        runbase.progressInit(caption, total, animation);
         #        progress = runbase.parmProgress();
         #    }
@@ -12824,7 +12824,7 @@ ENDDOC
         #                                                      , int64       total = 0
         #                                                      )
         #{
-        #    SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(null, animation, total, caption);
+        #    SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(null, caption, total, animation);
         #
         #    return enumerator;
         #}
