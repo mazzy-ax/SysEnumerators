@@ -1,6 +1,13 @@
-# SysEnumerators Changelog 
+# SysEnumerators Changelog
 
 see also [Releases on GitHub](https://github.com/mazzy-ax/SysEnumerators/releases)
+
+## 0.2.2 - 2018-04-14
+
+* Fix SysDictEnum::newFrom(). It returns a value now
+* Fix SysDictEnum xpo-element contains modifications from USR-layer only. Now the xpo-element is not contain sys-methods.
+* Add to repository script build.ps1 rebuilds files in the \Src directory based on \Projects\*.xpo files
+* Add to repository .gitignore file
 
 ## 0.2.1 - 2018-04-11
 
