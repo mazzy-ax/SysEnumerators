@@ -6,8 +6,7 @@ public class SysEnumerator_DictTable_Index extends SysEnumerator_DictTable
 
     public indexId current()
     {
-        int idx = this.currentIdx();
-        indexId ret = this.base().indexCnt2Id(idx);
+        indexId ret = this.currentValue().id();
 
         return ret;
     }
@@ -25,7 +24,10 @@ public class SysEnumerator_DictTable_Index extends SysEnumerator_DictTable
     //TODO mazzy: SysDictField??
     public DictIndex currentValue()
     {
-        return this.base().indexObject(this.current());
+        int idx = this.currentIdx();
+        DictIndex ret = this.base().indexObject(idx);
+
+        return ret;
     }
 
     protected boolean currentValueProvided()

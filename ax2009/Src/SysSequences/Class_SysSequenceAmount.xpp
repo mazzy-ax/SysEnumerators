@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-class SysSequenceAmount extends SysRangeAmount implements ISysSequence, Enumerable
+public class SysSequenceAmount extends SysRangeAmount implements ISysSequence, Enumerable
 {
     amount step;
 

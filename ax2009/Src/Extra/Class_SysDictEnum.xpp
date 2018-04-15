@@ -34,7 +34,8 @@
 
     public static SysDictEnum newFromObject(object enum)
     {
-        SysDictEnum         sysDictEnum;
+        SysDictEnum  sysDictEnum;
+        classId  enumClassId = classidget(enum);
 
         SysDictEnum fromDictEnum(DictEnum obj)
         {
@@ -48,7 +49,7 @@
     ;
         Debug::assert(enum != null);
 
-        switch( classidget(enum) )
+        switch( enumClassId )
         {
             case classnum(SysDictEnum):
                 sysDictEnum = enum;
@@ -64,15 +65,15 @@
 
             default:
                 // extra slow calculations
-                if( SysDictClass::is(enum, classnum(SysDictEnum)) )
+                if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysDictEnum)) )
                 {
                     sysDictEnum = enum;
                 }
-                else if( SysDictClass::is(enum, classnum(DictEnum)) )
+                else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(DictEnum)) )
                 {
                     sysDictEnum = fromDictEnum(enum);
                 }
-                else if( SysDictClass::is(enum, classnum(SysEnumerator_Enum)) )
+                else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysEnumerator_Enum)) )
                 {
                     sysDictEnum = fromSysEnumerator_Enum(enum);
                 }

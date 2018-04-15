@@ -2,6 +2,14 @@
 
 see also [Releases on GitHub](https://github.com/mazzy-ax/SysEnumerators/releases)
 
+## 0.2.3 - 2018-04-15
+
+* Style fix in the SysEnumerator_ConfigurationKeySet - method baseOrDefault extracted from new
+* Style fix - all declarations of classes and methods contains public/protected/private as first keyword
+* Fix SysDictClass::is on SysDictClass::isEqualOrSuperclass when second argument is class. For performance and compatibility with ax3, ax4
+* Minor performance fixes in SysEnumerator_DictTable_Index
+
+
 ## 0.2.2 - 2018-04-14
 
 * Fix SysDictEnum::newFrom(). It returns a value now

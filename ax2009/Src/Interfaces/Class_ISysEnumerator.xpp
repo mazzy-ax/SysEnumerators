@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-interface ISysEnumerator extends Enumerator
+public interface ISysEnumerator extends Enumerator
 {
 
     public anytype current()

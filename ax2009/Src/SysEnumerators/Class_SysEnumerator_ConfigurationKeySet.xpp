@@ -10,6 +10,16 @@ public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
         return base;
     }
 
+    protected ConfigurationKeySet baseOrDefault(ConfigurationKeySet _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new ConfigurationKeySet();
+        }
+
+        return _base;
+    }
+
     public configurationKeyId current()
     {
         int idx = this.currentIdx();
@@ -49,12 +59,7 @@ public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
 
     public void new(ConfigurationKeySet _base = null, SysSequenceInt _idx = null)
     {
-        if ( !_base )
-        {
-            _base = new ConfigurationKeySet();
-        }
-
-        base = _base;
+        base = this.baseOrDefault();
         super(_idx);
     }
 

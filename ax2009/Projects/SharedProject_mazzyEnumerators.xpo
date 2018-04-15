@@ -260,7 +260,8 @@ Formatversion: 1
       SOURCE #newFromObject
         #public static SysDictEnum newFromObject(object enum)
         #{
-        #    SysDictEnum         sysDictEnum;
+        #    SysDictEnum  sysDictEnum;
+        #    classId  enumClassId = classidget(enum);
         #
         #    SysDictEnum fromDictEnum(DictEnum obj)
         #    {
@@ -274,7 +275,7 @@ Formatversion: 1
         #;
         #    Debug::assert(enum != null);
         #
-        #    switch( classidget(enum) )
+        #    switch( enumClassId )
         #    {
         #        case classnum(SysDictEnum):
         #            sysDictEnum = enum;
@@ -290,15 +291,15 @@ Formatversion: 1
         #
         #        default:
         #            // extra slow calculations
-        #            if( SysDictClass::is(enum, classnum(SysDictEnum)) )
+        #            if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysDictEnum)) )
         #            {
         #                sysDictEnum = enum;
         #            }
-        #            else if( SysDictClass::is(enum, classnum(DictEnum)) )
+        #            else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(DictEnum)) )
         #            {
         #                sysDictEnum = fromDictEnum(enum);
         #            }
-        #            else if( SysDictClass::is(enum, classnum(SysEnumerator_Enum)) )
+        #            else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysEnumerator_Enum)) )
         #            {
         #                sysDictEnum = fromSysEnumerator_Enum(enum);
         #            }
@@ -420,7 +421,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #interface ISysSequence extends ISysRange
+        #public interface ISysSequence extends ISysRange
         #{
         #}
       ENDSOURCE
@@ -471,7 +472,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #interface ISysEnumerator extends Enumerator
+        #public interface ISysEnumerator extends Enumerator
         #{
         #}
       ENDSOURCE
@@ -962,7 +963,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysRangeAmountTest extends SysTestCase
+        #public class SysRangeAmountTest extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -1269,6 +1270,455 @@ Formatversion: 1
 
 ***Element: CLS
 
+; Microsoft Dynamics AX Class: SysRangeAnytype unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysRangeAnytype
+    PROPERTIES
+      Name                #SysRangeAnytype
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysRangeAnytype implements ISysRange
+        #{
+        #    anytype start;
+        #    anytype end;
+        #}
+      ENDSOURCE
+      SOURCE #clone
+        #public SysRangeAnytype clone()
+        #{
+        #    SysRangeAnytype range = SysRangeAnytype::construct(this.start(), this.end());
+        #
+        #    return range;
+        #}
+      ENDSOURCE
+      SOURCE #contains
+        #public boolean contains(anytype value)
+        #{
+        #    boolean ret = (this.start() <= value && value <= this.end());
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #cover
+        #public boolean cover(anytype value)
+        #{
+        #    boolean ret = (this.start() < value && value < this.end());
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #distance
+        #// переполнение в аксапте не возбуждает исключение, а возвращает значение с отброшенными битами
+        #public anytype distance()
+        #{
+        #    anytype ret = this.end() - this.start();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #end
+        #public anytype end()
+        #{
+        #    return end;
+        #}
+      ENDSOURCE
+      SOURCE #equal
+        #public boolean equal(SysRangeAnytype range)
+        #{
+        #    boolean ret = range && (this.start() == range.start()) && (this.end() == range.end());
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #in
+        #public boolean in(SysRangeAnytype range)
+        #{
+        #    boolean ret = range && (range.start() <= this.start()) && (this.end() <= range.end());
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #isBoundary
+        #public boolean isBoundary(anytype value)
+        #{
+        #    return (value == this.start()) || (value == this.end());
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #public void new(anytype _start, anytype _end)
+        #{
+        #    start = _start;
+        #    end = _end;
+        #}
+      ENDSOURCE
+      SOURCE #normalize
+        #public SysRangeAnytype normalize()
+        #{
+        #    SysRangeAnytype range;
+        #
+        #    if( this.reversed() )
+        #    {
+        #        range = this.reverse();
+        #    }
+        #    else
+        #    {
+        #        range = this.clone();
+        #    }
+        #
+        #    return range;
+        #}
+      ENDSOURCE
+      SOURCE #reverse
+        #public SysRangeAnytype reverse()
+        #{
+        #    SysRangeAnytype range = SysRangeAnytype::construct(this.end(), this.start());
+        #
+        #    return range;
+        #}
+      ENDSOURCE
+      SOURCE #reversed
+        #public boolean reversed()
+        #{
+        #    boolean ret = this.start() > this.end();
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #start
+        #public anytype start()
+        #{
+        #    return start;
+        #}
+      ENDSOURCE
+      SOURCE #toString
+        #public str toString()
+        #{
+        #    // SysQuery::range() is not nice
+        #    return strfmt('%1..%2', this.start(), this.end());
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #public static SysRangeAnytype construct(anytype start, anytype end)
+        #{
+        #    SysRangeAnytype range = new SysRangeAnytype(start, end);
+        #
+        #    return range;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysRangeAnytypeTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysRangeAnytypeTest
+    PROPERTIES
+      Name                #SysRangeAnytypeTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysRangeAnytypeTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #test1st
+        #void test1st()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertEquals(start, range.start());
+        #    this.assertEquals(end, range.end());
+        #}
+      ENDSOURCE
+      SOURCE #testClone
+        #void testClone()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #    SysRangeAnytype clone = range.clone();
+        #
+        #    this.assertNotNull(range);
+        #    this.assertNotNull(clone);
+        #
+        #    this.assertEquals(range.start(), clone.start());
+        #    this.assertEquals(range.end(), clone.end());
+        #    this.assertEquals(range.distance(), clone.distance());
+        #    this.assertEquals(range.reversed(), clone.reversed());
+        #}
+      ENDSOURCE
+      SOURCE #testContains
+        #void testContains()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertTrue(range.contains(start));
+        #    this.assertTrue(range.contains(end));
+        #    this.assertTrue(range.contains(middle));
+        #    this.assertFalse(range.contains(start - 1));
+        #    this.assertFalse(range.contains(end + 1));
+        #}
+      ENDSOURCE
+      SOURCE #testContainsEmpty
+        #void testContainsEmpty()
+        #{
+        #    int start = 5;
+        #    int end = 2;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertFalse(range.contains(start));
+        #    this.assertFalse(range.contains(end));
+        #    this.assertFalse(range.contains(middle));
+        #    this.assertFalse(range.contains(start - 1));
+        #    this.assertFalse(range.contains(end + 1));
+        #}
+      ENDSOURCE
+      SOURCE #testContainsZero
+        #void testContainsZero()
+        #{
+        #    int start = -5;
+        #    int end = 2;
+        #    int middle = 0;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertTrue(range.contains(start));
+        #    this.assertTrue(range.contains(end));
+        #    this.assertTrue(range.contains(middle));
+        #    this.assertFalse(range.contains(start - 1));
+        #    this.assertFalse(range.contains(end + 1));
+        #}
+      ENDSOURCE
+      SOURCE #testCover
+        #void testCover()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertFalse(range.cover(start));
+        #    this.assertFalse(range.cover(end));
+        #    this.assertTrue(range.cover(middle));
+        #    this.assertFalse(range.cover(start - 1));
+        #    this.assertFalse(range.cover(end + 1));
+        #}
+      ENDSOURCE
+      SOURCE #testCoverEmpty
+        #void testCoverEmpty()
+        #{
+        #    int start = 5;
+        #    int end = 2;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertFalse(range.cover(start));
+        #    this.assertFalse(range.cover(end));
+        #    this.assertFalse(range.cover(middle));
+        #    this.assertFalse(range.cover(start - 1));
+        #    this.assertFalse(range.cover(end + 1));
+        #}
+      ENDSOURCE
+      SOURCE #testCoverZero
+        #void testCoverZero()
+        #{
+        #    int start = -5;
+        #    int end = 2;
+        #    int middle = 0;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertFalse(range.cover(start));
+        #    this.assertFalse(range.cover(end));
+        #    this.assertTrue(range.cover(middle));
+        #    this.assertFalse(range.cover(start - 1));
+        #    this.assertFalse(range.cover(end + 1));
+        #}
+      ENDSOURCE
+      SOURCE #testDistance
+        #void testDistance()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertEquals(end - start, range.distance());
+        #}
+      ENDSOURCE
+      SOURCE #testDistanceEmpty
+        #void testDistanceEmpty()
+        #{
+        #    int start = 5;
+        #    int end = 2;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertEquals(end - start, range.distance());
+        #}
+      ENDSOURCE
+      SOURCE #testDistanceMaxMin
+        #void testDistanceMaxMin()
+        #{
+        #    SysRangeAnytype range = SysRangeAnytype::construct(maxint(), minint());
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertEquals(0.00, round(range.distance(),4));
+        #}
+      ENDSOURCE
+      SOURCE #testDistanceMinMax
+        #void testDistanceMinMax()
+        #{
+        #    SysRangeAnytype range = SysRangeAnytype::construct(minint(), maxint());
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertEquals(0.00, round(range.distance(),4));
+        #}
+      ENDSOURCE
+      SOURCE #testEqual
+        #void testEqual()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #    SysRangeAnytype middleRange = SysRangeAnytype::construct(middle, end);
+        #
+        #    this.assertNotNull(range);
+        #    this.assertNotNull(middleRange);
+        #
+        #    this.assertTrue(range.equal(range));
+        #    this.assertTrue(range.equal(range.clone()));
+        #    this.assertTrue(range.equal(range.reverse().reverse()));
+        #    this.assertFalse(range.equal(middleRange));
+        #    this.assertFalse(range.equal(null));
+        #}
+      ENDSOURCE
+      SOURCE #testIn
+        #void testIn()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #    SysRangeAnytype middleRange = SysRangeAnytype::construct(middle, end);
+        #
+        #    this.assertNotNull(range);
+        #    this.assertNotNull(middleRange);
+        #
+        #    this.assertTrue(range.in(range));
+        #    this.assertTrue(middleRange.in(range));
+        #    this.assertFalse(range.in(middleRange));
+        #    this.assertFalse(range.in(null));
+        #}
+      ENDSOURCE
+      SOURCE #testIsBoundary
+        #void testIsBoundary()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #
+        #    this.assertTrue(range.isBoundary(start));
+        #    this.assertTrue(range.isBoundary(end));
+        #    this.assertFalse(range.isBoundary(middle));
+        #}
+      ENDSOURCE
+      SOURCE #testReverse
+        #void testReverse()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #    SysRangeAnytype reverseRange = range.reverse();
+        #
+        #    this.assertNotNull(range);
+        #    this.assertNotNull(reverseRange);
+        #
+        #    this.assertFalse(range.reversed());
+        #    this.assertTrue(reverseRange.reversed());
+        #    this.assertEquals(range.start(), reverseRange.end());
+        #    this.assertEquals(range.end(), reverseRange.start());
+        #    this.assertEquals(0-range.distance(), 0+reverseRange.distance());
+        #}
+      ENDSOURCE
+      SOURCE #testToString
+        #void testToString()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int middle = 3;
+        #
+        #    SysRangeAnytype range = SysRangeAnytype::construct(start, end);
+        #
+        #    this.assertNotNull(range);
+        #    this.assertEquals(strfmt('%1..%2', start, end), range.toString());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
 ; Microsoft Dynamics AX Class: SysRangeDate unloaded
 ; --------------------------------------------------------------------------------
   CLSVERSION 1
@@ -1431,7 +1881,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysRangeDateTest extends SysTestCase
+        #public class SysRangeDateTest extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -2007,7 +2457,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysRangeInt64Test extends SysTestCase
+        #public class SysRangeInt64Test extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -2335,7 +2785,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysRangeIntTest extends SysTestCase
+        #public class SysRangeIntTest extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -2805,7 +3255,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysRangeRealTest extends SysTestCase
+        #public class SysRangeRealTest extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -3129,7 +3579,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceAmount extends SysRangeAmount implements ISysSequence, Enumerable
+        #public class SysSequenceAmount extends SysRangeAmount implements ISysSequence, Enumerable
         #{
         #    amount step;
         #}
@@ -3252,7 +3702,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceAmountTest extends SysTestCase
+        #public class SysSequenceAmountTest extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -3734,6 +4184,516 @@ Formatversion: 1
 
 ***Element: CLS
 
+; Microsoft Dynamics AX Class: SysSequenceAnytype unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysSequenceAnytype
+    PROPERTIES
+      Name                #SysSequenceAnytype
+      Extends             #SysRangeAnytype
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysSequenceAnytype extends SysRangeAnytype implements ISysSequence, Enumerable
+        #{
+        #    anytype step;
+        #}
+      ENDSOURCE
+      SOURCE #clone
+        #public SysSequenceAnytype clone()
+        #{
+        #    SysSequenceAnytype range = SysSequenceAnytype::construct(this.start(), this.end(), this.step());
+        #
+        #    return range;
+        #}
+      ENDSOURCE
+      SOURCE #equal
+        #public boolean equal(SysSequenceAnytype sequence)
+        #{
+        #    boolean ret = super(sequence) && (this.step() == sequence.step());
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #estimatedIterations
+        #public int64 estimatedIterations()
+        #{
+        #    int64 ret = int64Max();
+        #    anytype distance = this.distance();
+        #    boolean overflow = this.cover(0) && (distance <= 0.0001);
+        #
+        #    if( overflow )
+        #    {
+        #        ret = int64Max();
+        #    }
+        #    else if( distance == 0 )
+        #    {
+        #        ret = 1;
+        #    }
+        #    else if( ((distance < 0) && (this.step() > 0))
+        #          || ((distance > 0) && (this.step() < 0)) )
+        #    {
+        #        ret = 0;
+        #    }
+        #    else if( step == 1 )
+        #    {
+        #        ret = any2int64(distance + 1.0);
+        #    }
+        #    else
+        #    {
+        #        ret = any2int64(distance / this.step() + 1.0);
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #getEnumerator
+        #public SysEnumerator getEnumerator()
+        #{
+        #    return SysEnumerator::newFromSequence(this);
+        #}
+      ENDSOURCE
+      SOURCE #getNext
+        #public anytype getNext(anytype value)
+        #{
+        #    return value + this.step();
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #public void new(anytype _start, anytype _end, anytype _step)
+        #{
+        #    super(_start, _end);
+        #    step = _step;
+        #}
+      ENDSOURCE
+      SOURCE #reverse
+        #public SysSequenceAnytype reverse()
+        #{
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(this.end(), this.start(), 0-this.step());
+        #
+        #    return sequence;
+        #}
+      ENDSOURCE
+      SOURCE #step
+        #public anytype step()
+        #{
+        #    return step;
+        #}
+      ENDSOURCE
+      SOURCE #toString
+        #public str toString()
+        #{
+        #    return strfmt('%1:[%2]', this.step(), super());
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #public static SysSequenceAnytype construct(anytype _start, anytype _end, anytype _step)
+        #{
+        #    SysSequenceAnytype sequence = new SysSequenceAnytype(_start, _end, _step);
+        #
+        #    return sequence;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysSequenceAnytypeTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysSequenceAnytypeTest
+    PROPERTIES
+      Name                #SysSequenceAnytypeTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysSequenceAnytypeTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #test1st
+        #void test1st()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int step = 1;
+        #    int64 iterations = 4;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #test3
+        #void test3()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int step = 3;
+        #    int64 iterations = 2;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #test9
+        #void test9()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int step = 9;
+        #    int64 iterations = 1;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testEmpty
+        #void testEmpty()
+        #{
+        #    int start = 5;
+        #    int end = 2;
+        #    int step = 1;
+        #    int64 iterations = 0;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testGetEnumerator
+        #void testGetEnumerator()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int step = 1;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #    SysEnumerator se = sequence.getEnumerator();
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotNull(se.enumerators());
+        #}
+      ENDSOURCE
+      SOURCE #testGetNext
+        #void testGetNext()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int step = 1;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertEquals(start + step, sequence.getNext(start));
+        #    this.assertEquals(end + step, sequence.getNext(end));
+        #}
+      ENDSOURCE
+      SOURCE #testMinMax1
+        #void testMinMax1()
+        #{
+        #    int start = minint();
+        #    int end = maxint();
+        #    int step = 1;
+        #    int64 iterations = int64Max();
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testMinMax2
+        #void testMinMax2()
+        #{
+        #    int start = minint();
+        #    int end = maxint();
+        #    int step = 2;
+        #    int64 iterations = int64Max();
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testMinMax3
+        #void testMinMax3()
+        #{
+        #    int start = minint();
+        #    int end = maxint();
+        #    int step = 3;
+        #    int64 iterations = int64Max();
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testMinusMax1
+        #void testMinusMax1()
+        #{
+        #    int start = -1;
+        #    int end = maxint();
+        #    int step = 1;
+        #    int64 iterations = int64Max();
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testMinusMax2
+        #void testMinusMax2()
+        #{
+        #    int start = -1;
+        #    int end = maxint();
+        #    int step = 2;
+        #    int64 iterations = int64Max();
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testMinusMax3
+        #void testMinusMax3()
+        #{
+        #    int start = -1;
+        #    int end = maxint();
+        #    int step = 3;
+        #    int64 iterations = int64Max();
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testNegative1
+        #void testNegative1()
+        #{
+        #    int start = -5;
+        #    int end = 2;
+        #    int step = 1;
+        #    int64 iterations = 8;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testNegative2
+        #void testNegative2()
+        #{
+        #    int start = -5;
+        #    int end = 2;
+        #    int step = 2;
+        #    int64 iterations = 4;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testNegative3
+        #void testNegative3()
+        #{
+        #    int start = -5;
+        #    int end = 2;
+        #    int step = 3;
+        #    int64 iterations = 3;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testNegative9
+        #void testNegative9()
+        #{
+        #    int start = -5;
+        #    int end = 2;
+        #    int step = 9;
+        #    int64 iterations = 1;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(start, sequence.start());
+        #    this.assertEquals(end, sequence.end());
+        #    this.assertEquals(end - start, sequence.distance());
+        #    this.assertEquals(step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testReverse1
+        #void testReverse1()
+        #{
+        #    int start = -5;
+        #    int end = 2;
+        #    int step = 1;
+        #    int64 iterations = 8;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step).reverse();
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(end, sequence.start());
+        #    this.assertEquals(start, sequence.end());
+        #    this.assertEquals(start - end, sequence.distance());
+        #    this.assertEquals(-step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testReverse3
+        #void testReverse3()
+        #{
+        #    int start = -5;
+        #    int end = 2;
+        #    int step = 3;
+        #    int64 iterations = 3;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step).reverse();
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(end, sequence.start());
+        #    this.assertEquals(start, sequence.end());
+        #    this.assertEquals(start - end, sequence.distance());
+        #    this.assertEquals(-step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testReverse9
+        #void testReverse9()
+        #{
+        #    int start = -5;
+        #    int end = 2;
+        #    int step = 9;
+        #    int64 iterations = 1;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step).reverse();
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(end, sequence.start());
+        #    this.assertEquals(start, sequence.end());
+        #    this.assertEquals(start - end, sequence.distance());
+        #    this.assertEquals(-step, sequence.step());
+        #
+        #    this.assertEquals(iterations, sequence.estimatedIterations());
+        #}
+      ENDSOURCE
+      SOURCE #testToString
+        #void testToString()
+        #{
+        #    int start = 2;
+        #    int end = 5;
+        #    int step = 1;
+        #
+        #    SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
+        #
+        #    this.assertNotNull(sequence);
+        #    this.assertEquals(strfmt('%3:[%1..%2]', start, end, step), sequence.toString());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
 ; Microsoft Dynamics AX Class: SysSequenceDate unloaded
 ; --------------------------------------------------------------------------------
   CLSVERSION 1
@@ -3751,7 +4711,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceDate extends SysRangeDate implements ISysSequence, Enumerable
+        #public class SysSequenceDate extends SysRangeDate implements ISysSequence, Enumerable
         #{
         #    int step;
         #}
@@ -3869,7 +4829,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceDateTest extends SysTestCase
+        #public class SysSequenceDateTest extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -4250,7 +5210,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceInt extends SysRangeInt implements ISysSequence, Enumerable
+        #public class SysSequenceInt extends SysRangeInt implements ISysSequence, Enumerable
         #{
         #    int step;
         #}
@@ -4373,7 +5333,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceInt64 extends SysRangeInt64 implements ISysSequence, Enumerable
+        #public class SysSequenceInt64 extends SysRangeInt64 implements ISysSequence, Enumerable
         #{
         #    int64 step;
         #}
@@ -4496,7 +5456,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceInt64Test extends SysTestCase
+        #public class SysSequenceInt64Test extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -4880,7 +5840,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceIntTest extends SysTestCase
+        #public class SysSequenceIntTest extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -5283,7 +6243,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceReal extends SysRangeReal implements ISysSequence, Enumerable
+        #public class SysSequenceReal extends SysRangeReal implements ISysSequence, Enumerable
         #{
         #    real step;
         #}
@@ -5406,7 +6366,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysSequenceRealTest extends SysTestCase
+        #public class SysSequenceRealTest extends SysTestCase
         #{
         #}
       ENDSOURCE
@@ -6237,12 +7197,12 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysEnumerator_ArrayTest extends SysTestCase
+        #public class SysEnumerator_ArrayTest extends SysTestCase
         #{
         #}
       ENDSOURCE
       SOURCE #testArray
-        #void testArray()
+        #public void testArray()
         #{
         #    Array arr = new Array(Types::String);
         #    SysEnumerator_Array se;
@@ -6301,7 +7261,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testArrayEmpty
-        #void testArrayEmpty()
+        #public void testArrayEmpty()
         #{
         #    Array arr = new Array(Types::String);
         #    SysEnumerator_Array se = SysEnumerator_Array::construct(arr);
@@ -6316,7 +7276,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testArrayNull
-        #void testArrayNull()
+        #public void testArrayNull()
         #{
         #    SysEnumerator_Array se = SysEnumerator_Array::construct(null);
         #
@@ -6332,7 +7292,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testArraySkipUntilEnd
-        #void testArraySkipUntilEnd()
+        #public void testArraySkipUntilEnd()
         #{
         #    Array arr = new Array(Types::String);
         #    SysEnumerator_Array se;
@@ -6623,6 +7583,17 @@ Formatversion: 1
         #    return base;
         #}
       ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected ConfigurationKeySet baseOrDefault(ConfigurationKeySet _base = null)
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = new ConfigurationKeySet();
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
@@ -6677,12 +7648,7 @@ Formatversion: 1
       SOURCE #new
         #public void new(ConfigurationKeySet _base = null, SysSequenceInt _idx = null)
         #{
-        #    if ( !_base )
-        #    {
-        #        _base = new ConfigurationKeySet();
-        #    }
-        #
-        #    base = _base;
+        #    base = this.baseOrDefault();
         #    super(_idx);
         #}
       ENDSOURCE
@@ -6867,12 +7833,12 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysEnumerator_ContainerClassTest extends SysTestCase
+        #public class SysEnumerator_ContainerClassTest extends SysTestCase
         #{
         #}
       ENDSOURCE
       SOURCE #testContainerClass
-        #void testContainerClass()
+        #public void testContainerClass()
         #{
         #    container con = ['a','b','c','d','e'];
         #    ContainerClass cc = new ContainerClass(con);
@@ -6924,7 +7890,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testContainerEmpty
-        #void testContainerEmpty()
+        #public void testContainerEmpty()
         #{
         #    ContainerClass conClass = new ContainerClass(connull());
         #    SysEnumerator_ContainerClass se = SysEnumerator_ContainerClass::construct(conClass);
@@ -6942,7 +7908,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testContainerNull
-        #void testContainerNull()
+        #public void testContainerNull()
         #{
         #    SysEnumerator_ContainerClass se = SysEnumerator_ContainerClass::construct();
         #
@@ -6959,7 +7925,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testContainerSkip
-        #void testContainerSkip()
+        #public void testContainerSkip()
         #{
         #    container con = ['a','b','c','d','e'];
         #    SysEnumerator_ContainerClass se = SysEnumerator_ContainerClass::newFromContainer(con);
@@ -7014,12 +7980,12 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysEnumerator_ContainerTest extends SysTestCase
+        #public class SysEnumerator_ContainerTest extends SysTestCase
         #{
         #}
       ENDSOURCE
       SOURCE #testContainer
-        #void testContainer()
+        #public void testContainer()
         #{
         #    container con = ['a','b','c','d','e'];
         #    SysEnumerator_Container se = SysEnumerator_Container::construct(con);
@@ -7070,7 +8036,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testContainerEmpty
-        #void testContainerEmpty()
+        #public void testContainerEmpty()
         #{
         #    container con = connull();
         #    SysEnumerator_Container se = SysEnumerator_Container::construct(con);
@@ -7085,7 +8051,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testContainerSkip
-        #void testContainerSkip()
+        #public void testContainerSkip()
         #{
         #    container con = ['a','b','c','d','e'];
         #    SysEnumerator_Container se = SysEnumerator_Container::construct(con);
@@ -7478,7 +8444,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #abstract public class SysEnumerator_DictClass extends SysEnumerator_Indexed
+        #public abstract class SysEnumerator_DictClass extends SysEnumerator_Indexed
         #{
         #    DictClass base;
         #}
@@ -7887,7 +8853,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #abstract public class SysEnumerator_Dictionary extends SysEnumerator_Indexed
+        #public abstract class SysEnumerator_Dictionary extends SysEnumerator_Indexed
         #{
         #    Dictionary base;
         #}
@@ -8461,7 +9427,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #abstract public class SysEnumerator_DictMethod extends SysEnumerator_Indexed
+        #public abstract class SysEnumerator_DictMethod extends SysEnumerator_Indexed
         #{
         #    DictMethod base;
         #}
@@ -8708,7 +9674,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #abstract public class SysEnumerator_DictTable extends SysEnumerator_Indexed
+        #public abstract class SysEnumerator_DictTable extends SysEnumerator_Indexed
         #{
         #    DictTable base;
         #}
@@ -8971,8 +9937,7 @@ Formatversion: 1
       SOURCE #current
         #public indexId current()
         #{
-        #    int idx = this.currentIdx();
-        #    indexId ret = this.base().indexCnt2Id(idx);
+        #    indexId ret = this.currentValue().id();
         #
         #    return ret;
         #}
@@ -8993,7 +9958,10 @@ Formatversion: 1
         #//TODO mazzy: SysDictField??
         #public DictIndex currentValue()
         #{
-        #    return this.base().indexObject(this.current());
+        #    int idx = this.currentIdx();
+        #    DictIndex ret = this.base().indexObject(idx);
+        #
+        #    return ret;
         #}
       ENDSOURCE
       SOURCE #currentValueProvided
@@ -9413,7 +10381,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEmpty
-        #void testEmpty()
+        #public void testEmpty()
         #{
         #    SysEnumerator_Empty se = SysEnumerator_Empty::construct();
         #
@@ -9583,7 +10551,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEnum
-        #void testEnum()
+        #public void testEnum()
         #{
         #    DictEnum dictEnum = new DictEnum(enumnum(ABC));
         #    SysEnumerator_Enum se = SysEnumerator_Enum::construct(dictEnum);
@@ -9662,7 +10630,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #abstract public class SysEnumerator_FillSet extends xSysEnumerator
+        #public abstract class SysEnumerator_FillSet extends xSysEnumerator
         #{
         #    Set values;
         #    SysEnumeratorGroup enumeratorGroup;
@@ -10029,7 +10997,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testFirst
-        #void testFirst()
+        #public void testFirst()
         #{
         #    SysEnumerator_First se = SysEnumerator_First::construct(3);
         #    int64 zero64;
@@ -10073,7 +11041,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testFirstNegative
-        #void testFirstNegative()
+        #public void testFirstNegative()
         #{
         #    SysEnumerator_First se = SysEnumerator_First::construct(-2);
         #    int64 zero64;
@@ -10093,7 +11061,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testFirstNull
-        #void testFirstNull()
+        #public void testFirstNull()
         #{
         #    SysEnumerator_First se = SysEnumerator_First::construct(0);
         #    int64 zero64;
@@ -10134,7 +11102,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #abstract public class SysEnumerator_Indexed extends xSysEnumerator
+        #public abstract class SysEnumerator_Indexed extends xSysEnumerator
         #{
         #    SysSequenceInt sequence;
         #    int currentIdx;
@@ -10260,7 +11228,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #abstract public class SysEnumerator_Indexed64 extends xSysEnumerator
+        #public abstract class SysEnumerator_Indexed64 extends xSysEnumerator
         #{
         #    SysSequenceInt64 sequence;
         #    int64 currentIdx;
@@ -10545,7 +11513,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testInt64
-        #void testInt64()
+        #public void testInt64()
         #{
         #    SysEnumerator_Int64 se = SysEnumerator_Int64::construct();
         #    int64 zero64;
@@ -10596,7 +11564,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testInt
-        #void testInt()
+        #public void testInt()
         #{
         #    SysEnumerator_Int se = SysEnumerator_Int::construct();
         #    int64 zero64;
@@ -10778,7 +11746,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #abstract public class SysEnumerator_Keywords extends xSysEnumerator
+        #public abstract class SysEnumerator_Keywords extends xSysEnumerator
         #{
         #    Keywords base;
         #    str current;
@@ -10902,7 +11870,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testKeywordsFunction
-        #void testKeywordsFunction()
+        #public void testKeywordsFunction()
         #{
         #    SysEnumerator_Keywords_Function se = SysEnumerator_Keywords_Function::construct();
         #
@@ -11012,7 +11980,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testKeywordsSymbol
-        #void testKeywordsSymbol()
+        #public void testKeywordsSymbol()
         #{
         #    SysEnumerator_Keywords_Symbol se = SysEnumerator_Keywords_Symbol::construct();
         #
@@ -11307,7 +12275,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testList
-        #void testList()
+        #public void testList()
         #{
         #    List l = new List(Types::String);
         #    SysEnumerator_List se;
@@ -11361,7 +12329,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testListEmpty
-        #void testListEmpty()
+        #public void testListEmpty()
         #{
         #    List l = new List(Types::String);
         #    SysEnumerator_List se = SysEnumerator_List::construct(l);
@@ -11376,7 +12344,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testListNull
-        #void testListNull()
+        #public void testListNull()
         #{
         #    SysEnumerator_List se = SysEnumerator_List::construct(null);
         #
@@ -11556,7 +12524,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testMap
-        #void testMap()
+        #public void testMap()
         #{
         #    // see also test combined Map + Range
         #
@@ -11617,7 +12585,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testMapEmpty
-        #void testMapEmpty()
+        #public void testMapEmpty()
         #{
         #    Map m = new Map(Types::Integer, Types::String);
         #    SysEnumerator_Map se = SysEnumerator_Map::construct(m);
@@ -12238,7 +13206,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testRecord
-        #void testRecord()
+        #public void testRecord()
         #{
         #    // see also combined Record + value2set
         #
@@ -12259,7 +13227,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testRecordEmpty
-        #void testRecordEmpty()
+        #public void testRecordEmpty()
         #{
         #    SysUserInfo sysUserInfo;
         #    SysEnumerator_Record se = SysEnumerator_Record::construct(sysUserInfo);
@@ -12272,7 +13240,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testRecordNull
-        #void testRecordNull()
+        #public void testRecordNull()
         #{
         #    SysEnumerator_Record se = SysEnumerator_Record::construct(null);
         #
@@ -12284,7 +13252,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testRecordReset
-        #void testRecordReset()
+        #public void testRecordReset()
         #{
         #    SysUserInfo sysUserInfo = SysUserInfo::find();
         #    SysEnumerator_Record se = SysEnumerator_Record::construct(sysUserInfo);
@@ -12485,7 +13453,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEstimatedIterations
-        #void testEstimatedIterations()
+        #public void testEstimatedIterations()
         #{
         #    int64 estimated = 123;
         #    SysEnumerator_RunBaseProgress se = SysEnumerator_RunBaseProgress::construct();
@@ -12502,7 +13470,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testRunbase
-        #void testRunbase()
+        #public void testRunbase()
         #{
         #    RunBase runBase = Tutorial_RunbaseBatch::construct();
         #    SysEnumerator_RunBaseProgress se = SysEnumerator_RunBaseProgress::newFromRunBase(runBase);
@@ -12764,7 +13732,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSequence
-        #void testSequence()
+        #public void testSequence()
         #{
         #    SysSequenceInt sequence = SysSequenceInt::construct(1, 5, 2);
         #    SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(sequence);
@@ -12801,7 +13769,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSequenceEmpty
-        #void testSequenceEmpty()
+        #public void testSequenceEmpty()
         #{
         #    SysSequenceInt sequence = SysSequenceInt::construct(1, 0, 2);
         #    SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(sequence);
@@ -12816,7 +13784,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSequenceNull
-        #void testSequenceNull()
+        #public void testSequenceNull()
         #{
         #    SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(null);
         #
@@ -12830,7 +13798,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSequenceReset
-        #void testSequenceReset()
+        #public void testSequenceReset()
         #{
         #    SysSequenceInt    sequence = SysSequenceInt::construct(1, 5, 2);
         #    SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(sequence);
@@ -13041,7 +14009,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSet
-        #void testSet()
+        #public void testSet()
         #{
         #    Set s = new Set(Types::String);
         #    SysEnumerator_Set se;
@@ -13100,7 +14068,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSetEmpty
-        #void testSetEmpty()
+        #public void testSetEmpty()
         #{
         #    Set s = new Set(Types::String);
         #    SysEnumerator_Set se = SysEnumerator_Set::construct(s);
@@ -13115,7 +14083,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSetNull
-        #void testSetNull()
+        #public void testSetNull()
         #{
         #    SysEnumerator_Set se = SysEnumerator_Set::construct(null);
         #
@@ -13271,7 +14239,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testStruct
-        #void testStruct()
+        #public void testStruct()
         #{
         #    Struct s = new Struct();
         #    SysEnumerator_Struct se;
@@ -13330,7 +14298,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testStructEmpty
-        #void testStructEmpty()
+        #public void testStructEmpty()
         #{
         #    Struct s = new Struct();
         #    SysEnumerator_Struct se = SysEnumerator_Struct::construct(s);
@@ -13345,7 +14313,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testStructNull
-        #void testStructNull()
+        #public void testStructNull()
         #{
         #    SysEnumerator_Struct se = SysEnumerator_Struct::construct(null);
         #
@@ -13550,7 +14518,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class SysEnumerator_SystemCollection extends xSysEnumerator
+        #public class SysEnumerator_SystemCollection extends xSysEnumerator
         #{
         #    System.Collections.IEnumerable      base;
         #    System.Collections.IEnumerator      baseEnumerator;
@@ -13676,7 +14644,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSystemCollection
-        #void testSystemCollection()
+        #public void testSystemCollection()
         #{
         #    System.Collections.ArrayList array = new System.Collections.ArrayList();
         #    SysEnumerator_SystemCollection se = SysEnumerator_SystemCollection::construct(array);
@@ -13733,7 +14701,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSystemCollectionReset
-        #void testSystemCollectionReset()
+        #public void testSystemCollectionReset()
         #{
         #    System.Collections.ArrayList array = new System.Collections.ArrayList();
         #    SysEnumerator_SystemCollection se = SysEnumerator_SystemCollection::construct(array);
@@ -13768,7 +14736,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSystemCollectionSkip
-        #void testSystemCollectionSkip()
+        #public void testSystemCollectionSkip()
         #{
         #    System.Collections.ArrayList array = new System.Collections.ArrayList();
         #    SysEnumerator_SystemCollection se = SysEnumerator_SystemCollection::construct(array);
@@ -13804,7 +14772,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testSystemNull
-        #void testSystemNull()
+        #public void testSystemNull()
         #{
         #    SysEnumerator_SystemCollection se = SysEnumerator_SystemCollection::construct(null);
         #;
@@ -13978,7 +14946,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testChildNodes
-        #void testChildNodes()
+        #public void testChildNodes()
         #{
         #    SysDictTable sysDictTable = new SysDictTable(tablenum(CustTable));
         #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictTable.treeNode());
@@ -14036,7 +15004,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEmpty
-        #void testEmpty()
+        #public void testEmpty()
         #{
         #    SysDictClass sysDictClass = new SysDictClass(classnum(Global));
         #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictClass.treeNode().AOTfirstChild());
@@ -14052,7 +15020,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testFindChildNodes
-        #void testFindChildNodes()
+        #public void testFindChildNodes()
         #{
         #    SysDictTable    sysDictTable = new SysDictTable(tablenum(CustTable));
         #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictTable.treeNode(), 'Indexes');
@@ -14096,7 +15064,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testNull
-        #void testNull()
+        #public void testNull()
         #{
         #    SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(null);
         #    int64 zero64;
@@ -14249,7 +15217,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testChildNodes
-        #void testChildNodes()
+        #public void testChildNodes()
         #{
         #    SysDictTable    sysDictTable = new SysDictTable(tablenum(CustTable));
         #    SysEnumerator_TreeNodeSibling se = SysEnumerator_TreeNodeSibling::construct(sysDictTable.treeNode().AOTfirstChild());
@@ -14307,7 +15275,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEmpty
-        #void testEmpty()
+        #public void testEmpty()
         #{
         #    SysEnumerator_TreeNodeSibling se = SysEnumerator_TreeNodeSibling::construct(null);
         #    int64 zero64;
@@ -14514,7 +15482,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testChildNodes
-        #void testChildNodes()
+        #public void testChildNodes()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -14571,7 +15539,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEmpty
-        #void testEmpty()
+        #public void testEmpty()
         #{
         #    XmlDocument xmlDoc = XmlDocument::newBlank();
         #    SysEnumerator_XmlChildren se = SysEnumerator_XmlChildren::construct(xmlDoc);
@@ -14594,7 +15562,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testXPath
-        #void testXPath()
+        #public void testXPath()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -14927,7 +15895,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testChildNodes
-        #void testChildNodes()
+        #public void testChildNodes()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -14984,7 +15952,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEmpty
-        #void testEmpty()
+        #public void testEmpty()
         #{
         #    XmlDocument xmlDoc = XmlDocument::newBlank();
         #    SysEnumerator_XmlNodeListIndex se = SysEnumerator_XmlNodeListIndex::construct(xmlDoc.childNodes());
@@ -15007,7 +15975,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testXPath
-        #void testXPath()
+        #public void testXPath()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -15118,7 +16086,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testChildNodes
-        #void testChildNodes()
+        #public void testChildNodes()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -15175,7 +16143,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEmpty
-        #void testEmpty()
+        #public void testEmpty()
         #{
         #    XmlDocument xmlDoc = XmlDocument::newBlank();
         #    SysEnumerator_XmlNodeList se = SysEnumerator_XmlNodeList::construct(xmlDoc.childNodes());
@@ -15198,7 +16166,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testXPath
-        #void testXPath()
+        #public void testXPath()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -15430,7 +16398,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testChildNodes
-        #void testChildNodes()
+        #public void testChildNodes()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -15487,7 +16455,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEmpty
-        #void testEmpty()
+        #public void testEmpty()
         #{
         #    XmlDocument xmlDoc = XmlDocument::newBlank();
         #    SysEnumerator_XmlSibling se = SysEnumerator_XmlSibling::construct(xmlDoc.firstChild());
@@ -15510,7 +16478,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testXPath
-        #void testXPath()
+        #public void testXPath()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -15629,7 +16597,7 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #abstract public class SysEnumeratorGroup extends xSysEnumerator
+        #public abstract class SysEnumeratorGroup extends xSysEnumerator
         #{
         #    Set enumerators;
         #    ISysEnumerator currentEnumerator;
@@ -15877,7 +16845,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testAdd
-        #void testAdd()
+        #public void testAdd()
         #{
         #    SysEnumerator se = SysEnumerator::construct();
         #    int64 zero64;
@@ -15897,7 +16865,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEmpty
-        #void testEmpty()
+        #public void testEmpty()
         #{
         #    SysEnumerator se = SysEnumerator::construct();
         #    int64 zero64;
@@ -15913,7 +16881,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEstimatedIterations
-        #void testEstimatedIterations()
+        #public void testEstimatedIterations()
         #{
         #    SysSequenceInt sequnce = SysSequenceInt::construct(1,100);
         #    SysEnumerator_Int intEnumerator = SysEnumerator_Int::construct(sequnce);
@@ -15967,7 +16935,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testArgsRecords
-        #void testArgsRecords()
+        #public void testArgsRecords()
         #{
         #    Args args = new Args();
         #    DataArea dataArea;
@@ -15988,7 +16956,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testCombinedMapRange
-        #void testCombinedMapRange()
+        #public void testCombinedMapRange()
         #{
         #    Map m = new Map(Types::Integer,Types::String);
         #    SysEnumerator se;
@@ -16041,7 +17009,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEmpty
-        #void testEmpty()
+        #public void testEmpty()
         #{
         #    SysEnumerator se = SysEnumerator::construct();
         #
@@ -16049,7 +17017,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEnum
-        #void testEnum()
+        #public void testEnum()
         #{
         #    ABC enum;
         #    SysEnumerator se = SysEnumerator::newFromEnum(enum);
@@ -16086,7 +17054,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEnumId
-        #void testEnumId()
+        #public void testEnumId()
         #{
         #    SysEnumerator se = SysEnumerator::newFromEnumId(enumnum(ABC));
         #
@@ -16143,13 +17111,13 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class PerfSysEnumerator_XmlTest extends SysTestCase
+        #public class PerfSysEnumerator_XmlTest extends SysTestCase
         #{
         #    #define.loopCount(1000)
         #}
       ENDSOURCE
       SOURCE #testXml
-        #void testXml()
+        #public void testXml()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -16210,7 +17178,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testXmlIndex
-        #void testXmlIndex()
+        #public void testXmlIndex()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -16271,7 +17239,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testXmlSibling
-        #void testXmlSibling()
+        #public void testXmlSibling()
         #{
         #    str xmlStr = @'
         #        <root>
@@ -16353,13 +17321,13 @@ Formatversion: 1
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
         #//
-        #class PerfSysEnumeratorTest extends SysTestCase
+        #public class PerfSysEnumeratorTest extends SysTestCase
         #{
         #    #define.loopCount(5000)
         #}
       ENDSOURCE
       SOURCE #testEnumerator
-        #void testEnumerator()
+        #public void testEnumerator()
         #{
         #    int dummy;
         #    SysEnumerator se = SysSequenceInt::construct(1, #loopCount).getEnumerator();
@@ -16371,7 +17339,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testEnumeratorDriver
-        #void testEnumeratorDriver()
+        #public void testEnumeratorDriver()
         #{
         #    int dummy;
         #    SysEnumerator_Int se = SysEnumerator_Int::construct(SysSequenceInt::construct(1, #loopCount));
@@ -16383,7 +17351,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testFor
-        #void testFor()
+        #public void testFor()
         #{
         #    int dummy;
         #    int i;
@@ -16395,7 +17363,7 @@ Formatversion: 1
         #}
       ENDSOURCE
       SOURCE #testWhile
-        #void testWhile()
+        #public void testWhile()
         #{
         #    int dummy;
         #    int i = 1;
@@ -16576,6 +17544,20 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
+        UTILOBJECTID 50221
+        NODETYPE 329
+        NAME #SysRangeAnytype
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50223
+        NODETYPE 329
+        NAME #SysRangeAnytypeTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
         UTILOBJECTID 50008
         NODETYPE 329
         NAME #SysRangeDate
@@ -16652,6 +17634,20 @@ Formatversion: 1
         UTILOBJECTID 50138
         NODETYPE 329
         NAME #SysSequenceAmountTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50222
+        NODETYPE 329
+        NAME #SysSequenceAnytype
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50224
+        NODETYPE 329
+        NAME #SysSequenceAnytypeTest
       ENDNODE
       BEGINNODE
         FILETYPE 0

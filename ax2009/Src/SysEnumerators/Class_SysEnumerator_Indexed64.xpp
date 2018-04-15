@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-abstract public class SysEnumerator_Indexed64 extends xSysEnumerator
+public abstract class SysEnumerator_Indexed64 extends xSysEnumerator
 {
     SysSequenceInt64 sequence;
     int64 currentIdx;

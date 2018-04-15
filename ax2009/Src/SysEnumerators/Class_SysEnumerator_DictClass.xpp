@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-abstract public class SysEnumerator_DictClass extends SysEnumerator_Indexed
+public abstract class SysEnumerator_DictClass extends SysEnumerator_Indexed
 {
     DictClass base;
 

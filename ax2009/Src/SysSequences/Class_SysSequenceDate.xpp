@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-class SysSequenceDate extends SysRangeDate implements ISysSequence, Enumerable
+public class SysSequenceDate extends SysRangeDate implements ISysSequence, Enumerable
 {
     int step;
 

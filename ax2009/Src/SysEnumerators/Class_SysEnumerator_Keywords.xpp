@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-abstract public class SysEnumerator_Keywords extends xSysEnumerator
+public abstract class SysEnumerator_Keywords extends xSysEnumerator
 {
     Keywords base;
     str current;

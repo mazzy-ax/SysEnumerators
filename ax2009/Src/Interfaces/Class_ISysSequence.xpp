@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-interface ISysSequence extends ISysRange
+public interface ISysSequence extends ISysRange
 {
 
     public boolean equal(ISysSequence sequence)

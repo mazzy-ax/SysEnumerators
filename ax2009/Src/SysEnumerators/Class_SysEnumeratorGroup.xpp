@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-abstract public class SysEnumeratorGroup extends xSysEnumerator
+public abstract class SysEnumeratorGroup extends xSysEnumerator
 {
     Set enumerators;
     ISysEnumerator currentEnumerator;
