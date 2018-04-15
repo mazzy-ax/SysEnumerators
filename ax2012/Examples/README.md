@@ -2,7 +2,7 @@
 
 ## 1. [Пробежать по интервалу чисел от 2 до 9 с шагом 3](Job_SysEnumeratorExample01_Int.xpp)
 
-![SysEnumeratorExample01_Int](../Media/example01.png)
+![SysEnumeratorExample01_Int](../Media/Example01.png)
 
 ```java
 SysEnumerator se = SysEnumerator::newFromToInt(2, 9, 3);
@@ -15,7 +15,7 @@ while( se.moveNext() )
 
 ## 2. [Пробежать по интервалу дат с шагом 5 дней](Job_SysEnumeratorExample02_Date.xpp)
 
-![SysEnumeratorExample02_Date](../Media/example02.png)
+![SysEnumeratorExample02_Date](../Media/Example02.png)
 
 ```java
 SysEnumerator se = SysEnumerator::newFromToDate(01\04\2018, 30\04\2018, 5);
@@ -28,7 +28,7 @@ while( se.moveNext() )
 
 ## 3. [Пробежать по элементам контейнера](Job_SysEnumeratorExample03_Container.xpp)
 
-![SysEnumeratorExample03_Container](../Media/example03.png)
+![SysEnumeratorExample03_Container](../Media/Example03.png)
 
 ```java
 container c = ['a', 'b', 1, 'd', systemdateget(), 'f'];
@@ -42,7 +42,7 @@ while( se.moveNext() )
 
 ## 4. [Пробежать по перечислению enum](Job_SysEnumeratorExample04_Enum.xpp)
 
-![SysEnumeratorExample04_Enum](../Media/example04.png)
+![SysEnumeratorExample04_Enum](../Media/Example04.png)
 
 ```java
 LedgerTransType transType;
@@ -56,7 +56,7 @@ while( se.moveNext() )
 
 ## 5. [Пробежать по полям таблицы](Job_SysEnumeratorExample05_Fields.xpp)
 
-![SysEnumeratorExample05_Fields](../Media/example05.png)
+![SysEnumeratorExample05_Fields](../Media/Example05.png)
 
 ```java
 LedgerTransType transType;
@@ -70,7 +70,7 @@ while( se.moveNext() )
 
 ## 6. [Пробежать по CSV-файлу](Job_SysEnumeratorExample06_File.xpp)
 
-![SysEnumeratorExample06_File](../Media/example06.png)
+![SysEnumeratorExample06_File](../Media/Example06.png)
 
 ```java
 FileName myDocumentsFolder = WinAPI::getFolderPath(#CSIDL_Personal);
