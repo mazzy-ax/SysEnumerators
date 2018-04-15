@@ -86,7 +86,7 @@ while( se.moveNext() )
 
 ## 7. [Работа с группой энумераторов](Job_SysEnumeratorExample06_File.xpp)
 
-![SysEnumeratorExample07_Group](../Media/example07.png)
+![SysEnumeratorExample07_Group](../Media/Example07.png)
 
 ```java
     SysEnumerator_SysOperationProgress progress = SysEnumerator_SysOperationProgress::construct();
