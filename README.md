@@ -20,7 +20,7 @@
 
 ## Пример использования SysEnumerators
 
-![SysEnumeratorExample03_Container](ax2009/Media/example03.png)
+![SysEnumeratorExample03_Container](ax2009/Media/Example03.png)
 
 ```java
 container c = ['a', 'b', 1, 'd', systemdateget(), 'f'];
