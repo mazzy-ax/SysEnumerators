@@ -1,0 +1,46 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictTable_DeleteAction extends SysEnumerator_DictTable
+{
+
+    public anytype current()
+    {
+        int idx = this.currentIdx();
+        tableId ret = this.base().deleteActionTableId(idx);
+
+        return ret;
+    }
+
+    public anytype currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype currentValue()
+    {
+        int idx = this.currentIdx();
+        int ret = this.base().deleteActionType(idx);
+
+        return ret;
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().deleteActionCnt();
+
+        return ret;
+    }
+
+    public static SysEnumerator_DictTable_DeleteAction construct(DictTable base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_DictTable_DeleteAction enumerator = new SysEnumerator_DictTable_DeleteAction(base, idx);
+
+        return enumerator;
+    }
+}

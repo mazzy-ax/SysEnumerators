@@ -1,0 +1,43 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_ContainerClass extends SysEnumerator_Container
+{
+    ContainerClass baseClass;
+
+    public ContainerClass baseClass()
+    {
+        return baseClass;
+    }
+
+    protected ContainerClass baseClassOrDefault(ContainerClass _baseClass = null)
+    {
+        if( !_baseClass )
+        {
+            _baseClass = new ContainerClass(connull());
+        }
+
+        return _baseClass;
+    }
+
+    public void new(ContainerClass _baseClass = null, SysSequence _idx = null)
+    {
+        baseClass = this.baseClassOrDefault(_baseClass);
+        super(baseClass.value(), _idx);
+    }
+
+    public static SysEnumerator_ContainerClass construct(ContainerClass base = null, SysRange idx = null)
+    {
+        SysEnumerator_ContainerClass enumerator = new SysEnumerator_ContainerClass(base, idx);
+
+        return enumerator;
+    }
+
+    public static SysEnumerator_ContainerClass newFromContainer(Container con, SysRange idx = null)
+    {
+        ContainerClass conClass = new ContainerClass(con);
+        SysEnumerator_ContainerClass enumerator = new SysEnumerator_ContainerClass(conClass, idx);
+
+        return enumerator;
+    }
+}

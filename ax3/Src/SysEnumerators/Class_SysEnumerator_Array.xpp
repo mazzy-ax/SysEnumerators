@@ -1,0 +1,70 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Array extends SysEnumerator_Indexed
+{
+    Array base;
+
+    public Array base()
+    {
+        return base;
+    }
+
+    protected Array baseOrDefault(Array _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new Array(Types::AnyType);
+        }
+
+        return _base;
+    }
+
+    public anytype current()
+    {
+        int idx = this.currentIdx();
+        anytype ret = this.base().value(idx);
+
+        return ret;
+    }
+
+    public anytype currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().lastIndex();
+
+        return ret;
+    }
+
+    public str definitionString()
+    {
+        return super();
+    }
+
+    public void new(Array _base = null, SysSequence _idx = null)
+    {
+        base = this.baseOrDefault(_base);
+        super(_idx);
+    }
+
+    public static SysEnumerator_Array construct(Array base = null, SysRange idx = null)
+    {
+        SysEnumerator_Array enumerator = new SysEnumerator_Array(base, idx);
+
+        return enumerator;
+    }
+}

@@ -1,0 +1,38 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictMethod_Var extends SysEnumerator_DictMethod
+{
+
+    public anytype current()
+    {
+        int idx = this.currentIdx();
+        str ret = extendedTypeId2DisplayName(this.base().varType(idx), this.base().varId(idx));
+
+        return ret;
+    }
+
+    public anytype currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().varCnt();
+
+        return ret;
+    }
+
+    public static SysEnumerator_DictMethod_Var construct(DictMethod base, SysRange idx = null)
+    {
+        SysEnumerator_DictMethod_Var enumerator = new SysEnumerator_DictMethod_Var(base, idx);
+
+        return enumerator;
+    }
+}

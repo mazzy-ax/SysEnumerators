@@ -1,0 +1,156 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumeratorTest extends SysTestCase
+{
+
+    public void testArgsRecords()
+    {
+        Args args = new Args();
+        DataArea dataArea;
+        SysEnumerator se;
+
+        select dataArea;
+        args.record(dataArea);
+
+        se = SysEnumerator::newFromArgsRecord(args);
+        this.assertNotNull(se);
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(dataArea, se.current());
+        this.assertEquals(dataArea, se.currentKey());
+        this.assertEquals(dataArea, se.currentValue());
+    }
+
+    public void testCombinedMapRange()
+    {
+        Map m = new Map(Types::Integer,Types::String);
+        SysEnumerator se;
+
+        m.insert(10, 'a');
+        m.insert(50, 'e');
+        m.insert(20, 'b');
+        m.insert(30, 'c');
+        m.insert(40, 'd');
+
+        se = SysEnumerator::construct()
+            .add(SysEnumerator_Map::construct(m))
+            .add(SysEnumerator_Int::construct());
+
+        this.assertNotNull(se);
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(1, se.current());
+        this.assertEquals(10, se.currentKey());
+        this.assertEquals('a', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(2, se.current());
+        this.assertEquals(20, se.currentKey());
+        this.assertEquals('b', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(3, se.current());
+        this.assertEquals(30, se.currentKey());
+        this.assertEquals('c', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(4, se.current());
+        this.assertEquals(40, se.currentKey());
+        this.assertEquals('d', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(5, se.current());
+        this.assertEquals(50, se.currentKey());
+        this.assertEquals('e', se.currentValue());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+    }
+
+    public void testEmpty()
+    {
+        SysEnumerator se = SysEnumerator::construct();
+
+        this.assertNotNull(se);
+    }
+
+    public void testEnum()
+    {
+        ABC enum;
+        SysEnumerator se = SysEnumerator::newFromEnum(enum);
+
+        this.assertNotNull(se);
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(0, se.current());
+        this.assertEquals('None', se.currentKey());
+        this.assertEquals(0+ABC::None, se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(1, se.current());
+        this.assertEquals('A', se.currentKey());
+        this.assertEquals(0+ABC::A, se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(2, se.current());
+        this.assertEquals('B', se.currentKey());
+        this.assertEquals(0+ABC::B, se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(3, se.current());
+        this.assertEquals('C', se.currentKey());
+        this.assertEquals(0+ABC::C, se.currentValue());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+    }
+
+    public void testEnumId()
+    {
+        SysEnumerator se = SysEnumerator::newFromEnumId(enumnum(ABC));
+
+        this.assertNotNull(se);
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(0, se.current());
+        this.assertEquals('None', se.currentKey());
+        this.assertEquals(0+ABC::None, se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(1, se.current());
+        this.assertEquals('A', se.currentKey());
+        this.assertEquals(0+ABC::A, se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(2, se.current());
+        this.assertEquals('B', se.currentKey());
+        this.assertEquals(0+ABC::B, se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(3, se.current());
+        this.assertEquals('C', se.currentKey());
+        this.assertEquals(0+ABC::C, se.currentValue());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+    }
+}

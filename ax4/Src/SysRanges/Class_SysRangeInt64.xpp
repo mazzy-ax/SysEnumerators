@@ -1,0 +1,109 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRangeInt64 implements ISysRange
+{
+    int64 start;
+    int64 end;
+
+    public SysRangeInt64 clone()
+    {
+        SysRangeInt64 range = SysRangeInt64::construct(this.start(), this.end());
+
+        return range;
+    }
+
+    public boolean contains(int64 value)
+    {
+        boolean ret = (this.start() <= value && value <= this.end());
+        return ret;
+    }
+
+    public boolean cover(int64 value)
+    {
+        boolean ret = (this.start() < value && value < this.end());
+        return ret;
+    }
+
+    // переполнение в аксапте не возбуждает исключение, а возвращает значение с отброшенными битами
+    public int64 distance()
+    {
+        int64 ret = this.end() - this.start();
+
+        return ret;
+    }
+
+    public int64 end()
+    {
+        return end;
+    }
+
+    public boolean equal(SysRangeInt64 range)
+    {
+        boolean ret = range && (this.start() == range.start()) && (this.end() == range.end());
+        return ret;
+    }
+
+    public boolean in(SysRangeInt64 range)
+    {
+        boolean ret = range && (range.start() <= this.start()) && (this.end() <= range.end());
+        return ret;
+    }
+
+    public boolean isBoundary(int64 value)
+    {
+        return (value == this.start()) || (value == this.end());
+    }
+
+    public void new(int64 _start = 1, int64 _end = int64Max())
+    {
+        start = _start;
+        end = _end;
+    }
+
+    public SysRangeInt64 normalize()
+    {
+        SysRangeInt64 range;
+
+        if( this.reversed() )
+        {
+            range = this.reverse();
+        }
+        else
+        {
+            range = this.clone();
+        }
+
+        return range;
+    }
+
+    public SysRangeInt64 reverse()
+    {
+        SysRangeInt64 range = SysRangeInt64::construct(this.end(), this.start());
+
+        return range;
+    }
+
+    public boolean reversed()
+    {
+        boolean ret = this.start() > this.end();
+        return ret;
+    }
+
+    public int64 start()
+    {
+        return start;
+    }
+
+    public str toString()
+    {
+        return strfmt('%1..%2', this.start(), this.end());
+    }
+
+    public static SysRangeInt64 construct(int64 _start = 1, int64 _end = int64Max())
+    {
+        SysRangeInt64 range = new SysRangeInt64(_start, _end);
+
+        return range;
+    }
+}

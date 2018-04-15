@@ -1,0 +1,89 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
+{
+    QueryRun base;
+    SysRangeInt dsRange;
+
+    int64 estimatedIterations;
+
+    public QueryRun base()
+    {
+        return base;
+    }
+
+    protected QueryRun baseOrDefault(QueryRun _base = null)
+    {
+        if( !_base )
+        {
+            _base = new QueryRun(new Query());
+        }
+
+        return _base;
+    }
+
+    public Common current(int dataSourceNo = 1)
+    {
+        Common ret;
+
+        if( dsRange.contains(dataSourceNo) )
+        {
+            ret = base.getNo(dataSourceNo);
+        }
+
+        return ret;
+    }
+
+    public Common currentKey(int dataSourceNo = 1)
+    {
+        return this.current(dataSourceNo);
+    }
+
+    public Common currentValue(int dataSourceNo = 1)
+    {
+        return this.current(dataSourceNo);
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    public int64 estimatedIterations(int64 _estimatedIterations = -1)
+    {
+        if( estimatedIterations == 0 )
+        {
+            estimatedIterations = SysQuery::countLoops(this.base());
+        }
+
+        return estimatedIterations;
+    }
+
+    public void new(QueryRun _base = null)
+    {
+        base = this.baseOrDefault(_base);
+        dsRange = SysRangeInt::construct(1, base.query().dataSourceCount());
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super() && this.base().next();
+
+        return ret;
+    }
+
+    public void reset()
+    {
+        this.base().reset();
+        super();
+    }
+
+    public static SysEnumerator_QueryRun construct(QueryRun base = null)
+    {
+        SysEnumerator_QueryRun enumerator = new SysEnumerator_QueryRun(base);
+
+        return enumerator;
+    }
+}

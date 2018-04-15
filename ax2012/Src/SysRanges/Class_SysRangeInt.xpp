@@ -1,0 +1,45 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRangeInt extends SysRange
+{
+    int start;
+    int end;
+
+    public SysRange clone()
+    {
+        SysRangeInt range = SysRangeInt::construct(this.start(), this.end());
+
+        return range;
+    }
+
+    public anytype end()
+    {
+        return end;
+    }
+
+    public void new(int _start = 1, int _end = maxint())
+    {
+        start = _start;
+        end = _end;
+    }
+
+    public SysRange reverse()
+    {
+        SysRangeInt range = SysRangeInt::construct(this.end(), this.start());
+
+        return range;
+    }
+
+    public anytype start()
+    {
+        return start;
+    }
+
+    public static SysRangeInt construct(int _start = 1, int _end = maxint())
+    {
+        SysRangeInt range = new SysRangeInt(_start, _end);
+
+        return range;
+    }
+}

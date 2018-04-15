@@ -1,0 +1,89 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_XmlSibling extends xSysEnumerator
+{
+    XmlNode node;
+    XmlNode origin;
+    int idx;
+
+    public XmlNode base()
+    {
+        return node;
+    }
+
+    public XmlNode current()
+    {
+        return node;
+    }
+
+    public int currentIdx()
+    {
+        return idx;
+    }
+
+    public int currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public XmlNode currentValue()
+    {
+        return this.current();
+    }
+
+    protected void init()
+    {
+        idx = 0;
+        super();
+    }
+
+    protected boolean more()
+    {
+        boolean ret = super() && this.base();
+
+        return ret;
+    }
+
+    public void new(XmlNode _node = null)
+    {
+        node = _node;
+        origin = _node;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret && this.base() )
+        {
+            node = this.base().nextSibling();
+            idx++;
+        }
+        else
+        {
+            node = null;
+        }
+
+        return ret;
+    }
+
+    public XmlNode origin()
+    {
+        return origin;
+    }
+
+    public void reset()
+    {
+        node = origin;
+        super();
+    }
+
+    public static SysEnumerator_XmlSibling construct(XmlNode node = null)
+    {
+        SysEnumerator_XmlSibling enumerator = new SysEnumerator_XmlSibling(node);
+
+        return enumerator;
+    }
+}

@@ -1,0 +1,48 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Dictionary_Table extends SysEnumerator_Dictionary
+{
+
+    public anytype current()
+    {
+        int idx = this.currentIdx();
+        enumId ret = this.base().tableCnt2Id(idx);
+
+        return ret;
+    }
+
+    public anytype currentKey()
+    {
+        return this.base().tableName(this.current());
+    }
+
+    protected boolean currentKeyProvided()
+    {
+        return true;
+    }
+
+    public anytype currentValue()
+    {
+        return this.base().tableObject(this.current());
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().tableCnt();
+
+        return ret;
+    }
+
+    public static SysEnumerator_Dictionary_Table construct(Dictionary base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_Dictionary_Table enumerator = new SysEnumerator_Dictionary_Table(base, idx);
+
+        return enumerator;
+    }
+}

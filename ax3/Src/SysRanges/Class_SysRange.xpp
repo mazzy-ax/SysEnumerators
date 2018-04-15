@@ -1,0 +1,110 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRange
+{
+    anytype start;
+    anytype end;
+
+    public SysRange clone()
+    {
+        SysRange range = SysRange::construct(this.start(), this.end());
+
+        return range;
+    }
+
+    public boolean contains(anytype value)
+    {
+        boolean ret = (this.start() <= value && value <= this.end());
+        return ret;
+    }
+
+    public boolean cover(anytype value)
+    {
+        boolean ret = (this.start() < value && value < this.end());
+        return ret;
+    }
+
+    // переполнение в аксапте не возбуждает исключение, а возвращает значение с отброшенными битами
+    public anytype distance()
+    {
+        anytype ret = this.end() - this.start();
+
+        return ret;
+    }
+
+    public anytype end()
+    {
+        return end;
+    }
+
+    public boolean equal(SysRange range)
+    {
+        boolean ret = range && (this.start() == range.start()) && (this.end() == range.end());
+        return ret;
+    }
+
+    public boolean in(SysRange range)
+    {
+        boolean ret = range && (range.start() <= this.start()) && (this.end() <= range.end());
+        return ret;
+    }
+
+    public boolean isBoundary(anytype value)
+    {
+        return (value == this.start()) || (value == this.end());
+    }
+
+    public void new(anytype _start, anytype _end)
+    {
+        start = _start;
+        end = _end;
+    }
+
+    public SysRange normalize()
+    {
+        SysRange range;
+
+        if( this.reversed() )
+        {
+            range = this.reverse();
+        }
+        else
+        {
+            range = this.clone();
+        }
+
+        return range;
+    }
+
+    public SysRange reverse()
+    {
+        SysRange range = SysRange::construct(this.end(), this.start());
+
+        return range;
+    }
+
+    public boolean reversed()
+    {
+        boolean ret = this.start() > this.end();
+        return ret;
+    }
+
+    public anytype start()
+    {
+        return start;
+    }
+
+    public str toString()
+    {
+        // SysQuery::range() is not nice
+        return strfmt('%1..%2', this.start(), this.end());
+    }
+
+    public static SysRange construct(anytype start, anytype end)
+    {
+        SysRange range = new SysRange(start, end);
+
+        return range;
+    }
+}

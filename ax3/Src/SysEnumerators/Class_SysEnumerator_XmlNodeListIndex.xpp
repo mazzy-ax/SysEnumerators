@@ -1,0 +1,73 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_XmlNodeListIndex extends SysEnumerator_Indexed
+{
+    XmlNodeList base;
+
+    public XmlNodeList base()
+    {
+        return base;
+    }
+
+    public anytype current()
+    {
+        XmlNode ret;
+        int idx;
+
+        if( this.base() )
+        {
+            idx = this.currentIdx();
+            ret = this.base().item(idx);
+        }
+
+        return ret;
+    }
+
+    public anytype currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = -1;
+
+        if( this.base() )
+        {
+            ret = this.base().length() - 1;
+        }
+
+        return ret;
+    }
+
+    protected int defaultStart()
+    {
+        return 0;
+    }
+
+    protected boolean more()
+    {
+        boolean ret = super() && this.base() && this.base().length();
+
+        return ret;
+    }
+
+    public void new(XmlNodeList _base = null, SysSequence _idx = null)
+    {
+        base = _base;
+        super(_idx);
+    }
+
+    public static SysEnumerator_XmlNodeListIndex construct(XmlNodeList base, SysRange idx = null)
+    {
+        SysEnumerator_XmlNodeListIndex enumerator = new SysEnumerator_XmlNodeListIndex(base, idx);
+
+        return enumerator;
+    }
+}

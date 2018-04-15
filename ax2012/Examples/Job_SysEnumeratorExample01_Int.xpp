@@ -1,0 +1,12 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+static void SysEnumeratorExample01_Int(Args _args)
+{
+    SysEnumerator se = SysEnumerator::newFromToInt(2, 9, 3);
+
+    while( se.moveNext() )
+    {
+        info(strfmt("%1", se.current()));
+    }
+}

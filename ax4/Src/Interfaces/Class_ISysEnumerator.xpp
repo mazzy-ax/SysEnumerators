@@ -1,0 +1,35 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public interface ISysEnumerator extends Enumerator
+{
+
+    public anytype current()
+    {
+    }
+
+    public anytype currentIdx()
+    {
+    }
+
+    public anytype currentKey()
+    {
+    }
+
+    public anytype currentValue()
+    {
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+    }
+
+    //TODO mazzy: extract to special interface?
+    public void reset()
+    {
+    }
+
+    public boolean skip(int items = 1)
+    {
+    }
+}

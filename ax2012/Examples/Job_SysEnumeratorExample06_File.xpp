@@ -1,0 +1,18 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+static void SysEnumeratorExample06_File(Args _args)
+{
+    #WinAPI
+
+    FileName myDocumentsFolder = WinAPI::getFolderPath(#CSIDL_Personal);
+    Filename fileName = myDocumentsFolder + @'\test.csv';
+    CommaIo commaIo = new CommaIo(fileName, 'R');
+    SysEnumerator_CommaIo se = SysEnumerator_CommaIo::construct(commaIo);
+
+    while( se.moveNext() )
+    {
+        info(Con2Str(se.current()));
+    }
+
+}

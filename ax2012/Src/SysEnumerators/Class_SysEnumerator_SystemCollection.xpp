@@ -1,0 +1,123 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_SystemCollection extends xSysEnumerator
+{
+    System.Collections.IEnumerable      base;
+    System.Collections.IEnumerator      baseEnumerator;
+
+    System.Reflection.PropertyInfo      currentPropery;
+    System.Reflection.MethodInfo        moveNextMethod;
+    System.Reflection.MethodInfo        resetMethod;
+
+    System.Object[]                     nil;
+
+    public System.Collections.IEnumerable base()
+    {
+        return base;
+    }
+
+    public System.Collections.IEnumerator baseEnumerator()
+    {
+        if( !baseEnumerator )
+        {
+            baseEnumerator = this.base().GetEnumerator();
+        }
+
+        return baseEnumerator;
+    }
+
+    protected System.Collections.IEnumerable baseOrDefault(System.Collections.IEnumerable _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new System.Collections.ArrayList();
+        }
+
+        return _base;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super() && this.next();
+
+        return ret;
+    }
+
+    public anytype current()
+    {
+        anytype ret;
+        InteropPermission perm = new InteropPermission(InteropKind::ClrInterop);
+    ;
+        Debug::assert(perm != null);
+        perm.assert();
+
+        ret = CLRInterop::getAnyTypeForObject(this.get_Current());
+
+        CodeAccessPermission::revertAssert();
+
+        return ret;
+    }
+
+    public anytype currentIdx()
+    {
+        return this.current();
+    }
+
+    public anytype currentKey()
+    {
+        return this.current();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    public System.Object get_Current()
+    {
+        System.Object ret = currentPropery.GetValue(this.baseEnumerator(), nil);
+
+        return ret;
+    }
+
+    public void new(System.Collections.IEnumerable _base = null)
+    {
+        System.Type enumeratorType;
+    ;
+        base = this.baseOrDefault(_base);
+
+        nil = CLRInterop::Null('System.Object[]');
+        enumeratorType = System.Type::GetType('System.Collections.IEnumerator');
+        currentPropery = enumeratorType.GetProperty('Current');
+        moveNextMethod = enumeratorType.GetMethod('MoveNext');
+        resetMethod    = enumeratorType.GetMethod('Reset');
+
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super() && moveNextMethod.Invoke(this.baseEnumerator(), nil);
+
+        return ret;
+    }
+
+    public void reset()
+    {
+        resetMethod.Invoke(this.baseEnumerator(), nil);
+        super();
+    }
+
+    public static SysEnumerator_SystemCollection construct(System.Collections.IEnumerable base = null)
+    {
+        SysEnumerator_SystemCollection enumerator = new SysEnumerator_SystemCollection(base);
+
+        return enumerator;
+    }
+}

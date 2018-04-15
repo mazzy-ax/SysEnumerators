@@ -12,6 +12,14 @@
 
 Set-StrictMode -Version Latest
 
-Get-ChildItem 'ax2009\Projects\*.xpo' |
-    Import-Xpo |
-    Split-xpo -DestinationPath 'ax2009\Src' -Exclude SharedProject_*.xpo -PathStyle mazzy -xpp -Encoding UTF8
+function splitXpo ($Path) {
+    $xpoItem = Get-ChildItem "$Path\\Projects\\*.xpo" | Import-Xpo
+    $xpoItem | Split-xpo -DestinationPath "$Path"       -xpp -PathStyle mazzy -Encoding UTF8 -Include 'Job_*.xpp'
+    $xpoItem | Split-xpo -DestinationPath "$Path\\Test"  -xpp -PathStyle mazzy -Encoding UTF8 -Include '*test.xpp'
+    $xpoItem | Split-xpo -DestinationPath "$Path\\Src"   -xpp -PathStyle mazzy -Encoding UTF8 -Exclude '*test.xpp', 'Job_*.xpp', 'SharedProject_*.xpo'
+}
+
+splitXpo .\ax2009
+splitXpo .\ax2012
+splitXpo .\ax4
+splitXpo .\ax3

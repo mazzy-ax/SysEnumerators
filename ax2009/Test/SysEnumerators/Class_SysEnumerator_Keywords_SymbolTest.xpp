@@ -1,0 +1,29 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Keywords_SymbolTest extends SysTestCase
+{
+
+    public void testKeywordsSymbol()
+    {
+        SysEnumerator_Keywords_Symbol se = SysEnumerator_Keywords_Symbol::construct();
+
+        this.assertNotNull(se);
+        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('abstract', se.current());
+        this.assertEquals('abstract', se.currentIdx());
+        this.assertEquals('abstract', se.currentKey());
+        this.assertEquals('abstract', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('anytype', se.current());
+        this.assertEquals('anytype', se.currentIdx());
+        this.assertEquals('anytype', se.currentKey());
+        this.assertEquals('anytype', se.currentValue());
+    }
+}

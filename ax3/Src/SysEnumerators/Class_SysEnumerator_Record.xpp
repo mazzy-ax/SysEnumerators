@@ -1,0 +1,80 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Record extends xSysEnumerator
+{
+    Common base;
+
+    public Common base()
+    {
+        return base;
+    }
+
+    public anytype current()
+    {
+        return base;
+    }
+
+    public anytype currentIdx()
+    {
+        return this.current();
+    }
+
+    public anytype currentKey()
+    {
+        return this.currentValue();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected boolean more()
+    {
+        boolean ret = (this.base().RecId != 0);
+
+        return ret;
+    }
+
+    public void new(Common _base = null)
+    {
+        base = _base;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret && this.base().TableId )
+        {
+            next base;
+        }
+
+        return ret;
+    }
+
+    public common record()
+    {
+        return base;
+    }
+
+    public void reset()
+    {
+        throw error(Error::wrongUseOfFunction(funcname()));
+    }
+
+    public static SysEnumerator_Record construct(Common base = null)
+    {
+        SysEnumerator_Record enumerator = new SysEnumerator_Record(base);
+
+        return enumerator;
+    }
+
+}

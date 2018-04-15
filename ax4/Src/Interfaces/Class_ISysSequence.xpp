@@ -1,0 +1,26 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public interface ISysSequence extends ISysRange
+{
+
+    public boolean equal(ISysSequence sequence)
+    {
+    }
+
+    public int64 estimatedIterations()
+    {
+    }
+
+    public anytype getNext(anytype value)
+    {
+    }
+
+    public ISysSequence reverse()
+    {
+    }
+
+    public anytype step()
+    {
+    }
+}

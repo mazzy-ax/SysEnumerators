@@ -1,0 +1,20 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public abstract class SysEnumerator_DictTable extends SysEnumerator_Indexed
+{
+    DictTable base;
+
+    public DictTable base()
+    {
+        return base;
+    }
+
+    public void new(DictTable _base, SysSequence _idx = null)
+    {;
+        Debug::assert(_base != null);
+
+        base = _base;
+        super(_idx);
+    }
+}

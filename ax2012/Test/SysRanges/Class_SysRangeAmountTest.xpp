@@ -1,0 +1,285 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRangeAmountTest extends SysTestCase
+{
+
+    void test1st()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(start, range.start());
+        this.assertEquals(end, range.end());
+    }
+
+    void test1stDefault()
+    {
+        SysRangeAmount range = SysRangeAmount::construct();
+
+        this.assertNotNull(range);
+
+        this.assertEquals(0, range.start());
+        this.assertEquals(RealMax(), range.end());
+    }
+
+    void testClone()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+        SysRangeAmount clone = range.clone();
+
+        this.assertNotNull(range);
+        this.assertNotNull(clone);
+
+        this.assertEquals(range.start(), clone.start());
+        this.assertEquals(range.end(), clone.end());
+        this.assertEquals(range.distance(), clone.distance());
+        this.assertEquals(range.reversed(), clone.reversed());
+    }
+
+    void testContains()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.contains(start));
+        this.assertTrue(range.contains(end));
+        this.assertTrue(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testContainsEmpty()
+    {
+        Amount start = 5.0;
+        Amount end = 2.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.contains(start));
+        this.assertFalse(range.contains(end));
+        this.assertFalse(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testContainsZero()
+    {
+        Amount start = -5.0;
+        Amount end = 2.0;
+        Amount middle = 0.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.contains(start));
+        this.assertTrue(range.contains(end));
+        this.assertTrue(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testCover()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertTrue(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testCoverEmpty()
+    {
+        Amount start = 5.0;
+        Amount end = 2.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertFalse(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testCoverZero()
+    {
+        Amount start = -5.0;
+        Amount end = 2.0;
+        Amount middle = 0.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertTrue(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testDistance()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceDefault()
+    {
+        SysRangeAmount range = SysRangeAmount::construct();
+
+        this.assertNotNull(range);
+
+        this.assertEquals(RealMax(), range.distance());
+    }
+
+    void testDistanceEmpty()
+    {
+        Amount start = 5.0;
+        Amount end = 2.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceMaxMin()
+    {
+        SysRangeAmount range = SysRangeAmount::construct(RealMax(), RealMin());
+
+        this.assertNotNull(range);
+
+        this.assertEquals(0.00, round(range.distance(),4));
+    }
+
+    void testDistanceMinMax()
+    {
+        SysRangeAmount range = SysRangeAmount::construct(RealMin(), RealMax());
+
+        this.assertNotNull(range);
+
+        this.assertEquals(0.00, round(range.distance(),4));
+    }
+
+    void testEqual()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+        SysRangeAmount middleRange = SysRangeAmount::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.equal(range));
+        this.assertTrue(range.equal(range.clone()));
+        this.assertTrue(range.equal(range.reverse().reverse()));
+        this.assertFalse(range.equal(middleRange));
+        this.assertFalse(range.equal(null));
+    }
+
+    void testIn()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+        SysRangeAmount middleRange = SysRangeAmount::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.in(range));
+        this.assertTrue(middleRange.in(range));
+        this.assertFalse(range.in(middleRange));
+        this.assertFalse(range.in(null));
+    }
+
+    void testIsBoundary()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.isBoundary(start));
+        this.assertTrue(range.isBoundary(end));
+        this.assertFalse(range.isBoundary(middle));
+    }
+
+    void testReverse()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+        Amount middle = 3.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+        SysRangeAmount reverseRange = range.reverse();
+
+        this.assertNotNull(range);
+        this.assertNotNull(reverseRange);
+
+        this.assertFalse(range.reversed());
+        this.assertTrue(reverseRange.reversed());
+        this.assertEquals(range.start(), reverseRange.end());
+        this.assertEquals(range.end(), reverseRange.start());
+        this.assertEquals(0-range.distance(), reverseRange.distance());
+    }
+
+    void testToString()
+    {
+        Amount start = 2.0;
+        Amount end = 5.0;
+
+        SysRangeAmount range = SysRangeAmount::construct(start, end);
+
+        this.assertNotNull(range);
+        this.assertEquals(strfmt('%1..%2', start, end), range.toString());
+    }
+}

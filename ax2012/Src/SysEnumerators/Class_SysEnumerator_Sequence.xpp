@@ -1,0 +1,96 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Sequence extends xSysEnumerator
+{
+    SysSequence    sequence;
+    anytype         current;
+
+    public SysSequence base()
+    {
+        return sequence;
+    }
+
+
+    protected SysSequence baseOrDefault(SysSequence _sequence = null)
+    {
+        if( !_sequence )
+        {
+            _sequence = SysSequenceInt::construct(1, 0);
+        }
+
+        return _sequence;
+    }
+
+
+    protected boolean begin()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            current = this.base().start();
+        }
+
+        return ret;
+    }
+
+    public anytype current()
+    {
+        return current;
+    }
+
+    public anytype currentIdx()
+    {
+        return this.current();
+    }
+
+    public anytype currentKey()
+    {
+        return this.current();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = this.base().estimatedIterations();
+
+        return ret;
+    }
+
+    protected boolean more()
+    {
+        boolean ret = this.base().contains(current);
+
+        return ret;
+    }
+
+    public void new(SysSequence _sequence = null)
+    {;
+        sequence = this.baseOrDefault(_sequence);
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            current = this.base().getNext(current);
+        }
+
+        return ret;
+    }
+
+    public static SysEnumerator_Sequence construct(SysSequence sequence = null)
+    {
+        SysEnumerator_Sequence enumerator = new SysEnumerator_Sequence(sequence);
+
+        return enumerator;
+    }
+}

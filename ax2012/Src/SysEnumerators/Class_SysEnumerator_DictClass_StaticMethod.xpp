@@ -1,0 +1,46 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictClass_StaticMethod extends SysEnumerator_DictClass
+{
+
+    public anytype current()
+    {
+        int idx = this.currentIdx();
+        str ret = this.base().staticMethod(idx);
+
+        return ret;
+    }
+
+    public anytype currentKey()
+    {
+        return this.current();
+    }
+
+    public anytype currentValue()
+    {
+        int idx = this.currentIdx();
+        DictMethod ret = this.base().staticMethodObject(idx);
+
+        return ret;
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().staticMethodCnt();
+
+        return ret;
+    }
+
+    public static SysEnumerator_DictClass_StaticMethod construct(DictClass base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_DictClass_StaticMethod enumerator = new SysEnumerator_DictClass_StaticMethod(base, idx);
+
+        return enumerator;
+    }
+}

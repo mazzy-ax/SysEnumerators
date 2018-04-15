@@ -1,0 +1,111 @@
+﻿
+    public static SysDictEnum newFrom(anytype enum)
+    {
+        DictEnum            dictEnum;
+        SysDictEnum         sysDictEnum;
+        SysEnumerator_Enum  sysEnumerator_Enum;
+
+        switch( typeof(enum) )
+        {
+            case types::Enum:
+                sysDictEnum = SysDictEnum::newFromEnum(enum);
+                break;
+
+            case types::Integer:
+                sysDictEnum = new SysDictEnum(enum);
+
+            case types::Class:
+                sysDictEnum = SysDictEnum::newFromObject(enum);
+
+            default:
+                throw error(Error::wrongUseOfFunction(funcname()));
+        }
+
+        return sysDictEnum;
+    }
+
+    public static SysDictEnum newFromEnum(anytype enum)
+    {
+        enumId          enumId          = SysDictEnum::value2id(enum);
+        SysDictEnum     sysDictEnum     = new SysDictEnum(enumId);
+
+        return sysDictEnum;
+    }
+
+    public static SysDictEnum newFromObject(object enum)
+    {
+        SysDictEnum sysDictEnum;
+        classId enumClassId = classidget(enum);
+
+        SysDictEnum fromDictEnum(DictEnum obj)
+        {
+            return new SysDictEnum(obj.id());
+        }
+
+        SysDictEnum fromSysEnumerator_Enum(sysEnumerator_Enum obj)
+        {
+            return obj.base();
+        }
+    ;
+        Debug::assert(enum != null);
+
+        switch( enumClassId )
+        {
+            case classnum(SysDictEnum):
+                sysDictEnum = enum;
+                break;
+
+            case classnum(DictEnum):
+                sysDictEnum = fromDictEnum(enum);
+                break;
+
+            case classnum(SysEnumerator_Enum):
+                sysDictEnum = fromSysEnumerator_Enum(enum);
+                break;
+
+            default:
+                // extra slow calculations
+                if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysDictEnum)) )
+                {
+                    sysDictEnum = enum;
+                }
+                else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(DictEnum)) )
+                {
+                    sysDictEnum = fromDictEnum(enum);
+                }
+                else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysEnumerator_Enum)) )
+                {
+                    sysDictEnum = fromSysEnumerator_Enum(enum);
+                }
+                else
+                {
+                    throw error(Error::wrongUseOfFunction(funcname()));
+                }
+                break;
+        }
+
+        return sysDictEnum;
+    }
+
+    // Thanks AndyD, https://axforum.info/forums/showthread.php?p=97771#post97771
+    public static EnumId value2id(AnyType enum)
+    {
+        ContainerClass  contClass;
+        str             sEnum;
+        EnumId          enumId = 0;
+    ;
+        if (typeOf(enum) != Types::Enum)
+            return 0;
+
+        contClass = New ContainerClass([enum]);
+        sEnum = BinData::dataToString(contClass.toBlob());
+        if (sEnum && strlen(sEnum) == 12)
+        {
+            if (hex2int(substr(sEnum, 1, 2)) == 0x07 && hex2int(substr(sEnum, 3, 2)) == 0x04)
+            {
+                enumId = (hex2int(substr(sEnum, 9, 2)) << 8) | hex2int(substr(sEnum, 7, 2));
+            }
+        }
+        return enumId;
+    }
+

@@ -1,0 +1,106 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DataSourceMarked extends xSysEnumerator
+{
+    FormDataSource base;
+    Common record;
+
+    public FormDataSource base()
+    {
+        return base;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super();
+
+        if( ret && this.base() )
+        {
+            record = this.base().getFirst(true);
+            if( !record )
+            {
+                record = this.base().cursor();
+            }
+        }
+
+        return ret;
+    }
+
+    public anytype current()
+    {
+        return record;
+    }
+
+    public anytype currentIdx()
+    {
+        return this.current();
+    }
+
+    public anytype currentKey()
+    {
+        return this.currentValue();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    public int estimatedIterations(int estimatedIterations = -1)
+    {
+        int ret = 0;
+
+        if( this.base() )
+        {
+            if( this.base().anyMarked() )
+            {
+                ret = super(estimatedIterations);
+            }
+            else
+            {
+                ret = 1;
+            }
+        }
+
+        return ret;
+    }
+
+    protected boolean more()
+    {
+        return (record.RecId != 0);
+    }
+
+    public void new(FormDataSource _base)
+    {;
+        Debug::assert(_base != null);
+
+        base = _base;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            record = this.base().getNext();
+        }
+
+        return ret;
+    }
+
+    public common record()
+    {
+        return record;
+    }
+
+    public static SysEnumerator_DataSourceMarked construct(FormDataSource base)
+    {
+        SysEnumerator_DataSourceMarked enumerator = new SysEnumerator_DataSourceMarked(base);
+
+        return enumerator;
+    }
+
+}

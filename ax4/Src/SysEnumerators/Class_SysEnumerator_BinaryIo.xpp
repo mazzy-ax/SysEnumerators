@@ -1,0 +1,24 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_BinaryIo extends SysEnumerator_Io
+{
+
+    public BinaryIo base()
+    {
+        return super();
+    }
+
+    public void new(BinaryIo _base = null)
+    {
+        super(_base);
+    }
+
+    public static SysEnumerator_BinaryIo construct(BinaryIo base = null)
+    {
+        SysEnumerator_BinaryIo enumerator = new SysEnumerator_BinaryIo(base);
+
+        return enumerator;
+    }
+
+}
