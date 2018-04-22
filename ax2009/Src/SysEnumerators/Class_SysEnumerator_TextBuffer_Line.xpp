@@ -1,0 +1,30 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_TextBuffer_Line extends SysEnumerator_TextBuffer
+{
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = super(estimatedIterations);
+
+        if( this.base() )
+        {
+            ret = this.base().numLines();
+        }
+
+        return ret;
+    }
+
+    public void new(TextBuffer _base = null, str _pattern = '[^\r\n]+')
+    {
+        super(_base, _pattern);
+    }
+
+    public static SysEnumerator_TextBuffer_Line construct(TextBuffer base = null)
+    {
+        SysEnumerator_TextBuffer_Line enumerator = new SysEnumerator_TextBuffer_Line(base, '[^\r\n]*');
+
+        return enumerator;
+    }
+}

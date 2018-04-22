@@ -12741,15 +12741,12 @@ Formatversion: 1
         #    return base;
         #}
       ENDSOURCE
-      SOURCE #baseOrDefault
-        #protected QueryRun baseOrDefault(QueryRun _base = null)
+      SOURCE #begin
+        #protected boolean begin()
         #{
-        #    if( !_base )
-        #    {
-        #        _base = new QueryRun(new Query());
-        #    }
+        #    boolean ret = super() && this.next();
         #
-        #    return _base;
+        #    return ret;
         #}
       ENDSOURCE
       SOURCE #classDeclaration
@@ -12759,7 +12756,6 @@ Formatversion: 1
         #public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
         #{
         #    QueryRun base;
-        #    SysRangeInt dsRange;
         #
         #    int64 estimatedIterations;
         #}
@@ -12769,9 +12765,9 @@ Formatversion: 1
         #{
         #    Common ret;
         #
-        #    if( dsRange.contains(dataSourceNo) )
+        #    if( this.base() )
         #    {
-        #        ret = base.getNo(dataSourceNo);
+        #        ret = this.base().getNo(dataSourceNo);
         #    }
         #
         #    return ret;
@@ -12798,26 +12794,33 @@ Formatversion: 1
       SOURCE #estimatedIterations
         #public int64 estimatedIterations(int64 _estimatedIterations = -1)
         #{
-        #    if( estimatedIterations == 0 )
+        #    if( estimatedIterations < 0
+        #     && this.base()
+        #     && this.base().query()
+        #     && this.base().query().dataSourceCount() )
         #    {
-        #        estimatedIterations = SysQuery::countLoops(this.base());
+        #        estimatedIterations = SysQuery::countTotal(this.base());
+        #    }
+        #    else
+        #    {
+        #        return max(0, estimatedIterations);
         #    }
         #
         #    return estimatedIterations;
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(QueryRun _base = null)
+        #public void new(QueryRun _base = null, int64 _estimatedIterations = -1)
         #{
-        #    base = this.baseOrDefault(_base);
-        #    dsRange = SysRangeInt::construct(1, base.query().dataSourceCount());
+        #    base = _base;
+        #    estimatedIterations = _estimatedIterations;
         #    super();
         #}
       ENDSOURCE
       SOURCE #next
         #protected boolean next()
         #{
-        #    boolean ret = super() && this.base().next();
+        #    boolean ret = super() && this.base() && this.base().next();
         #
         #    return ret;
         #}
@@ -12825,17 +12828,97 @@ Formatversion: 1
       SOURCE #reset
         #public void reset()
         #{
-        #    this.base().reset();
+        #    if( this.base() )
+        #    {
+        #        this.base().reset();
+        #    }
         #    super();
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_QueryRun construct(QueryRun base = null)
+        #public static SysEnumerator_QueryRun construct(QueryRun base = null, int64 estimatedIterations = -1)
         #{
-        #    SysEnumerator_QueryRun enumerator = new SysEnumerator_QueryRun(base);
+        #    SysEnumerator_QueryRun enumerator = new SysEnumerator_QueryRun(base, estimatedIterations);
         #
         #    return enumerator;
         #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_QueryRunTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_QueryRunTest
+    PROPERTIES
+      Name                #SysEnumerator_QueryRunTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_QueryRunTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testQueryRun
+        #void testQueryRun()
+        #{
+        #    UserInfo                userInfo;
+        #    Query                   q = new Query();
+        #    SysEnumerator_QueryRun  se;
+        #;
+        #    q.addDataSource(UserInfo.TableId);
+        #    se = SysEnumerator_QueryRun::construct(new QueryRun(q));
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotEqual(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertNotEqual(0, se.current().RecId);
+        #}
+        #
+      ENDSOURCE
+      SOURCE #testQueryRunEmpty
+        #void testQueryRunEmpty()
+        #{
+        #    Query q = new Query();
+        #    QueryRun qr = new QueryRun(q);
+        #    SysEnumerator_QueryRun se = SysEnumerator_QueryRun::construct(qr);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.parmExceptionExpected(true);
+        #
+        #    se.moveNext();
+        #}
+        #
+      ENDSOURCE
+      SOURCE #testQueryRunNull
+        #void testQueryRunNull()
+        #{
+        #    SysEnumerator_QueryRun se = SysEnumerator_QueryRun::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+        #
       ENDSOURCE
     ENDMETHODS
   ENDCLASS
@@ -13378,6 +13461,19 @@ Formatversion: 1
         #    if( ret == 0 )
         #    {
         #        ret = super();
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #moveNext
+        #public boolean moveNext()
+        #{
+        #    boolean ret = super();
+        #
+        #    if( !ret )
+        #    {
+        #        this.base().reset(); // hide progress
         #    }
         #
         #    return ret;
@@ -14436,6 +14532,19 @@ Formatversion: 1
         #    return ret;
         #}
       ENDSOURCE
+      SOURCE #moveNext
+        #public boolean moveNext()
+        #{
+        #    boolean ret = super();
+        #
+        #    if( !ret )
+        #    {
+        #        this.base().reset(); // hide progress
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
       SOURCE #new
         #public void new(SysOperationProgressBase _base = null)
         #{
@@ -14821,6 +14930,856 @@ Formatversion: 1
         #    this.assertFalse(se.moveNext());
         #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
         #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_TextBuffer unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_TextBuffer
+    PROPERTIES
+      Name                #SysEnumerator_TextBuffer
+      Extends             #xSysEnumerator
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #base
+        #public TextBuffer base()
+        #{
+        #    return base;
+        #}
+      ENDSOURCE
+      SOURCE #baseOrDefault
+        #protected TextBuffer baseOrDefault(TextBuffer _base = null)
+        #{
+        #    if( _base == null )
+        #    {
+        #        _base = new TextBuffer();
+        #    }
+        #
+        #    return _base;
+        #}
+      ENDSOURCE
+      SOURCE #begin
+        #protected boolean begin()
+        #{
+        #    boolean ret = super() && this.next();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #calcCurrent
+        #protected boolean calcCurrent(boolean found)
+        #{
+        #    TextBuffer text = this.base();
+        #    int size = text ? text.size() : 0;
+        #    int pos, len;
+        #
+        #    if( found && text && (start <= size) )
+        #    {
+        #        pos = text.matchPos();
+        #        len = text.matchLen();
+        #
+        #        current = text.subStr(pos, len);
+        #        start = pos + len;
+        #    }
+        #    else
+        #    {
+        #        current = '';
+        #        start = 0;
+        #    }
+        #
+        #
+        #    return found;
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_TextBuffer extends xSysEnumerator
+        #{
+        #    TextBuffer base;
+        #    str pattern;
+        #    str current;
+        #    int start;
+        #}
+      ENDSOURCE
+      SOURCE #current
+        #public str current()
+        #{
+        #    return current;
+        #}
+      ENDSOURCE
+      SOURCE #currentIdx
+        #public str currentIdx()
+        #{
+        #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #currentKey
+        #public str currentKey()
+        #{
+        #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #currentValue
+        #public str currentValue()
+        #{
+        #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #init
+        #protected void init()
+        #{
+        #    start = 1;
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #more
+        #protected boolean more()
+        #{
+        #    boolean ret = super() && start;
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #public void new(TextBuffer _base = null, str _pattern = '')
+        #{
+        #    base = this.baseOrDefault(_base);
+        #    pattern = _pattern;
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #next
+        #protected boolean next()
+        #{
+        #    boolean ret = super();
+        #
+        #    if( ret && this.base() )
+        #    {
+        #        ret = this.calcCurrent(this.base().find(pattern, start));
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #public static SysEnumerator_TextBuffer construct(TextBuffer base = null, str pattern = ':n+') // Pattern for a Word
+        #{
+        #    SysEnumerator_TextBuffer enumerator = new SysEnumerator_TextBuffer(base, pattern);
+        #
+        #    return enumerator;
+        #}
+      ENDSOURCE
+      SOURCE #newLine
+        #public static SysEnumerator_TextBuffer_Line newLine(TextBuffer base = null)
+        #{
+        #    SysEnumerator_TextBuffer_Line enumerator = new SysEnumerator_TextBuffer_Line(base, '[^\r\n]*');
+        #
+        #    return enumerator;
+        #}
+      ENDSOURCE
+      SOURCE #newSplit
+        #public static SysEnumerator_TextBuffer_Split newSplit(TextBuffer base = null, str splitPattern = ',')
+        #{
+        #    SysEnumerator_TextBuffer_Split enumerator = new SysEnumerator_TextBuffer_Split(base, splitPattern);
+        #
+        #    return enumerator;
+        #}
+      ENDSOURCE
+      SOURCE #newTabs
+        #public static SysEnumerator_TextBuffer_Split newTabs(TextBuffer base = null)
+        #{
+        #    SysEnumerator_TextBuffer_Split enumerator = new SysEnumerator_TextBuffer_Split(base, '\t');
+        #
+        #    return enumerator;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_TextBuffer_Line unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_TextBuffer_Line
+    PROPERTIES
+      Name                #SysEnumerator_TextBuffer_Line
+      Extends             #SysEnumerator_TextBuffer
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_TextBuffer_Line extends SysEnumerator_TextBuffer
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #estimatedIterations
+        #public int64 estimatedIterations(int64 estimatedIterations = -1)
+        #{
+        #    int64 ret = super(estimatedIterations);
+        #
+        #    if( this.base() )
+        #    {
+        #        ret = this.base().numLines();
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #public void new(TextBuffer _base = null, str _pattern = '[^\r\n]+')
+        #{
+        #    super(_base, _pattern);
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #public static SysEnumerator_TextBuffer_Line construct(TextBuffer base = null)
+        #{
+        #    SysEnumerator_TextBuffer_Line enumerator = new SysEnumerator_TextBuffer_Line(base, '[^\r\n]*');
+        #
+        #    return enumerator;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_TextBuffer_LineTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_TextBuffer_LineTest
+    PROPERTIES
+      Name                #SysEnumerator_TextBuffer_LineTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_TextBuffer_LineTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testTextBuffer_1024ok
+        #public void testTextBuffer_1024ok()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Line se;
+        #    int64 zero64;
+        #    str line1 = strrep('-',1024);
+        #    str line2 = strrep('=',1024);
+        #
+        #    text.appendText(line1);
+        #    text.appendText('\n');
+        #    text.appendText(line2);
+        #
+        #    se = SysEnumerator_TextBuffer_Line::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 2, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(line1, se.current());
+        #    this.assertEquals(line1, se.currentIdx());
+        #    this.assertEquals(line1, se.currentKey());
+        #    this.assertEquals(line1, se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(line2, se.current());
+        #    this.assertEquals(line2, se.currentIdx());
+        #    this.assertEquals(line2, se.currentKey());
+        #    this.assertEquals(line2, se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBuffer_1048575ok
+        #public void testTextBuffer_1048575ok()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Line se;
+        #    int64 zero64;
+        #    str line1 = strrep('-',1048574);
+        #    str line2 = strrep('=',1048574);
+        #
+        #    text.appendText(line1);
+        #    text.appendText('\n');
+        #    text.appendText(line2);
+        #
+        #    se = SysEnumerator_TextBuffer_Line::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 2, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferEmpty
+        #public void testTextBufferEmpty()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Line se = SysEnumerator_TextBuffer_Line::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferLine
+        #public void testTextBufferLine()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Line se;
+        #    int64 zero64;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer_Line::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 3, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1', se.current());
+        #    this.assertEquals('line1', se.currentIdx());
+        #    this.assertEquals('line1', se.currentKey());
+        #    this.assertEquals('line1', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line2,\t хвост2', se.current());
+        #    this.assertEquals('line2,\t хвост2', se.currentIdx());
+        #    this.assertEquals('line2,\t хвост2', se.currentKey());
+        #    this.assertEquals('line2,\t хвост2', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line3, tail3, and\tmore', se.current());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentIdx());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentKey());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferNull
+        #public void testTextBufferNull()
+        #{
+        #    SysEnumerator_TextBuffer_Line se = SysEnumerator_TextBuffer_Line::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_TextBuffer_Split unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_TextBuffer_Split
+    PROPERTIES
+      Name                #SysEnumerator_TextBuffer_Split
+      Extends             #SysEnumerator_TextBuffer
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #calcCurrent
+        #protected boolean calcCurrent(boolean found)
+        #{
+        #    TextBuffer text = this.base();
+        #    int size = text ? text.size() : 0;
+        #    int pos;
+        #
+        #    if( !text || (start > size) )
+        #    {
+        #        current = '';
+        #        start = 0;
+        #    }
+        #    else if( found )
+        #    {
+        #        pos = text.matchPos();
+        #        current = text.subStr(start, pos-start);
+        #        start = pos + 1;
+        #    }
+        #    else
+        #    {
+        #        pos = size + 1;
+        #        current = text.subStr(start, pos-start);
+        #        start = pos;
+        #        found = true;
+        #    }
+        #
+        #    return found;
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_TextBuffer_Split extends SysEnumerator_TextBuffer
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #public static SysEnumerator_TextBuffer_Split construct(TextBuffer base = null, str pattern = ',')
+        #{
+        #    SysEnumerator_TextBuffer_Split enumerator = new SysEnumerator_TextBuffer_Split(base, pattern);
+        #
+        #    return enumerator;
+        #}
+      ENDSOURCE
+      SOURCE #newWithTabs
+        #public static SysEnumerator_TextBuffer_Split newWithTabs(TextBuffer base = null)
+        #{
+        #    SysEnumerator_TextBuffer_Split enumerator = new SysEnumerator_TextBuffer_Split(base, '\t');
+        #
+        #    return enumerator;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_TextBuffer_SplitTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_TextBuffer_SplitTest
+    PROPERTIES
+      Name                #SysEnumerator_TextBuffer_SplitTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_TextBuffer_SplitTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferCommaSeparated
+        #public void testTextBufferCommaSeparated()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Split se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer_Split::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1\nline2', se.current());
+        #    this.assertEquals('line1\nline2', se.currentIdx());
+        #    this.assertEquals('line1\nline2', se.currentKey());
+        #    this.assertEquals('line1\nline2', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('\t хвост2\nline3', se.current());
+        #    this.assertEquals('\t хвост2\nline3', se.currentIdx());
+        #    this.assertEquals('\t хвост2\nline3', se.currentKey());
+        #    this.assertEquals('\t хвост2\nline3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' tail3', se.current());
+        #    this.assertEquals(' tail3', se.currentIdx());
+        #    this.assertEquals(' tail3', se.currentKey());
+        #    this.assertEquals(' tail3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' and\tmore', se.current());
+        #    this.assertEquals(' and\tmore', se.currentIdx());
+        #    this.assertEquals(' and\tmore', se.currentKey());
+        #    this.assertEquals(' and\tmore', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferEmpty
+        #public void testTextBufferEmpty()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Split se = SysEnumerator_TextBuffer_Split::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferNull
+        #public void testTextBufferNull()
+        #{
+        #    SysEnumerator_TextBuffer_Split se = SysEnumerator_TextBuffer_Split::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferTabSeparated
+        #public void testTextBufferTabSeparated()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Split se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer_Split::newWithTabs(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1\nline2,', se.current());
+        #    this.assertEquals('line1\nline2,', se.currentIdx());
+        #    this.assertEquals('line1\nline2,', se.currentKey());
+        #    this.assertEquals('line1\nline2,', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.current());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentIdx());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentKey());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('more', se.current());
+        #    this.assertEquals('more', se.currentIdx());
+        #    this.assertEquals('more', se.currentKey());
+        #    this.assertEquals('more', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_TextBufferTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_TextBufferTest
+    PROPERTIES
+      Name                #SysEnumerator_TextBufferTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_TextBufferTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferCommaSeparated
+        #public void testTextBufferCommaSeparated()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer::newSplit(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1\nline2', se.current());
+        #    this.assertEquals('line1\nline2', se.currentIdx());
+        #    this.assertEquals('line1\nline2', se.currentKey());
+        #    this.assertEquals('line1\nline2', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('\t хвост2\nline3', se.current());
+        #    this.assertEquals('\t хвост2\nline3', se.currentIdx());
+        #    this.assertEquals('\t хвост2\nline3', se.currentKey());
+        #    this.assertEquals('\t хвост2\nline3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' tail3', se.current());
+        #    this.assertEquals(' tail3', se.currentIdx());
+        #    this.assertEquals(' tail3', se.currentKey());
+        #    this.assertEquals(' tail3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' and\tmore', se.current());
+        #    this.assertEquals(' and\tmore', se.currentIdx());
+        #    this.assertEquals(' and\tmore', se.currentKey());
+        #    this.assertEquals(' and\tmore', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferEmpty
+        #public void testTextBufferEmpty()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se = SysEnumerator_TextBuffer::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferLine
+        #public void testTextBufferLine()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se;
+        #    int64 zero64;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer::newLine(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 3, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1', se.current());
+        #    this.assertEquals('line1', se.currentIdx());
+        #    this.assertEquals('line1', se.currentKey());
+        #    this.assertEquals('line1', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line2,\t хвост2', se.current());
+        #    this.assertEquals('line2,\t хвост2', se.currentIdx());
+        #    this.assertEquals('line2,\t хвост2', se.currentKey());
+        #    this.assertEquals('line2,\t хвост2', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line3, tail3, and\tmore', se.current());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentIdx());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentKey());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferNull
+        #public void testTextBufferNull()
+        #{
+        #    SysEnumerator_TextBuffer se = SysEnumerator_TextBuffer::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferTabSeparated
+        #public void testTextBufferTabSeparated()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer::newTabs(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1\nline2,', se.current());
+        #    this.assertEquals('line1\nline2,', se.currentIdx());
+        #    this.assertEquals('line1\nline2,', se.currentKey());
+        #    this.assertEquals('line1\nline2,', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.current());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentIdx());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentKey());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('more', se.current());
+        #    this.assertEquals('more', se.currentIdx());
+        #    this.assertEquals('more', se.currentKey());
+        #    this.assertEquals('more', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferWord
+        #public void testTextBufferWord()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1', se.current());
+        #    this.assertEquals('line1', se.currentIdx());
+        #    this.assertEquals('line1', se.currentKey());
+        #    this.assertEquals('line1', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line2', se.current());
+        #    this.assertEquals('line2', se.currentIdx());
+        #    this.assertEquals('line2', se.currentKey());
+        #    this.assertEquals('line2', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('хвост2', se.current());
+        #    this.assertEquals('хвост2', se.currentIdx());
+        #    this.assertEquals('хвост2', se.currentKey());
+        #    this.assertEquals('хвост2', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line3', se.current());
+        #    this.assertEquals('line3', se.currentIdx());
+        #    this.assertEquals('line3', se.currentKey());
+        #    this.assertEquals('line3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('tail3', se.current());
+        #    this.assertEquals('tail3', se.currentIdx());
+        #    this.assertEquals('tail3', se.currentKey());
+        #    this.assertEquals('tail3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('and', se.current());
+        #    this.assertEquals('and', se.currentIdx());
+        #    this.assertEquals('and', se.currentKey());
+        #    this.assertEquals('and', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('more', se.current());
+        #    this.assertEquals('more', se.currentIdx());
+        #    this.assertEquals('more', se.currentKey());
+        #    this.assertEquals('more', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
         #}
       ENDSOURCE
     ENDMETHODS
@@ -16792,7 +17751,7 @@ Formatversion: 1
       SOURCE #next
         #protected boolean next()
         #{
-        #    boolean ret = super() && this.more();
+        #    boolean ret = super() && this.enumerators();
         #    SetEnumerator se;
         #    xSysEnumerator enumerator;
         #
@@ -18258,6 +19217,13 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
+        UTILOBJECTID 50225
+        NODETYPE 329
+        NAME #SysEnumerator_QueryRunTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
         UTILOBJECTID 50101
         NODETYPE 329
         NAME #SysEnumerator_Record
@@ -18366,6 +19332,48 @@ Formatversion: 1
         UTILOBJECTID 50149
         NODETYPE 329
         NAME #SysEnumerator_SystemCollectionTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50226
+        NODETYPE 329
+        NAME #SysEnumerator_TextBuffer
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50227
+        NODETYPE 329
+        NAME #SysEnumerator_TextBuffer_Line
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50228
+        NODETYPE 329
+        NAME #SysEnumerator_TextBuffer_LineTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50230
+        NODETYPE 329
+        NAME #SysEnumerator_TextBuffer_Split
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50231
+        NODETYPE 329
+        NAME #SysEnumerator_TextBuffer_SplitTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50229
+        NODETYPE 329
+        NAME #SysEnumerator_TextBufferTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
@@ -24289,6 +25297,83 @@ Formatversion: 1
 
 ***Element: CLS
 
+; Microsoft Dynamics AX Class: SysEnumerator_QueryRunTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_QueryRunTest
+    PROPERTIES
+      Name                #SysEnumerator_QueryRunTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_QueryRunTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testQueryRun
+        #void testQueryRun()
+        #{
+        #    UserInfo                userInfo;
+        #    Query                   q = new Query();
+        #    SysEnumerator_QueryRun  se;
+        #;
+        #    q.addDataSource(UserInfo.TableId);
+        #    se = SysEnumerator_QueryRun::construct(new QueryRun(q));
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotEqual(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertNotEqual(0, se.current().RecId);
+        #}
+        #
+      ENDSOURCE
+      SOURCE #testQueryRunEmpty
+        #void testQueryRunEmpty()
+        #{
+        #    Query q = new Query();
+        #    QueryRun qr = new QueryRun(q);
+        #    SysEnumerator_QueryRun se = SysEnumerator_QueryRun::construct(qr);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.parmExceptionExpected(true);
+        #
+        #    se.moveNext();
+        #}
+        #
+      ENDSOURCE
+      SOURCE #testQueryRunNull
+        #void testQueryRunNull()
+        #{
+        #    SysEnumerator_QueryRun se = SysEnumerator_QueryRun::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+        #
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
 ; Microsoft Dynamics AX Class: SysEnumerator_RecordTest unloaded
 ; --------------------------------------------------------------------------------
   CLSVERSION 1
@@ -24968,6 +26053,560 @@ Formatversion: 1
         #    this.assertFalse(se.moveNext());
         #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
         #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_TextBuffer_LineTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_TextBuffer_LineTest
+    PROPERTIES
+      Name                #SysEnumerator_TextBuffer_LineTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_TextBuffer_LineTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testTextBuffer_1024ok
+        #public void testTextBuffer_1024ok()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Line se;
+        #    int64 zero64;
+        #    str line1 = strrep('-',1024);
+        #    str line2 = strrep('=',1024);
+        #
+        #    text.appendText(line1);
+        #    text.appendText('\n');
+        #    text.appendText(line2);
+        #
+        #    se = SysEnumerator_TextBuffer_Line::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 2, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(line1, se.current());
+        #    this.assertEquals(line1, se.currentIdx());
+        #    this.assertEquals(line1, se.currentKey());
+        #    this.assertEquals(line1, se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(line2, se.current());
+        #    this.assertEquals(line2, se.currentIdx());
+        #    this.assertEquals(line2, se.currentKey());
+        #    this.assertEquals(line2, se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBuffer_1048575ok
+        #public void testTextBuffer_1048575ok()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Line se;
+        #    int64 zero64;
+        #    str line1 = strrep('-',1048574);
+        #    str line2 = strrep('=',1048574);
+        #
+        #    text.appendText(line1);
+        #    text.appendText('\n');
+        #    text.appendText(line2);
+        #
+        #    se = SysEnumerator_TextBuffer_Line::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 2, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferEmpty
+        #public void testTextBufferEmpty()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Line se = SysEnumerator_TextBuffer_Line::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferLine
+        #public void testTextBufferLine()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Line se;
+        #    int64 zero64;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer_Line::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 3, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1', se.current());
+        #    this.assertEquals('line1', se.currentIdx());
+        #    this.assertEquals('line1', se.currentKey());
+        #    this.assertEquals('line1', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line2,\t хвост2', se.current());
+        #    this.assertEquals('line2,\t хвост2', se.currentIdx());
+        #    this.assertEquals('line2,\t хвост2', se.currentKey());
+        #    this.assertEquals('line2,\t хвост2', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line3, tail3, and\tmore', se.current());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentIdx());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentKey());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferNull
+        #public void testTextBufferNull()
+        #{
+        #    SysEnumerator_TextBuffer_Line se = SysEnumerator_TextBuffer_Line::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_TextBuffer_SplitTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_TextBuffer_SplitTest
+    PROPERTIES
+      Name                #SysEnumerator_TextBuffer_SplitTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_TextBuffer_SplitTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferCommaSeparated
+        #public void testTextBufferCommaSeparated()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Split se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer_Split::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1\nline2', se.current());
+        #    this.assertEquals('line1\nline2', se.currentIdx());
+        #    this.assertEquals('line1\nline2', se.currentKey());
+        #    this.assertEquals('line1\nline2', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('\t хвост2\nline3', se.current());
+        #    this.assertEquals('\t хвост2\nline3', se.currentIdx());
+        #    this.assertEquals('\t хвост2\nline3', se.currentKey());
+        #    this.assertEquals('\t хвост2\nline3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' tail3', se.current());
+        #    this.assertEquals(' tail3', se.currentIdx());
+        #    this.assertEquals(' tail3', se.currentKey());
+        #    this.assertEquals(' tail3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' and\tmore', se.current());
+        #    this.assertEquals(' and\tmore', se.currentIdx());
+        #    this.assertEquals(' and\tmore', se.currentKey());
+        #    this.assertEquals(' and\tmore', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferEmpty
+        #public void testTextBufferEmpty()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Split se = SysEnumerator_TextBuffer_Split::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferNull
+        #public void testTextBufferNull()
+        #{
+        #    SysEnumerator_TextBuffer_Split se = SysEnumerator_TextBuffer_Split::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferTabSeparated
+        #public void testTextBufferTabSeparated()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer_Split se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer_Split::newWithTabs(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1\nline2,', se.current());
+        #    this.assertEquals('line1\nline2,', se.currentIdx());
+        #    this.assertEquals('line1\nline2,', se.currentKey());
+        #    this.assertEquals('line1\nline2,', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.current());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentIdx());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentKey());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('more', se.current());
+        #    this.assertEquals('more', se.currentIdx());
+        #    this.assertEquals('more', se.currentKey());
+        #    this.assertEquals('more', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_TextBufferTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_TextBufferTest
+    PROPERTIES
+      Name                #SysEnumerator_TextBufferTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_TextBufferTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferCommaSeparated
+        #public void testTextBufferCommaSeparated()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer::newSplit(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1\nline2', se.current());
+        #    this.assertEquals('line1\nline2', se.currentIdx());
+        #    this.assertEquals('line1\nline2', se.currentKey());
+        #    this.assertEquals('line1\nline2', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('\t хвост2\nline3', se.current());
+        #    this.assertEquals('\t хвост2\nline3', se.currentIdx());
+        #    this.assertEquals('\t хвост2\nline3', se.currentKey());
+        #    this.assertEquals('\t хвост2\nline3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' tail3', se.current());
+        #    this.assertEquals(' tail3', se.currentIdx());
+        #    this.assertEquals(' tail3', se.currentKey());
+        #    this.assertEquals(' tail3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' and\tmore', se.current());
+        #    this.assertEquals(' and\tmore', se.currentIdx());
+        #    this.assertEquals(' and\tmore', se.currentKey());
+        #    this.assertEquals(' and\tmore', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferEmpty
+        #public void testTextBufferEmpty()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se = SysEnumerator_TextBuffer::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferLine
+        #public void testTextBufferLine()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se;
+        #    int64 zero64;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer::newLine(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(zero64 + 3, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1', se.current());
+        #    this.assertEquals('line1', se.currentIdx());
+        #    this.assertEquals('line1', se.currentKey());
+        #    this.assertEquals('line1', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line2,\t хвост2', se.current());
+        #    this.assertEquals('line2,\t хвост2', se.currentIdx());
+        #    this.assertEquals('line2,\t хвост2', se.currentKey());
+        #    this.assertEquals('line2,\t хвост2', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line3, tail3, and\tmore', se.current());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentIdx());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentKey());
+        #    this.assertEquals('line3, tail3, and\tmore', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferNull
+        #public void testTextBufferNull()
+        #{
+        #    SysEnumerator_TextBuffer se = SysEnumerator_TextBuffer::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferTabSeparated
+        #public void testTextBufferTabSeparated()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer::newTabs(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1\nline2,', se.current());
+        #    this.assertEquals('line1\nline2,', se.currentIdx());
+        #    this.assertEquals('line1\nline2,', se.currentKey());
+        #    this.assertEquals('line1\nline2,', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.current());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentIdx());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentKey());
+        #    this.assertEquals(' хвост2\nline3, tail3, and', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('more', se.current());
+        #    this.assertEquals('more', se.currentIdx());
+        #    this.assertEquals('more', se.currentKey());
+        #    this.assertEquals('more', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #}
+      ENDSOURCE
+      SOURCE #testTextBufferWord
+        #public void testTextBufferWord()
+        #{
+        #    TextBuffer text = new TextBuffer();
+        #    SysEnumerator_TextBuffer se;
+        #
+        #    text.appendText(@'line1
+        #line2,'+'\t'+@' хвост2
+        #line3, tail3, and'+'\tmore');
+        #
+        #    se = SysEnumerator_TextBuffer::construct(text);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(int64Max(), se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line1', se.current());
+        #    this.assertEquals('line1', se.currentIdx());
+        #    this.assertEquals('line1', se.currentKey());
+        #    this.assertEquals('line1', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line2', se.current());
+        #    this.assertEquals('line2', se.currentIdx());
+        #    this.assertEquals('line2', se.currentKey());
+        #    this.assertEquals('line2', se.currentValue());
+        #
+        #    // not ASCII
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('хвост2', se.current());
+        #    this.assertEquals('хвост2', se.currentIdx());
+        #    this.assertEquals('хвост2', se.currentKey());
+        #    this.assertEquals('хвост2', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('line3', se.current());
+        #    this.assertEquals('line3', se.currentIdx());
+        #    this.assertEquals('line3', se.currentKey());
+        #    this.assertEquals('line3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('tail3', se.current());
+        #    this.assertEquals('tail3', se.currentIdx());
+        #    this.assertEquals('tail3', se.currentKey());
+        #    this.assertEquals('tail3', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('and', se.current());
+        #    this.assertEquals('and', se.currentIdx());
+        #    this.assertEquals('and', se.currentKey());
+        #    this.assertEquals('and', se.currentValue());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        #    this.assertEquals('more', se.current());
+        #    this.assertEquals('more', se.currentIdx());
+        #    this.assertEquals('more', se.currentKey());
+        #    this.assertEquals('more', se.currentValue());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
         #}
       ENDSOURCE
     ENDMETHODS
@@ -26441,6 +28080,13 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
+        UTILOBJECTID 50225
+        NODETYPE 329
+        NAME #SysEnumerator_QueryRunTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
         UTILOBJECTID 50146
         NODETYPE 329
         NAME #SysEnumerator_RecordTest
@@ -26479,6 +28125,27 @@ Formatversion: 1
         UTILOBJECTID 50149
         NODETYPE 329
         NAME #SysEnumerator_SystemCollectionTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50228
+        NODETYPE 329
+        NAME #SysEnumerator_TextBuffer_LineTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50231
+        NODETYPE 329
+        NAME #SysEnumerator_TextBuffer_SplitTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50229
+        NODETYPE 329
+        NAME #SysEnumerator_TextBufferTest
       ENDNODE
       BEGINNODE
         FILETYPE 0

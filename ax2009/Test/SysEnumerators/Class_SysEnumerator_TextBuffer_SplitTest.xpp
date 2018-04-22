@@ -1,0 +1,120 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_TextBuffer_SplitTest extends SysTestCase
+{
+
+    public void testTextBufferCommaSeparated()
+    {
+        TextBuffer text = new TextBuffer();
+        SysEnumerator_TextBuffer_Split se;
+
+        text.appendText(@'line1
+    line2,'+'\t'+@' хвост2
+    line3, tail3, and'+'\tmore');
+
+        se = SysEnumerator_TextBuffer_Split::construct(text);
+
+        this.assertNotNull(se);
+        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('line1\nline2', se.current());
+        this.assertEquals('line1\nline2', se.currentIdx());
+        this.assertEquals('line1\nline2', se.currentKey());
+        this.assertEquals('line1\nline2', se.currentValue());
+
+        // not ASCII
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('\t хвост2\nline3', se.current());
+        this.assertEquals('\t хвост2\nline3', se.currentIdx());
+        this.assertEquals('\t хвост2\nline3', se.currentKey());
+        this.assertEquals('\t хвост2\nline3', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(' tail3', se.current());
+        this.assertEquals(' tail3', se.currentIdx());
+        this.assertEquals(' tail3', se.currentKey());
+        this.assertEquals(' tail3', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(' and\tmore', se.current());
+        this.assertEquals(' and\tmore', se.currentIdx());
+        this.assertEquals(' and\tmore', se.currentKey());
+        this.assertEquals(' and\tmore', se.currentValue());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+    }
+
+    public void testTextBufferEmpty()
+    {
+        TextBuffer text = new TextBuffer();
+        SysEnumerator_TextBuffer_Split se = SysEnumerator_TextBuffer_Split::construct(text);
+
+        this.assertNotNull(se);
+        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+    }
+
+    public void testTextBufferNull()
+    {
+        SysEnumerator_TextBuffer_Split se = SysEnumerator_TextBuffer_Split::construct(null);
+
+        this.assertNotNull(se);
+        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+    }
+
+    public void testTextBufferTabSeparated()
+    {
+        TextBuffer text = new TextBuffer();
+        SysEnumerator_TextBuffer_Split se;
+
+        text.appendText(@'line1
+    line2,'+'\t'+@' хвост2
+    line3, tail3, and'+'\tmore');
+
+        se = SysEnumerator_TextBuffer_Split::newWithTabs(text);
+
+        this.assertNotNull(se);
+        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('line1\nline2,', se.current());
+        this.assertEquals('line1\nline2,', se.currentIdx());
+        this.assertEquals('line1\nline2,', se.currentKey());
+        this.assertEquals('line1\nline2,', se.currentValue());
+
+        // not ASCII
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(' хвост2\nline3, tail3, and', se.current());
+        this.assertEquals(' хвост2\nline3, tail3, and', se.currentIdx());
+        this.assertEquals(' хвост2\nline3, tail3, and', se.currentKey());
+        this.assertEquals(' хвост2\nline3, tail3, and', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('more', se.current());
+        this.assertEquals('more', se.currentIdx());
+        this.assertEquals('more', se.currentKey());
+        this.assertEquals('more', se.currentValue());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+    }
+}

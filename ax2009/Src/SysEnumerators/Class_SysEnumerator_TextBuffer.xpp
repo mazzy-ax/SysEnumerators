@@ -1,0 +1,136 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_TextBuffer extends xSysEnumerator
+{
+    TextBuffer base;
+    str pattern;
+    str current;
+    int start;
+
+    public TextBuffer base()
+    {
+        return base;
+    }
+
+    protected TextBuffer baseOrDefault(TextBuffer _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new TextBuffer();
+        }
+
+        return _base;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super() && this.next();
+
+        return ret;
+    }
+
+    protected boolean calcCurrent(boolean found)
+    {
+        TextBuffer text = this.base();
+        int size = text ? text.size() : 0;
+        int pos, len;
+
+        if( found && text && (start <= size) )
+        {
+            pos = text.matchPos();
+            len = text.matchLen();
+
+            current = text.subStr(pos, len);
+            start = pos + len;
+        }
+        else
+        {
+            current = '';
+            start = 0;
+        }
+
+
+        return found;
+    }
+
+    public str current()
+    {
+        return current;
+    }
+
+    public str currentIdx()
+    {
+        return this.current();
+    }
+
+    public str currentKey()
+    {
+        return this.current();
+    }
+
+    public str currentValue()
+    {
+        return this.current();
+    }
+
+    protected void init()
+    {
+        start = 1;
+        super();
+    }
+
+    protected boolean more()
+    {
+        boolean ret = super() && start;
+
+        return ret;
+    }
+
+    public void new(TextBuffer _base = null, str _pattern = '')
+    {
+        base = this.baseOrDefault(_base);
+        pattern = _pattern;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret && this.base() )
+        {
+            ret = this.calcCurrent(this.base().find(pattern, start));
+        }
+
+        return ret;
+    }
+
+    public static SysEnumerator_TextBuffer construct(TextBuffer base = null, str pattern = ':n+') // Pattern for a Word
+    {
+        SysEnumerator_TextBuffer enumerator = new SysEnumerator_TextBuffer(base, pattern);
+
+        return enumerator;
+    }
+
+    public static SysEnumerator_TextBuffer_Line newLine(TextBuffer base = null)
+    {
+        SysEnumerator_TextBuffer_Line enumerator = new SysEnumerator_TextBuffer_Line(base, '[^\r\n]*');
+
+        return enumerator;
+    }
+
+    public static SysEnumerator_TextBuffer_Split newSplit(TextBuffer base = null, str splitPattern = ',')
+    {
+        SysEnumerator_TextBuffer_Split enumerator = new SysEnumerator_TextBuffer_Split(base, splitPattern);
+
+        return enumerator;
+    }
+
+    public static SysEnumerator_TextBuffer_Split newTabs(TextBuffer base = null)
+    {
+        SysEnumerator_TextBuffer_Split enumerator = new SysEnumerator_TextBuffer_Split(base, '\t');
+
+        return enumerator;
+    }
+}

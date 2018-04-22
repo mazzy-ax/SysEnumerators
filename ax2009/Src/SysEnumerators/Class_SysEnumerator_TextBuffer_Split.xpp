@@ -1,0 +1,48 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_TextBuffer_Split extends SysEnumerator_TextBuffer
+{
+
+    protected boolean calcCurrent(boolean found)
+    {
+        TextBuffer text = this.base();
+        int size = text ? text.size() : 0;
+        int pos;
+
+        if( !text || (start > size) )
+        {
+            current = '';
+            start = 0;
+        }
+        else if( found )
+        {
+            pos = text.matchPos();
+            current = text.subStr(start, pos-start);
+            start = pos + 1;
+        }
+        else
+        {
+            pos = size + 1;
+            current = text.subStr(start, pos-start);
+            start = pos;
+            found = true;
+        }
+
+        return found;
+    }
+
+    public static SysEnumerator_TextBuffer_Split construct(TextBuffer base = null, str pattern = ',')
+    {
+        SysEnumerator_TextBuffer_Split enumerator = new SysEnumerator_TextBuffer_Split(base, pattern);
+
+        return enumerator;
+    }
+
+    public static SysEnumerator_TextBuffer_Split newWithTabs(TextBuffer base = null)
+    {
+        SysEnumerator_TextBuffer_Split enumerator = new SysEnumerator_TextBuffer_Split(base, '\t');
+
+        return enumerator;
+    }
+}

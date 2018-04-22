@@ -5,15 +5,17 @@
 * интервалу чисел;
 * интервалу дат;
 * элементам контейнера;
-* элементам коллекций Microsoft Dynamics AX (`array`, `set`, `map`, `list`);
+* элементам коллекций Аксапты (`array`, `set`, `map`, `list`, `struct`);
+* элементам `enum`;
 * элементам коллекций из .Net-пространства `System.Collections` (как с [генериками](https://msdn.microsoft.com/library/system.collections.generic.aspx), так и [без них](https://msdn.microsoft.com/ru-ru/library/system.collections.aspx));
 * промаркированным на форме записям;
 * записям `QueryRun`, `Query`, `select Table where...`;
 * записям из коллекций `RecordSortedList`, `RecordLinkList`;
 * элементам `TreeNode`;
 * элементам коллекций Dict-классов;
-* XML-элементам
+* XML-элементам;
 * файлам (`CommaIo`, `AsciiIo`, `BinaryIo`, `TextIo`);
+* строкам, словам и regexp-токенам из `TextBuffer`;
 * и прочим системным коллекциям Аксапты.
 
 *SysEnumerators* также позволяет группировать несколько энумераторов. Разработчик может использовать группу в тех местах кода, где можно использовать обычный энумератор. Причем код менять не нужно. *Группа* вызывает `moveNext` у всех своим энумераторов при вызове метода `moveNext` группы и возвращает `false`, если хотя бы один возвратил `false`. Также работают методы `reset` и `skip`. Группа возвращает значение `current` одного из своих энумераторов.

@@ -176,7 +176,7 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
 
     protected boolean next()
     {
-        boolean ret = super() && this.more();
+        boolean ret = super() && this.enumerators();
         SetEnumerator se;
         xSysEnumerator enumerator;
 

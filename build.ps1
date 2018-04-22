@@ -1,25 +1,31 @@
 #
 # mazzy, https://github.com/mazzy-ax/SysEnumerators
 #
-# Rebuild files in the .\ax2009\Src\ directory based on .\ax2009\Projects\*.xpo files
+# The script rebuilds files in the (Src, Test, Examples) directories based on *.xpo project files
 
 #Requires -Version 5
+#Requires -module xpoTools
+#Requires -module SplitPipeline
 
-#Requires -module xpoTools 
-# Run powershell command PS> Install-Module xpoTools
-# To install the module from https://www.powershellgallery.com/packages/xpoTools/
-# see https://github.com/mazzy-ax/xpoTools for details
+# To install the modules from https://www.powershellgallery.com/ run powershell commands:
+# PS> Install-Module xpoTools
+# PS> install-Module SplitPipeline
+#
+# see https://github.com/mazzy-ax/xpoTools and https://github.com/nightroman/SplitPipeline for details
 
 Set-StrictMode -Version Latest
 
-function splitXpo ($Path) {
-    $xpoItem = Get-ChildItem "$Path\\*.xpo" | Import-Xpo
-    $xpoItem | Split-xpo -DestinationPath "$Path"       -xpp -PathStyle mazzy -Encoding UTF8 -Include 'Job_*.xpp'
-    $xpoItem | Split-xpo -DestinationPath "$Path\\Test"  -xpp -PathStyle mazzy -Encoding UTF8 -Include '*test.xpp'
-    $xpoItem | Split-xpo -DestinationPath "$Path\\Src"   -xpp -PathStyle mazzy -Encoding UTF8 -Exclude '*test.xpp', 'Job_*.xpp', 'SharedProject_*.xpo'
-}
+'ax2009', 'ax2012', 'ax3', 'ax4' | ForEach-Object {
+    $Path = $_
 
-splitXpo .\ax2009
-splitXpo .\ax2012
-splitXpo .\ax4
-splitXpo .\ax3
+    Get-ChildItem $Path -filter '*.xpo' |
+        Select-Object -ExpandProperty FullName |
+        Import-Xpo |
+        ForEach-Object {
+        #Split-Pipeline -Verbose -Load 10 -Variable Path {process{
+            Split-xpo -Items $_ -DestinationPathParts @($Path        ) -Include 'Job_*.xpp' -xpp -PathStyle mazzy -Encoding UTF8
+            Split-xpo -Items $_ -DestinationPathParts @($Path, 'Test') -Include '*test.xpp' -xpp -PathStyle mazzy -Encoding UTF8
+            Split-xpo -Items $_ -DestinationPathParts @($Path, 'Src' ) -Exclude '*test.xpp', 'Job_*.xpp', 'SharedProject_*.xpo' -xpp -PathStyle mazzy -Encoding UTF8
+    #}}
+    }
+}
