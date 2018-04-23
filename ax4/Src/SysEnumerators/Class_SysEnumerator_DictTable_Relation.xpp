@@ -1,0 +1,48 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictTable_Relation extends SysEnumerator_DictTable
+{
+
+    public str current()
+    {
+        int idx = this.currentIdx();
+        str ret = this.base().relation(idx);
+
+        return ret;
+    }
+
+    public str currentKey()
+    {
+        return this.current();
+    }
+
+    //TODO mazzy: SysDictField??
+    public DictRelation currentValue()
+    {
+        DictRelation dictRelation = new DictRelation(this.base().id());
+    ;
+        dictRelation.loadNameRelation(this.current());
+
+        return dictRelation;
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().relationCnt();
+
+        return ret;
+    }
+
+    public static SysEnumerator_DictTable_Relation construct(DictTable base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_DictTable_Relation enumerator = new SysEnumerator_DictTable_Relation(base, idx);
+
+        return enumerator;
+    }
+}

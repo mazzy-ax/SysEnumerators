@@ -1,0 +1,30 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_IntTest extends SysTestCase
+{
+
+    public void testInt()
+    {
+        SysEnumerator_Int se = SysEnumerator_Int::construct();
+        int64 zero64;
+
+        this.assertNotNull(se);
+        this.assertEquals(zero64 + maxint(), se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(1, se.current());
+        this.assertEquals(1, se.currentIdx());
+        this.assertEquals(1, se.currentKey());
+        this.assertEquals(1, se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals(2, se.current());
+        this.assertEquals(2, se.currentIdx());
+        this.assertEquals(2, se.currentKey());
+        this.assertEquals(2, se.currentValue());
+    }
+}

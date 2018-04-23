@@ -4,11 +4,11 @@ see also [Releases on GitHub](https://github.com/mazzy-ax/SysEnumerators/release
 
 ## 0.3.1 - 2018-04-24
 
+* Добавлен проект с энумераторами для ax4
 * Добавлен `SysEnumerator_Sleep`
 * Явно определен метод moveNext в интерфейсе `ISysEnumerator`. Раньше метод только наследовался
 * энумераторы `SysEnumerator_Counter` теперь считают от 1, а не от 0
 * энумераторы `SysEnumerator_Indexed` теперь по умолчанию энумерируют все целые. Раньше по умолчанию устанавливался пустой диапазон
-* Добавлен проект для ax4
 
 ## 0.3.0 - 2018-04-23
 

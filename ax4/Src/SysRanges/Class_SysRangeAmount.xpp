@@ -1,0 +1,110 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRangeAmount implements ISysRange
+{
+    amount start;
+    amount end;
+
+    public SysRangeAmount clone()
+    {
+        SysRangeAmount range = SysRangeAmount::construct(this.start(), this.end());
+
+        return range;
+    }
+
+    public boolean contains(amount value)
+    {
+        boolean ret = (this.start() <= value && value <= this.end());
+        return ret;
+    }
+
+    public boolean cover(amount value)
+    {
+        boolean ret = (this.start() < value && value < this.end());
+        return ret;
+    }
+
+    // переполнение в аксапте не возбуждает исключение, а возвращает значение с отброшенными битами
+    public amount distance()
+    {
+        amount ret = this.end() - this.start();
+
+        return ret;
+    }
+
+    public amount end()
+    {
+        return end;
+    }
+
+    public boolean equal(SysRangeAmount range)
+    {
+        boolean ret = range && (this.start() == range.start()) && (this.end() == range.end());
+        return ret;
+    }
+
+    public boolean in(SysRangeAmount range)
+    {
+        boolean ret = range && (range.start() <= this.start()) && (this.end() <= range.end());
+        return ret;
+    }
+
+    public boolean isBoundary(amount value)
+    {
+        return (value == this.start()) || (value == this.end());
+    }
+
+    public void new(amount _start = 0, amount _end = RealMax())
+    {
+        start = _start;
+        end = _end;
+    }
+
+    public SysRangeAmount normalize()
+    {
+        SysRangeAmount range;
+
+        if( this.reversed() )
+        {
+            range = this.reverse();
+        }
+        else
+        {
+            range = this.clone();
+        }
+
+        return range;
+    }
+
+    public SysRangeAmount reverse()
+    {
+        SysRangeAmount range = SysRangeAmount::construct(this.end(), this.start());
+
+        return range;
+    }
+
+    public boolean reversed()
+    {
+        boolean ret = this.start() > this.end();
+        return ret;
+    }
+
+    public amount start()
+    {
+        return start;
+    }
+
+    public str toString()
+    {
+        // SysQuery::range() is not nice
+        return strfmt('%1..%2', this.start(), this.end());
+    }
+
+    public static SysRangeAmount construct(amount start = 0, amount end = RealMax())
+    {
+        SysRangeAmount range = new SysRangeAmount(start, end);
+
+        return range;
+    }
+}

@@ -1,0 +1,86 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_ListTest extends SysTestCase
+{
+
+    public void testList()
+    {
+        List l = new List(Types::String);
+        SysEnumerator_List se;
+        int64 zero64;
+
+        l.addEnd('a');
+        l.addEnd('b');
+        l.addEnd('c');
+        l.addEnd('d');
+        l.addEnd('e');
+
+        se = SysEnumerator_List::construct(l);
+
+        this.assertNotNull(se);
+        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('a', se.current());
+        this.assertEquals('a', se.currentKey());
+        this.assertEquals('a', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('b', se.current());
+        this.assertEquals('b', se.currentKey());
+        this.assertEquals('b', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('c', se.current());
+        this.assertEquals('c', se.currentKey());
+        this.assertEquals('c', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('d', se.current());
+        this.assertEquals('d', se.currentKey());
+        this.assertEquals('d', se.currentValue());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('e', se.current());
+        this.assertEquals('e', se.currentKey());
+        this.assertEquals('e', se.currentValue());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(zero64 + 5, se.estimatedIterations());
+    }
+
+    public void testListEmpty()
+    {
+        List l = new List(Types::String);
+        SysEnumerator_List se = SysEnumerator_List::construct(l);
+
+        this.assertNotNull(se);
+        this.assertEquals(0, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(0, se.estimatedIterations());
+    }
+
+    public void testListNull()
+    {
+        SysEnumerator_List se = SysEnumerator_List::construct(null);
+
+        this.assertNotNull(se);
+        this.assertEquals(0, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(0, se.estimatedIterations());
+    }
+}

@@ -1,0 +1,49 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictTable_Field extends SysEnumerator_DictTable
+{
+
+    public fieldId current()
+    {
+        int idx = this.currentIdx();
+        fieldId ret = this.base().fieldCnt2Id(idx);
+
+        return ret;
+    }
+
+    public str currentKey()
+    {
+        return this.base().fieldName(this.current());
+    }
+
+    protected boolean currentKeyProvided()
+    {
+        return true;
+    }
+
+    //TODO mazzy: SysDictField??
+    public DictField currentValue()
+    {
+        return this.base().fieldObject(this.current());
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().fieldCnt();
+
+        return ret;
+    }
+
+    public static SysEnumerator_DictTable_Field construct(DictTable base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_DictTable_Field enumerator = new SysEnumerator_DictTable_Field(base, idx);
+
+        return enumerator;
+    }
+}

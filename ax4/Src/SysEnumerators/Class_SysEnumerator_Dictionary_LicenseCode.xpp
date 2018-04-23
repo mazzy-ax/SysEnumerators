@@ -1,0 +1,49 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Dictionary_LicenseCode extends SysEnumerator_Dictionary
+{
+
+    public licenseCodeId current()
+    {
+        int idx = this.currentIdx();
+        configurationKeyId ret = this.base().licenseCodeCnt2Id(idx);
+
+        return ret;
+    }
+
+    public str currentKey()
+    {
+        return this.base().licenseCodeName(this.current());
+    }
+
+    protected boolean currentKeyProvided()
+    {
+        return true;
+    }
+
+    //TODO mazzy: SysDictClass??
+    public DictLicenseCode currentValue()
+    {
+        return this.base().licenseCodeObject(this.current());
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().licenseCodeCnt();
+
+        return ret;
+    }
+
+    public static SysEnumerator_Dictionary_LicenseCode construct(Dictionary base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_Dictionary_LicenseCode enumerator = new SysEnumerator_Dictionary_LicenseCode(base, idx);
+
+        return enumerator;
+    }
+}

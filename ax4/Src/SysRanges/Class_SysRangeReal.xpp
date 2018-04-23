@@ -1,0 +1,110 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRangeReal implements ISysRange
+{
+    real start;
+    real end;
+
+    public SysRangeReal clone()
+    {
+        SysRangeReal range = SysRangeReal::construct(this.start(), this.end());
+
+        return range;
+    }
+
+    public boolean contains(real value)
+    {
+        boolean ret = (this.start() <= value && value <= this.end());
+        return ret;
+    }
+
+    public boolean cover(real value)
+    {
+        boolean ret = (this.start() < value && value < this.end());
+        return ret;
+    }
+
+    // переполнение в аксапте не возбуждает исключение, а возвращает значение с отброшенными битами
+    public real distance()
+    {
+        real ret = this.end() - this.start();
+
+        return ret;
+    }
+
+    public real end()
+    {
+        return end;
+    }
+
+    public boolean equal(SysRangeReal range)
+    {
+        boolean ret = range && (this.start() == range.start()) && (this.end() == range.end());
+        return ret;
+    }
+
+    public boolean in(SysRangeReal range)
+    {
+        boolean ret = range && (range.start() <= this.start()) && (this.end() <= range.end());
+        return ret;
+    }
+
+    public boolean isBoundary(real value)
+    {
+        return (value == this.start()) || (value == this.end());
+    }
+
+    public void new(real _start = 0, real _end = RealMax())
+    {
+        start = _start;
+        end = _end;
+    }
+
+    public SysRangeReal normalize()
+    {
+        SysRangeReal range;
+
+        if( this.reversed() )
+        {
+            range = this.reverse();
+        }
+        else
+        {
+            range = this.clone();
+        }
+
+        return range;
+    }
+
+    public SysRangeReal reverse()
+    {
+        SysRangeReal range = SysRangeReal::construct(end, start);
+
+        return range;
+    }
+
+    public boolean reversed()
+    {
+        boolean ret = this.start() > this.end();
+        return ret;
+    }
+
+    public real start()
+    {
+        return start;
+    }
+
+    public str toString()
+    {
+        // SysQuery::range() is not nice
+        return strfmt('%1..%2', this.start(), this.end());
+    }
+
+    public static SysRangeReal construct(real _start = 0, real _end = RealMax())
+    {
+        SysRangeReal range = new SysRangeReal(_start, _end);
+
+        return range;
+    }
+}
