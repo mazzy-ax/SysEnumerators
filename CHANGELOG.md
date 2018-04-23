@@ -2,7 +2,12 @@
 
 see also [Releases on GitHub](https://github.com/mazzy-ax/SysEnumerators/releases)
 
-## 0.3.0
+## 0.3.1 - 2018-04-24
+
+* добавлен проект для ax4
+* исправлены ошибки
+
+## 0.3.0 - 2018-04-23
 
 * Add `SysEnumerator_TextBuffer` enumerators and unit test for it:
   * line enumerator

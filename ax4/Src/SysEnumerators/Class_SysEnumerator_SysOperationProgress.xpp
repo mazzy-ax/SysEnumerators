@@ -48,6 +48,18 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
         return ret;
     }
 
+    public boolean moveNext()
+    {
+        boolean ret = super();
+
+        if( !ret )
+        {
+            this.base().reset(); // hide progress
+        }
+
+        return ret;
+    }
+
     public void new(SysOperationProgressBase _base = null)
     {
         base = this.baseOrDefault(_base);

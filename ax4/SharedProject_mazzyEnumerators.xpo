@@ -222,12 +222,6 @@ Formatversion: 1
     
     METHODS
       Version: 3
-      SOURCE #classDeclaration
-        #public class SysDictEnum extends DictEnum
-        #{
-        #    #Properties
-        #}
-      ENDSOURCE
       SOURCE #newFrom
         #public static SysDictEnum newFrom(anytype enum)
         #{
@@ -800,151 +794,6 @@ Formatversion: 1
         #{
         #    //TODO mazzy
         #    return '';
-        #}
-      ENDSOURCE
-    ENDMETHODS
-  ENDCLASS
-
-***Element: CLS
-
-; Microsoft Dynamics Class: SysRange unloaded
-; --------------------------------------------------------------------------------
-  CLSVERSION 1
-  
-  CLASS #SysRange
-    PROPERTIES
-      Name                #SysRange
-      Extends             #
-      RunOn               #Called from
-    ENDPROPERTIES
-    
-    METHODS
-      Version: 3
-      SOURCE #classDeclaration
-        #//
-        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
-        #//
-        #public class SysRange implements ISysRange
-        #{
-        #    anytype start;
-        #    anytype end;
-        #}
-      ENDSOURCE
-      SOURCE #clone
-        #public SysRange clone()
-        #{
-        #    SysRange range = SysRange::construct(this.start(), this.end());
-        #
-        #    return range;
-        #}
-      ENDSOURCE
-      SOURCE #contains
-        #public boolean contains(anytype value)
-        #{
-        #    boolean ret = (this.start() <= value && value <= this.end());
-        #    return ret;
-        #}
-      ENDSOURCE
-      SOURCE #cover
-        #public boolean cover(anytype value)
-        #{
-        #    boolean ret = (this.start() < value && value < this.end());
-        #    return ret;
-        #}
-      ENDSOURCE
-      SOURCE #distance
-        #// переполнение в аксапте не возбуждает исключение, а возвращает значение с отброшенными битами
-        #public anytype distance()
-        #{
-        #    anytype ret = this.end() - this.start();
-        #
-        #    return ret;
-        #}
-      ENDSOURCE
-      SOURCE #end
-        #public anytype end()
-        #{
-        #    return end;
-        #}
-      ENDSOURCE
-      SOURCE #equal
-        #public boolean equal(SysRange range)
-        #{
-        #    boolean ret = range && (this.start() == range.start()) && (this.end() == range.end());
-        #    return ret;
-        #}
-      ENDSOURCE
-      SOURCE #in
-        #public boolean in(SysRange range)
-        #{
-        #    boolean ret = range && (range.start() <= this.start()) && (this.end() <= range.end());
-        #    return ret;
-        #}
-      ENDSOURCE
-      SOURCE #isBoundary
-        #public boolean isBoundary(anytype value)
-        #{
-        #    return (value == this.start()) || (value == this.end());
-        #}
-      ENDSOURCE
-      SOURCE #new
-        #public void new(anytype _start, anytype _end)
-        #{
-        #    start = _start;
-        #    end = _end;
-        #}
-      ENDSOURCE
-      SOURCE #normalize
-        #public SysRange normalize()
-        #{
-        #    SysRange range;
-        #
-        #    if( this.reversed() )
-        #    {
-        #        range = this.reverse();
-        #    }
-        #    else
-        #    {
-        #        range = this.clone();
-        #    }
-        #
-        #    return range;
-        #}
-      ENDSOURCE
-      SOURCE #reverse
-        #public SysRange reverse()
-        #{
-        #    SysRange range = SysRange::construct(this.end(), this.start());
-        #
-        #    return range;
-        #}
-      ENDSOURCE
-      SOURCE #reversed
-        #public boolean reversed()
-        #{
-        #    boolean ret = this.start() > this.end();
-        #    return ret;
-        #}
-      ENDSOURCE
-      SOURCE #start
-        #public anytype start()
-        #{
-        #    return start;
-        #}
-      ENDSOURCE
-      SOURCE #toString
-        #public str toString()
-        #{
-        #    // SysQuery::range() is not nice
-        #    return strfmt('%1..%2', this.start(), this.end());
-        #}
-      ENDSOURCE
-      SOURCE #construct
-        #public static SysRange construct(anytype start, anytype end)
-        #{
-        #    SysRange range = new SysRange(start, end);
-        #
-        #    return range;
         #}
       ENDSOURCE
     ENDMETHODS
@@ -3706,127 +3555,6 @@ Formatversion: 1
         #
         #    this.assertNotNull(range);
         #    this.assertEquals(strfmt('%1..%2', start, end), range.toString());
-        #}
-      ENDSOURCE
-    ENDMETHODS
-  ENDCLASS
-
-***Element: CLS
-
-; Microsoft Dynamics Class: SysSequence unloaded
-; --------------------------------------------------------------------------------
-  CLSVERSION 1
-  
-  CLASS #SysSequence
-    PROPERTIES
-      Name                #SysSequence
-      Extends             #SysRange
-      RunOn               #Called from
-    ENDPROPERTIES
-    
-    METHODS
-      Version: 3
-      SOURCE #classDeclaration
-        #//
-        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
-        #//
-        #public class SysSequence extends SysRange implements ISysSequence, Enumerable
-        #{
-        #    anytype step;
-        #}
-      ENDSOURCE
-      SOURCE #clone
-        #public SysSequence clone()
-        #{
-        #    SysSequence range = SysSequence::construct(this.start(), this.end(), this.step());
-        #
-        #    return range;
-        #}
-      ENDSOURCE
-      SOURCE #equal
-        #public boolean equal(SysSequence sequence)
-        #{
-        #    boolean ret = super(sequence) && (this.step() == sequence.step());
-        #    return ret;
-        #}
-      ENDSOURCE
-      SOURCE #estimatedIterations
-        #public int64 estimatedIterations()
-        #{
-        #    int64 ret = int64Max();
-        #    anytype distance = this.distance();
-        #    boolean overflow = this.cover(0) && (distance <= 0.0001);
-        #
-        #    if( overflow )
-        #    {
-        #        ret = int64Max();
-        #    }
-        #    else if( distance == 0 )
-        #    {
-        #        ret = 1;
-        #    }
-        #    else if( ((distance < 0) && (this.step() > 0))
-        #          || ((distance > 0) && (this.step() < 0)) )
-        #    {
-        #        ret = 0;
-        #    }
-        #    else if( step == 1 )
-        #    {
-        #        ret = any2int64(distance + 1.0);
-        #    }
-        #    else
-        #    {
-        #        ret = any2int64(distance / this.step() + 1.0);
-        #    }
-        #
-        #    return ret;
-        #}
-      ENDSOURCE
-      SOURCE #getEnumerator
-        #public SysEnumerator getEnumerator()
-        #{
-        #    return SysEnumerator::newFromSequence(this);
-        #}
-      ENDSOURCE
-      SOURCE #getNext
-        #public anytype getNext(anytype value)
-        #{
-        #    return value + this.step();
-        #}
-      ENDSOURCE
-      SOURCE #new
-        #public void new(anytype _start, anytype _end, anytype _step)
-        #{
-        #    super(_start, _end);
-        #    step = _step;
-        #}
-      ENDSOURCE
-      SOURCE #reverse
-        #public SysSequence reverse()
-        #{
-        #    SysSequence sequence = SysSequence::construct(this.end(), this.start(), 0-this.step());
-        #
-        #    return sequence;
-        #}
-      ENDSOURCE
-      SOURCE #step
-        #public anytype step()
-        #{
-        #    return step;
-        #}
-      ENDSOURCE
-      SOURCE #toString
-        #public str toString()
-        #{
-        #    return strfmt('%1:[%2]', this.step(), super());
-        #}
-      ENDSOURCE
-      SOURCE #construct
-        #public static SysSequence construct(anytype _start, anytype _end, anytype _step)
-        #{
-        #    SysSequence sequence = new SysSequence(_start, _end, _step);
-        #
-        #    return sequence;
         #}
       ENDSOURCE
     ENDMETHODS
@@ -11422,7 +11150,7 @@ Formatversion: 1
       SOURCE #defaultEnd
         #protected int defaultEnd()
         #{
-        #    return 0;
+        #    return maxint();
         #}
       ENDSOURCE
       SOURCE #defaultStart
@@ -11548,7 +11276,7 @@ Formatversion: 1
       SOURCE #defaultEnd
         #protected int64 defaultEnd()
         #{
-        #    return 0;
+        #    return int64max();
         #}
       ENDSOURCE
       SOURCE #defaultStart
@@ -13004,15 +12732,12 @@ Formatversion: 1
         #    return base;
         #}
       ENDSOURCE
-      SOURCE #baseOrDefault
-        #protected QueryRun baseOrDefault(QueryRun _base = null)
+      SOURCE #begin
+        #protected boolean begin()
         #{
-        #    if( !_base )
-        #    {
-        #        _base = new QueryRun(new Query());
-        #    }
+        #    boolean ret = super() && this.next();
         #
-        #    return _base;
+        #    return ret;
         #}
       ENDSOURCE
       SOURCE #classDeclaration
@@ -13022,7 +12747,6 @@ Formatversion: 1
         #public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
         #{
         #    QueryRun base;
-        #    SysRangeInt dsRange;
         #
         #    int64 estimatedIterations;
         #}
@@ -13032,9 +12756,9 @@ Formatversion: 1
         #{
         #    Common ret;
         #
-        #    if( dsRange.contains(dataSourceNo) )
+        #    if( this.base() )
         #    {
-        #        ret = base.getNo(dataSourceNo);
+        #        ret = this.base().getNo(dataSourceNo);
         #    }
         #
         #    return ret;
@@ -13061,26 +12785,33 @@ Formatversion: 1
       SOURCE #estimatedIterations
         #public int64 estimatedIterations(int64 _estimatedIterations = -1)
         #{
-        #    if( estimatedIterations == 0 )
+        #    if( estimatedIterations < 0
+        #     && this.base()
+        #     && this.base().query()
+        #     && this.base().query().dataSourceCount() )
         #    {
-        #        estimatedIterations = SysQuery::countLoops(this.base());
+        #        estimatedIterations = SysQuery::countTotal(this.base());
+        #    }
+        #    else
+        #    {
+        #        return max(0, estimatedIterations);
         #    }
         #
         #    return estimatedIterations;
         #}
       ENDSOURCE
       SOURCE #new
-        #public void new(QueryRun _base = null)
+        #public void new(QueryRun _base = null, int64 _estimatedIterations = -1)
         #{
-        #    base = this.baseOrDefault(_base);
-        #    dsRange = SysRangeInt::construct(1, base.query().dataSourceCount());
+        #    base = _base;
+        #    estimatedIterations = _estimatedIterations;
         #    super();
         #}
       ENDSOURCE
       SOURCE #next
         #protected boolean next()
         #{
-        #    boolean ret = super() && this.base().next();
+        #    boolean ret = super() && this.base() && this.base().next();
         #
         #    return ret;
         #}
@@ -13088,17 +12819,97 @@ Formatversion: 1
       SOURCE #reset
         #public void reset()
         #{
-        #    this.base().reset();
+        #    if( this.base() )
+        #    {
+        #        this.base().reset();
+        #    }
         #    super();
         #}
       ENDSOURCE
       SOURCE #construct
-        #public static SysEnumerator_QueryRun construct(QueryRun base = null)
+        #public static SysEnumerator_QueryRun construct(QueryRun base = null, int64 estimatedIterations = -1)
         #{
-        #    SysEnumerator_QueryRun enumerator = new SysEnumerator_QueryRun(base);
+        #    SysEnumerator_QueryRun enumerator = new SysEnumerator_QueryRun(base, estimatedIterations);
         #
         #    return enumerator;
         #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics Class: SysEnumerator_QueryRunTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_QueryRunTest
+    PROPERTIES
+      Name                #SysEnumerator_QueryRunTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_QueryRunTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testQueryRun
+        #void testQueryRun()
+        #{
+        #    UserInfo                userInfo;
+        #    Query                   q = new Query();
+        #    SysEnumerator_QueryRun  se;
+        #;
+        #    q.addDataSource(UserInfo.TableId);
+        #    se = SysEnumerator_QueryRun::construct(new QueryRun(q));
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotEqual(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertNotEqual(0, se.current().RecId);
+        #}
+        #
+      ENDSOURCE
+      SOURCE #testQueryRunEmpty
+        #void testQueryRunEmpty()
+        #{
+        #    Query q = new Query();
+        #    QueryRun qr = new QueryRun(q);
+        #    SysEnumerator_QueryRun se = SysEnumerator_QueryRun::construct(qr);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.parmExceptionExpected(true);
+        #
+        #    se.moveNext();
+        #}
+        #
+      ENDSOURCE
+      SOURCE #testQueryRunNull
+        #void testQueryRunNull()
+        #{
+        #    SysEnumerator_QueryRun se = SysEnumerator_QueryRun::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+        #
       ENDSOURCE
     ENDMETHODS
   ENDCLASS
@@ -13641,6 +13452,19 @@ Formatversion: 1
         #    if( ret == 0 )
         #    {
         #        ret = super();
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #moveNext
+        #public boolean moveNext()
+        #{
+        #    boolean ret = super();
+        #
+        #    if( !ret )
+        #    {
+        #        this.base().reset(); // hide progress
         #    }
         #
         #    return ret;
@@ -14694,6 +14518,19 @@ Formatversion: 1
         #    if( ret == 0 )
         #    {
         #        ret = super();
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #moveNext
+        #public boolean moveNext()
+        #{
+        #    boolean ret = super();
+        #
+        #    if( !ret )
+        #    {
+        #        this.base().reset(); // hide progress
         #    }
         #
         #    return ret;
@@ -16728,7 +16565,7 @@ Formatversion: 1
       SOURCE #next
         #protected boolean next()
         #{
-        #    boolean ret = super() && this.more();
+        #    boolean ret = super() && this.enumerators();
         #    SetEnumerator se;
         #    xSysEnumerator enumerator;
         #
@@ -17484,7 +17321,7 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50133
+        UTILOBJECTID 50142
         NODETYPE 329
         NAME #xSysEnumerator
       ENDNODE
@@ -17501,91 +17338,84 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50111
-        NODETYPE 329
-        NAME #SysRange
-      ENDNODE
-      BEGINNODE
-        FILETYPE 0
-        UTILTYPE 45
-        UTILOBJECTID 50112
+        UTILOBJECTID 50118
         NODETYPE 329
         NAME #SysRangeAmount
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50113
+        UTILOBJECTID 50119
         NODETYPE 329
         NAME #SysRangeAmountTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50134
+        UTILOBJECTID 50120
         NODETYPE 329
         NAME #SysRangeAnytype
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50135
+        UTILOBJECTID 50121
         NODETYPE 329
         NAME #SysRangeAnytypeTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50114
+        UTILOBJECTID 50122
         NODETYPE 329
         NAME #SysRangeDate
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50115
+        UTILOBJECTID 50123
         NODETYPE 329
         NAME #SysRangeDateTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50116
+        UTILOBJECTID 50124
         NODETYPE 329
         NAME #SysRangeInt
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50117
+        UTILOBJECTID 50125
         NODETYPE 329
         NAME #SysRangeInt64
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50118
+        UTILOBJECTID 50126
         NODETYPE 329
         NAME #SysRangeInt64Test
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50119
+        UTILOBJECTID 50127
         NODETYPE 329
         NAME #SysRangeIntTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50120
+        UTILOBJECTID 50128
         NODETYPE 329
         NAME #SysRangeReal
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50121
+        UTILOBJECTID 50129
         NODETYPE 329
         NAME #SysRangeRealTest
       ENDNODE
@@ -17602,91 +17432,84 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50122
-        NODETYPE 329
-        NAME #SysSequence
-      ENDNODE
-      BEGINNODE
-        FILETYPE 0
-        UTILTYPE 45
-        UTILOBJECTID 50123
+        UTILOBJECTID 50130
         NODETYPE 329
         NAME #SysSequenceAmount
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50124
+        UTILOBJECTID 50131
         NODETYPE 329
         NAME #SysSequenceAmountTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50136
+        UTILOBJECTID 50132
         NODETYPE 329
         NAME #SysSequenceAnytype
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50137
+        UTILOBJECTID 50133
         NODETYPE 329
         NAME #SysSequenceAnytypeTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50125
+        UTILOBJECTID 50134
         NODETYPE 329
         NAME #SysSequenceDate
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50126
+        UTILOBJECTID 50135
         NODETYPE 329
         NAME #SysSequenceDateTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50127
+        UTILOBJECTID 50136
         NODETYPE 329
         NAME #SysSequenceInt
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50128
+        UTILOBJECTID 50137
         NODETYPE 329
         NAME #SysSequenceInt64
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50129
+        UTILOBJECTID 50138
         NODETYPE 329
         NAME #SysSequenceInt64Test
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50130
+        UTILOBJECTID 50139
         NODETYPE 329
         NAME #SysSequenceIntTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50131
+        UTILOBJECTID 50140
         NODETYPE 329
         NAME #SysSequenceReal
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50132
+        UTILOBJECTID 50141
         NODETYPE 329
         NAME #SysSequenceRealTest
       ENDNODE
@@ -18209,215 +18032,222 @@ Formatversion: 1
         UTILTYPE 45
         UTILOBJECTID 50078
         NODETYPE 329
-        NAME #SysEnumerator_Record
+        NAME #SysEnumerator_QueryRunTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50079
         NODETYPE 329
-        NAME #SysEnumerator_RecordLinkList
+        NAME #SysEnumerator_Record
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50080
         NODETYPE 329
-        NAME #SysEnumerator_RecordSortedList
+        NAME #SysEnumerator_RecordLinkList
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50081
         NODETYPE 329
-        NAME #SysEnumerator_RecordTest
+        NAME #SysEnumerator_RecordSortedList
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50082
         NODETYPE 329
-        NAME #SysEnumerator_RunBaseProgress
+        NAME #SysEnumerator_RecordTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50083
         NODETYPE 329
-        NAME #SysEnumerator_RunBaseProgressTest
+        NAME #SysEnumerator_RunBaseProgress
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50084
         NODETYPE 329
-        NAME #SysEnumerator_SecurityKeySet
+        NAME #SysEnumerator_RunBaseProgressTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50085
         NODETYPE 329
-        NAME #SysEnumerator_Sequence
+        NAME #SysEnumerator_SecurityKeySet
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50086
         NODETYPE 329
-        NAME #SysEnumerator_SequenceTest
+        NAME #SysEnumerator_Sequence
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50087
         NODETYPE 329
-        NAME #SysEnumerator_Set
+        NAME #SysEnumerator_SequenceTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50088
         NODETYPE 329
-        NAME #SysEnumerator_SetTest
+        NAME #SysEnumerator_Set
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50089
         NODETYPE 329
-        NAME #SysEnumerator_Struct
+        NAME #SysEnumerator_SetTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50090
         NODETYPE 329
-        NAME #SysEnumerator_StructTest
+        NAME #SysEnumerator_Struct
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50091
         NODETYPE 329
+        NAME #SysEnumerator_StructTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50092
+        NODETYPE 329
         NAME #SysEnumerator_SysOperationProgress
-      ENDNODE
-      BEGINNODE
-        FILETYPE 0
-        UTILTYPE 45
-        UTILOBJECTID 50094
-        NODETYPE 329
-        NAME #SysEnumerator_TextIo
-      ENDNODE
-      BEGINNODE
-        FILETYPE 0
-        UTILTYPE 45
-        UTILOBJECTID 50095
-        NODETYPE 329
-        NAME #SysEnumerator_TreeNodeChildren
-      ENDNODE
-      BEGINNODE
-        FILETYPE 0
-        UTILTYPE 45
-        UTILOBJECTID 50096
-        NODETYPE 329
-        NAME #SysEnumerator_TreeNodeChildrenTest
-      ENDNODE
-      BEGINNODE
-        FILETYPE 0
-        UTILTYPE 45
-        UTILOBJECTID 50097
-        NODETYPE 329
-        NAME #SysEnumerator_TreeNodeSibling
-      ENDNODE
-      BEGINNODE
-        FILETYPE 0
-        UTILTYPE 45
-        UTILOBJECTID 50098
-        NODETYPE 329
-        NAME #SysEnumerator_TreeNodeSiblingTest
-      ENDNODE
-      BEGINNODE
-        FILETYPE 0
-        UTILTYPE 45
-        UTILOBJECTID 50099
-        NODETYPE 329
-        NAME #SysEnumerator_XmlAttributeArray
-      ENDNODE
-      BEGINNODE
-        FILETYPE 0
-        UTILTYPE 45
-        UTILOBJECTID 50100
-        NODETYPE 329
-        NAME #SysEnumerator_XmlChildren
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50101
         NODETYPE 329
-        NAME #SysEnumerator_XmlChildrenTest
+        NAME #SysEnumerator_TextIo
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50102
         NODETYPE 329
-        NAME #SysEnumerator_XmlNodeList
+        NAME #SysEnumerator_TreeNodeChildren
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50103
         NODETYPE 329
-        NAME #SysEnumerator_XmlNodeListIndex
+        NAME #SysEnumerator_TreeNodeChildrenTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50104
         NODETYPE 329
-        NAME #SysEnumerator_XmlNodeListIndexTest
+        NAME #SysEnumerator_TreeNodeSibling
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50105
         NODETYPE 329
-        NAME #SysEnumerator_XmlNodeListTest
+        NAME #SysEnumerator_TreeNodeSiblingTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50106
         NODETYPE 329
-        NAME #SysEnumerator_XmlSibling
+        NAME #SysEnumerator_XmlAttributeArray
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50107
         NODETYPE 329
-        NAME #SysEnumerator_XmlSiblingTest
+        NAME #SysEnumerator_XmlChildren
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50108
         NODETYPE 329
-        NAME #SysEnumeratorGroup
+        NAME #SysEnumerator_XmlChildrenTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50109
         NODETYPE 329
-        NAME #SysEnumeratorGroupTest
+        NAME #SysEnumerator_XmlNodeList
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
         UTILOBJECTID 50110
+        NODETYPE 329
+        NAME #SysEnumerator_XmlNodeListIndex
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50111
+        NODETYPE 329
+        NAME #SysEnumerator_XmlNodeListIndexTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50112
+        NODETYPE 329
+        NAME #SysEnumerator_XmlNodeListTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50113
+        NODETYPE 329
+        NAME #SysEnumerator_XmlSibling
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50114
+        NODETYPE 329
+        NAME #SysEnumerator_XmlSiblingTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50115
+        NODETYPE 329
+        NAME #SysEnumeratorGroup
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50116
+        NODETYPE 329
+        NAME #SysEnumeratorGroupTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50117
         NODETYPE 329
         NAME #SysEnumeratorTest
       ENDNODE
@@ -24224,6 +24054,83 @@ Formatversion: 1
 
 ***Element: CLS
 
+; Microsoft Dynamics Class: SysEnumerator_QueryRunTest unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_QueryRunTest
+    PROPERTIES
+      Name                #SysEnumerator_QueryRunTest
+      Extends             #SysTestCase
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #public class SysEnumerator_QueryRunTest extends SysTestCase
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #testQueryRun
+        #void testQueryRun()
+        #{
+        #    UserInfo                userInfo;
+        #    Query                   q = new Query();
+        #    SysEnumerator_QueryRun  se;
+        #;
+        #    q.addDataSource(UserInfo.TableId);
+        #    se = SysEnumerator_QueryRun::construct(new QueryRun(q));
+        #
+        #    this.assertNotNull(se);
+        #    this.assertNotEqual(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertTrue(se.moveNext());
+        #    this.assertNotEqual(0, se.current().RecId);
+        #}
+        #
+      ENDSOURCE
+      SOURCE #testQueryRunEmpty
+        #void testQueryRunEmpty()
+        #{
+        #    Query q = new Query();
+        #    QueryRun qr = new QueryRun(q);
+        #    SysEnumerator_QueryRun se = SysEnumerator_QueryRun::construct(qr);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.parmExceptionExpected(true);
+        #
+        #    se.moveNext();
+        #}
+        #
+      ENDSOURCE
+      SOURCE #testQueryRunNull
+        #void testQueryRunNull()
+        #{
+        #    SysEnumerator_QueryRun se = SysEnumerator_QueryRun::construct(null);
+        #
+        #    this.assertNotNull(se);
+        #    this.assertEquals(0, se.estimatedIterations());
+        #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+        #
+        #    this.assertFalse(se.moveNext());
+        #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        #    this.assertEquals(0, se.estimatedIterations());
+        #}
+        #
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
 ; Microsoft Dynamics Class: SysEnumerator_RecordTest unloaded
 ; --------------------------------------------------------------------------------
   CLSVERSION 1
@@ -26018,42 +25925,42 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50113
+        UTILOBJECTID 50119
         NODETYPE 329
         NAME #SysRangeAmountTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50135
+        UTILOBJECTID 50121
         NODETYPE 329
         NAME #SysRangeAnytypeTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50115
+        UTILOBJECTID 50123
         NODETYPE 329
         NAME #SysRangeDateTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50118
+        UTILOBJECTID 50126
         NODETYPE 329
         NAME #SysRangeInt64Test
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50119
+        UTILOBJECTID 50127
         NODETYPE 329
         NAME #SysRangeIntTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50121
+        UTILOBJECTID 50129
         NODETYPE 329
         NAME #SysRangeRealTest
       ENDNODE
@@ -26070,42 +25977,42 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50124
+        UTILOBJECTID 50131
         NODETYPE 329
         NAME #SysSequenceAmountTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50137
+        UTILOBJECTID 50133
         NODETYPE 329
         NAME #SysSequenceAnytypeTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50126
+        UTILOBJECTID 50135
         NODETYPE 329
         NAME #SysSequenceDateTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50129
+        UTILOBJECTID 50138
         NODETYPE 329
         NAME #SysSequenceInt64Test
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50130
+        UTILOBJECTID 50139
         NODETYPE 329
         NAME #SysSequenceIntTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50132
+        UTILOBJECTID 50141
         NODETYPE 329
         NAME #SysSequenceRealTest
       ENDNODE
@@ -26206,91 +26113,98 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50081
+        UTILOBJECTID 50078
+        NODETYPE 329
+        NAME #SysEnumerator_QueryRunTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50082
         NODETYPE 329
         NAME #SysEnumerator_RecordTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50083
+        UTILOBJECTID 50084
         NODETYPE 329
         NAME #SysEnumerator_RunBaseProgressTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50086
+        UTILOBJECTID 50087
         NODETYPE 329
         NAME #SysEnumerator_SequenceTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50088
+        UTILOBJECTID 50089
         NODETYPE 329
         NAME #SysEnumerator_SetTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50090
+        UTILOBJECTID 50091
         NODETYPE 329
         NAME #SysEnumerator_StructTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50096
+        UTILOBJECTID 50103
         NODETYPE 329
         NAME #SysEnumerator_TreeNodeChildrenTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50098
+        UTILOBJECTID 50105
         NODETYPE 329
         NAME #SysEnumerator_TreeNodeSiblingTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50101
+        UTILOBJECTID 50108
         NODETYPE 329
         NAME #SysEnumerator_XmlChildrenTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50104
+        UTILOBJECTID 50111
         NODETYPE 329
         NAME #SysEnumerator_XmlNodeListIndexTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50105
+        UTILOBJECTID 50112
         NODETYPE 329
         NAME #SysEnumerator_XmlNodeListTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50107
+        UTILOBJECTID 50114
         NODETYPE 329
         NAME #SysEnumerator_XmlSiblingTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50109
+        UTILOBJECTID 50116
         NODETYPE 329
         NAME #SysEnumeratorGroupTest
       ENDNODE
       BEGINNODE
         FILETYPE 0
         UTILTYPE 45
-        UTILOBJECTID 50110
+        UTILOBJECTID 50117
         NODETYPE 329
         NAME #SysEnumeratorTest
       ENDNODE

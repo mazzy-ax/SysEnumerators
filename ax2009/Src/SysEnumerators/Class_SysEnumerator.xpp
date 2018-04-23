@@ -122,6 +122,18 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
+    #AviFiles
+    public static SysEnumerator newFromRunBaseProgress( RunBase runbase
+                                                      , Caption   caption    = ''
+                                                      , int64     total      = 0
+                                                      , Filename  animation  = #AviStopwatch)
+    {
+        SysEnumerator enumerator = SysEnumerator::construct().add(SysEnumerator_RunBaseProgress::newFromRunBase(runbase, caption, total, animation), 'progress');
+
+        return enumerator;
+    }
+
+
     public static SysEnumerator newFromSequence(ISysSequence sequence)
     {
         SysEnumerator enumerator = SysEnumerator::construct().add(SysEnumerator_Sequence::construct(sequence));

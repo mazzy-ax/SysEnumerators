@@ -24,6 +24,10 @@ public interface ISysEnumerator extends Enumerator
     {
     }
 
+    public boolean moveNext()
+    {
+    }
+
     //TODO mazzy: extract to special interface?
     public void reset()
     {

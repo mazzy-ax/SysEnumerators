@@ -18,7 +18,7 @@ public abstract class SysEnumerator_Indexed64 extends xSysEnumerator
 
     protected int64 defaultEnd()
     {
-        return 0;
+        return int64max();
     }
 
     protected int64 defaultStart()

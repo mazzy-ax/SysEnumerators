@@ -56,6 +56,18 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int64
         return ret;
     }
 
+    public boolean moveNext()
+    {
+        boolean ret = super();
+
+        if( !ret )
+        {
+            this.base().reset(); // hide progress
+        }
+
+        return ret;
+    }
+
     public void new( RunbaseProgress _base = null
                    , Caption caption = ''
                    , int64 total = 0

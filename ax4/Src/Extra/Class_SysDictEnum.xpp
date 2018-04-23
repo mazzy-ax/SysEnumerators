@@ -1,7 +1,4 @@
-﻿public class SysDictEnum extends DictEnum
-{
-    #Properties
-
+﻿
     public static SysDictEnum newFrom(anytype enum)
     {
         DictEnum            dictEnum;
@@ -89,4 +86,3 @@
 
         return sysDictEnum;
     }
-}

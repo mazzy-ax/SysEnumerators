@@ -15,17 +15,13 @@
 
 Set-StrictMode -Version Latest
 
-'ax2009', 'ax2012', 'ax3', 'ax4' | ForEach-Object {
-    $Path = $_
-
-    Get-ChildItem $Path -filter '*.xpo' |
-        Select-Object -ExpandProperty FullName |
-        Import-Xpo |
-        ForEach-Object {
-        #Split-Pipeline -Verbose -Load 10 -Variable Path {process{
-            Split-xpo -Items $_ -DestinationPathParts @($Path        ) -Include 'Job_*.xpp' -xpp -PathStyle mazzy -Encoding UTF8
-            Split-xpo -Items $_ -DestinationPathParts @($Path, 'Test') -Include '*test.xpp' -xpp -PathStyle mazzy -Encoding UTF8
-            Split-xpo -Items $_ -DestinationPathParts @($Path, 'Src' ) -Exclude '*test.xpp', 'Job_*.xpp', 'SharedProject_*.xpo' -xpp -PathStyle mazzy -Encoding UTF8
-    #}}
-    }
-}
+'ax2009', 'ax2012', 'ax3', 'ax4' | Get-ChildItem -filter '*.xpo' -ErrorAction SilentlyContinue | ForEach-Object {
+    $Path = $_.DirectoryName
+    $_
+} | Import-Xpo | ForEach-Object {
+    [PSCustomObject]@{ Items = $_; DestinationPathParts = $Path         ; Include = 'Job_*.xpp' }
+    [PSCustomObject]@{ Items = $_; DestinationPathParts = $Path, 'Test' ; Include = '*test.xpp' }
+    [PSCustomObject]@{ Items = $_; DestinationPathParts = $Path, 'Src'  ; Exclude = '*test.xpp', 'Job_*.xpp', 'SharedProject_*.xpo' }
+} | Split-Pipeline -Load 100 -Module xpoTools -Verbose {process{
+    $_ | Split-xpo -xpp -PathStyle mazzy -Encoding UTF8 -PassThru
+}}

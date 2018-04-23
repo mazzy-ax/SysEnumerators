@@ -18,7 +18,7 @@ public abstract class SysEnumerator_Indexed extends xSysEnumerator
 
     protected int defaultEnd()
     {
-        return 0;
+        return maxint();
     }
 
     protected int defaultStart()

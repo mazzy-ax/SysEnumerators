@@ -4,12 +4,14 @@
 public abstract class SysEnumeratorGroup extends xSysEnumerator
 {
     Set enumerators;
+    Map enumeratorNames;
+
     ISysEnumerator currentEnumerator;
     ISysEnumerator currentIdxEnumerator;
     ISysEnumerator currentKeyEnumerator;
     ISysEnumerator currentValueEnumerator;
 
-    public SysEnumeratorGroup add(xSysEnumerator enumerator)
+    public SysEnumeratorGroup add(xSysEnumerator enumerator, str name = '')
     {
         // Circular references are not checked
         if( !this.isNotMe(enumerator) )
@@ -20,6 +22,11 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         if( !this.enumerators().add(enumerator) )
         {
             throw error(Error::wrongUseOfFunction(funcname()));
+        }
+
+        if( name )
+        {
+            this.names().insert(name, enumerator);
         }
 
         this.currentEnumerator(enumerator);
@@ -153,6 +160,13 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
+    public xSysEnumerator get(str name)
+    {
+        xSysEnumerator ret = this.names().lookup(name);
+
+        return ret;
+    }
+
     protected boolean isNotMe(ISysEnumerator enumerator)
     {
         ISysEnumerator self = this;
@@ -168,9 +182,15 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
+    public Map names()
+    {
+        return enumeratorNames;
+    }
+
     public void new()
     {
         enumerators = new Set(Types::Class);
+        enumeratorNames = new Map(Types::String, Types::Class);
         super();
     }
 
