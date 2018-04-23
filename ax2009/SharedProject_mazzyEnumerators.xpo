@@ -165,7 +165,6 @@ Formatversion: 1
     #    }
     #
     #    info(values2set.base().toString());
-    #
     #}
   ENDSOURCE
 
@@ -498,6 +497,11 @@ Formatversion: 1
       ENDSOURCE
       SOURCE #estimatedIterations
         #public int64 estimatedIterations(int64 estimatedIterations = -1)
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #moveNext
+        #public boolean moveNext()
         #{
         #}
       ENDSOURCE
@@ -6977,6 +6981,19 @@ Formatversion: 1
         #}
         #
       ENDSOURCE
+      SOURCE #newFromRunBaseProgress
+        ##AviFiles
+        #public static SysEnumerator newFromRunBaseProgress( RunBase runbase
+        #                                                  , Caption   caption    = ''
+        #                                                  , int64     total      = 0
+        #                                                  , Filename  animation  = #AviStopwatch)
+        #{
+        #    SysEnumerator enumerator = SysEnumerator::construct().add(SysEnumerator_RunBaseProgress::newFromRunBase(runbase, caption, total, animation), 'progress');
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
       SOURCE #newFromSequence
         #public static SysEnumerator newFromSequence(ISysSequence sequence)
         #{
@@ -8138,6 +8155,14 @@ Formatversion: 1
     
     METHODS
       Version: 3
+      SOURCE #begin
+        #protected boolean begin()
+        #{
+        #    boolean ret = super() && this.next();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
@@ -8162,6 +8187,12 @@ Formatversion: 1
         #public int currentIdx()
         #{
         #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #currentIdxProvided
+        #protected boolean currentIdxProvided()
+        #{
+        #    return true;
         #}
       ENDSOURCE
       SOURCE #currentKey
@@ -8235,6 +8266,14 @@ Formatversion: 1
     
     METHODS
       Version: 3
+      SOURCE #begin
+        #protected boolean begin()
+        #{
+        #    boolean ret = super() && this.next();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
       SOURCE #classDeclaration
         #//
         #// mazzy, https://github.com/mazzy-ax/SysEnumerators
@@ -8259,6 +8298,12 @@ Formatversion: 1
         #public int64 currentIdx()
         #{
         #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #currentIdxProvided
+        #protected boolean currentIdxProvided()
+        #{
+        #    return true;
         #}
       ENDSOURCE
       SOURCE #currentKey
@@ -11159,7 +11204,7 @@ Formatversion: 1
       SOURCE #defaultEnd
         #protected int defaultEnd()
         #{
-        #    return 0;
+        #    return maxint();
         #}
       ENDSOURCE
       SOURCE #defaultStart
@@ -11285,7 +11330,7 @@ Formatversion: 1
       SOURCE #defaultEnd
         #protected int64 defaultEnd()
         #{
-        #    return 0;
+        #    return int64Max();
         #}
       ENDSOURCE
       SOURCE #defaultStart
@@ -14226,6 +14271,89 @@ Formatversion: 1
         #    this.assertFalse(se.moveNext());
         #    this.assertEquals(SysEnumeratorPosition::Outside, se.position());
         #    this.assertEquals(0, se.estimatedIterations());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: SysEnumerator_Sleep unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #SysEnumerator_Sleep
+    PROPERTIES
+      Name                #SysEnumerator_Sleep
+      Extends             #xSysEnumerator
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #//
+        #// mazzy, https://github.com/mazzy-ax/SysEnumerators
+        #//
+        #
+        #/// <summary>
+        #/// Засыпает на указанное число миллисекунд после каждого успешного moveNext (внутри цикла)
+        #/// </summary>
+        #public class SysEnumerator_Sleep extends xSysEnumerator
+        #{
+        #    int ms;
+        #}
+      ENDSOURCE
+      SOURCE #current
+        #public int current()
+        #{
+        #    return ms;
+        #}
+      ENDSOURCE
+      SOURCE #currentIdx
+        #public int currentIdx()
+        #{
+        #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #currentKey
+        #public int currentKey()
+        #{
+        #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #currentValue
+        #public int currentValue()
+        #{
+        #    return this.current();
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #public void new(int timeInMs = 1000)
+        #{
+        #    ms = timeInMs;
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #next
+        #protected boolean next()
+        #{
+        #    boolean ret = super();
+        #
+        #    if( ret )
+        #    {
+        #        sleep(ms); //TODO mazzy: переделать, чтобы срабатывал после moveNext всех энумераторов
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #public static SysEnumerator_Sleep construct(int timeInMs = 1000)
+        #{
+        #    SysEnumerator_Sleep enumerator = new SysEnumerator_Sleep(timeInMs);
+        #
+        #    return enumerator;
         #}
       ENDSOURCE
     ENDMETHODS
@@ -17555,7 +17683,7 @@ Formatversion: 1
     METHODS
       Version: 3
       SOURCE #add
-        #public SysEnumeratorGroup add(xSysEnumerator enumerator)
+        #public SysEnumeratorGroup add(xSysEnumerator enumerator, str name = '')
         #{
         #    // Circular references are not checked
         #    if( !this.isNotMe(enumerator) )
@@ -17566,6 +17694,11 @@ Formatversion: 1
         #    if( !this.enumerators().add(enumerator) )
         #    {
         #        throw error(Error::wrongUseOfFunction(funcname()));
+        #    }
+        #
+        #    if( name )
+        #    {
+        #        this.names().insert(name, enumerator);
         #    }
         #
         #    this.currentEnumerator(enumerator);
@@ -17595,6 +17728,8 @@ Formatversion: 1
         #public abstract class SysEnumeratorGroup extends xSysEnumerator
         #{
         #    Set enumerators;
+        #    Map enumeratorNames;
+        #
         #    ISysEnumerator currentEnumerator;
         #    ISysEnumerator currentIdxEnumerator;
         #    ISysEnumerator currentKeyEnumerator;
@@ -17724,6 +17859,14 @@ Formatversion: 1
         #    return ret;
         #}
       ENDSOURCE
+      SOURCE #get
+        #public xSysEnumerator get(str name)
+        #{
+        #    xSysEnumerator ret = this.names().lookup(name);
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
       SOURCE #isNotMe
         #protected boolean isNotMe(ISysEnumerator enumerator)
         #{
@@ -17741,10 +17884,17 @@ Formatversion: 1
         #    return ret;
         #}
       ENDSOURCE
+      SOURCE #names
+        #public Map names()
+        #{
+        #    return enumeratorNames;
+        #}
+      ENDSOURCE
       SOURCE #new
         #public void new()
         #{
         #    enumerators = new Set(Types::Class);
+        #    enumeratorNames = new Map(Types::String, Types::Class);
         #    super();
         #}
       ENDSOURCE
@@ -18456,7 +18606,7 @@ Formatversion: 1
       BEGINNODE
         FILETYPE 0
         UTILTYPE 40
-        UTILOBJECTID 50135
+        UTILOBJECTID 40231
         NODETYPE 209
         NAME #SysEnumeratorPosition
       ENDNODE
@@ -19297,6 +19447,13 @@ Formatversion: 1
         UTILOBJECTID 50147
         NODETYPE 329
         NAME #SysEnumerator_SetTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50232
+        NODETYPE 329
+        NAME #SysEnumerator_Sleep
       ENDNODE
       BEGINNODE
         FILETYPE 0

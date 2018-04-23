@@ -1,0 +1,56 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+
+/// <summary>
+/// Засыпает на указанное число миллисекунд после каждого успешного moveNext (внутри цикла)
+/// </summary>
+public class SysEnumerator_Sleep extends xSysEnumerator
+{
+    int ms;
+
+    public int current()
+    {
+        return ms;
+    }
+
+    public int currentIdx()
+    {
+        return this.current();
+    }
+
+    public int currentKey()
+    {
+        return this.current();
+    }
+
+    public int currentValue()
+    {
+        return this.current();
+    }
+
+    public void new(int timeInMs = 1000)
+    {
+        ms = timeInMs;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            sleep(ms); //TODO mazzy: переделать, чтобы срабатывал после moveNext всех энумераторов
+        }
+
+        return ret;
+    }
+
+    public static SysEnumerator_Sleep construct(int timeInMs = 1000)
+    {
+        SysEnumerator_Sleep enumerator = new SysEnumerator_Sleep(timeInMs);
+
+        return enumerator;
+    }
+}
