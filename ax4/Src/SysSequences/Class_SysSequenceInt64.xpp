@@ -18,32 +18,31 @@ public class SysSequenceInt64 extends SysRangeInt64 implements ISysSequence, Enu
         return ret;
     }
 
-    public int64 estimatedIterations()
+    public SysIterations estimatedIterations()
     {
-        int64 ret = int64Max();
+        SysIterations ret = SysEnumerator::IterationsMax();
         int64 distance = this.distance();
         boolean overflow = this.cover(0) && (distance <= 0);
 
-        if( overflow )
+        if( !overflow )
         {
-            ret = int64Max();
-        }
-        else if( distance == 0 )
-        {
-            ret = 1;
-        }
-        else if( ((distance < 0) && (this.step() > 0))
-              || ((distance > 0) && (this.step() < 0)) )
-        {
-            ret = 0;
-        }
-        else if( step == 1 )
-        {
-            ret = distance + 1;
-        }
-        else
-        {
-            ret = distance div this.step() + 1;
+            if( distance == 0 )
+            {
+                ret = 1;
+            }
+            else if( ((distance < 0) && (this.step() > 0))
+                  || ((distance > 0) && (this.step() < 0)) )
+            {
+                ret = 0;
+            }
+            else if( step == 1 )
+            {
+                ret = distance + 1;
+            }
+            else
+            {
+                ret = distance div this.step() + 1;
+            }
         }
 
         return ret;

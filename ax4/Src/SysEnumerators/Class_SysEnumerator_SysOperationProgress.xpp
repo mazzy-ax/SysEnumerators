@@ -12,11 +12,15 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
         return base;
     }
 
-    protected SysOperationProgress baseOrDefault(SysOperationProgress _base = null)
+    protected SysOperationProgress baseOrDefault(SysOperationProgress _base = null
+                                               , Caption caption = ''
+                                               , int64 total = 0
+                                               , Filename animation = #AviStopwatch
+                                                )
     {
         if( _base == null )
         {
-            _base = SysOperationProgress::newGeneral(#AviStopwatch, '', 0);
+            _base = SysOperationProgress::newGeneral(animation, caption, total);
         }
 
         return _base;
@@ -29,9 +33,9 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
         return ret;
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
     {
-        int64 ret;
+        SysIterations ret;
 
         if( estimatedIterations >= 0 )
         {
@@ -60,9 +64,13 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
         return ret;
     }
 
-    public void new(SysOperationProgressBase _base = null)
-    {
-        base = this.baseOrDefault(_base);
+    public void new(SysOperationProgressBase _base = null
+                   , Caption caption = ''
+                   , int64 total = 0
+                   , Filename animation = #AviUpdate
+                   )
+        {
+        base = this.baseOrDefault(_base,caption,total,animation);
 
         if( base.getTotal() )
         {
@@ -92,9 +100,13 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
         super();
     }
 
-    public static SysEnumerator_SysOperationProgress construct(SysOperationProgress base = null)
+    public static SysEnumerator_SysOperationProgress construct(SysOperationProgress base = null
+                                                             , Caption   caption    = ''
+                                                             , int64     total      = 0
+                                                             , Filename  animation  = ''
+                                                             )
     {
-        SysEnumerator_SysOperationProgress enumerator = new SysEnumerator_SysOperationProgress(base);
+        SysEnumerator_SysOperationProgress enumerator = new SysEnumerator_SysOperationProgress(base,caption,total,animation ? animation : #AviUpdate);
 
         return enumerator;
     }

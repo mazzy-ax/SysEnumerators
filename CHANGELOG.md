@@ -2,10 +2,17 @@
 
 see also [Releases on GitHub](https://github.com/mazzy-ax/SysEnumerators/releases)
 
+## dev - 2018-04-29
+
+* 
+
 ## 0.3.1 - 2018-04-24
 
-* добавлен проект для ax4
-* исправлены ошибки
+* Добавлен проект с энумераторами для ax4
+* Добавлен `SysEnumerator_Sleep`
+* Явно определен метод moveNext в интерфейсе `ISysEnumerator`. Раньше метод только наследовался от Enumerator
+* энумераторы `SysEnumerator_Counter` теперь считают от 1, а не от 0
+* энумераторы `SysEnumerator_Indexed` теперь по умолчанию энумерируют все целые. Раньше по умолчанию устанавливался пустой диапазон
 
 ## 0.3.0 - 2018-04-23
 
@@ -29,7 +36,6 @@ see also [Releases on GitHub](https://github.com/mazzy-ax/SysEnumerators/release
 * Style fix - all declarations of classes and methods contains public/protected/private as first keyword
 * Replace `SysDictClass::is` on `SysDictClass::isEqualOrSuperclass` when second argument is class. For performance and compatibility with ax3, ax4
 * Minor performance fixes in `SysEnumerator_DictTable_Index`
-
 
 ## 0.2.2 - 2018-04-14
 

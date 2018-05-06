@@ -20,20 +20,20 @@ public class SysEnumerator_ContainerClass extends SysEnumerator_Container
         return _baseClass;
     }
 
-    public void new(ContainerClass _baseClass = null, SysSequence _idx = null)
+    public void new(ContainerClass _baseClass = null, SysSequenceInt _idx = null)
     {
         baseClass = this.baseClassOrDefault(_baseClass);
         super(baseClass.value(), _idx);
     }
 
-    public static SysEnumerator_ContainerClass construct(ContainerClass base = null, SysRange idx = null)
+    public static SysEnumerator_ContainerClass construct(ContainerClass base = null, SysSequenceInt idx = null)
     {
         SysEnumerator_ContainerClass enumerator = new SysEnumerator_ContainerClass(base, idx);
 
         return enumerator;
     }
 
-    public static SysEnumerator_ContainerClass newFromContainer(Container con, SysRange idx = null)
+    public static SysEnumerator_ContainerClass newFromContainer(Container con, SysSequenceInt idx = null)
     {
         ContainerClass conClass = new ContainerClass(con);
         SysEnumerator_ContainerClass enumerator = new SysEnumerator_ContainerClass(conClass, idx);

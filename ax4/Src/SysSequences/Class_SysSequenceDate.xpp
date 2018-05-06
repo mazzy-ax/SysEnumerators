@@ -18,9 +18,9 @@ public class SysSequenceDate extends SysRangeDate implements ISysSequence, Enume
         return ret;
     }
 
-    public int64 estimatedIterations()
+    public SysIterations estimatedIterations()
     {
-        int64 ret = int64Max();
+        SysIterations ret = SysEnumerator::IterationsMax();
         int distance = this.distance();
 
         if( distance == 0 )
@@ -71,7 +71,7 @@ public class SysSequenceDate extends SysRangeDate implements ISysSequence, Enume
 
     public int reverseStep()
     {
-        return -step;
+        return 0-step;
     }
 
     public int step()

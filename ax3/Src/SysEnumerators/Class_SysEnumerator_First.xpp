@@ -18,27 +18,27 @@ public class SysEnumerator_First extends xSysEnumerator
         return ret;
     }
 
-    public anytype current()
+    public int current()
     {
         return this.first() - this.remains();
     }
 
-    public anytype currentIdx()
+    public int currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    public int currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public int currentValue()
     {
         return this.current();
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
         return this.first();
     }

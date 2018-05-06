@@ -17,7 +17,6 @@ public class SysEnumerator_DictTable_StaticMethod extends SysEnumerator_DictTabl
         return this.current();
     }
 
-    //TODO mazzy: SysDictField??
     public DictMethod currentValue()
     {
         return this.base().staticMethodObject(this.currentIdx());

@@ -4,11 +4,19 @@
 public interface ISysSequence extends ISysRange
 {
 
+    public anyType end()
+    {
+    }
+
     public boolean equal(ISysSequence sequence)
     {
     }
 
-    public int64 estimatedIterations()
+    public SysIterations estimatedIterations()
+    {
+    }
+
+    public SysEnumerator getEnumerator()
     {
     }
 
@@ -16,7 +24,23 @@ public interface ISysSequence extends ISysRange
     {
     }
 
+    public SysSequenceAnytype normalize()
+    {
+    }
+
+    public SysRangeAnytype range()
+    {
+    }
+
     public ISysSequence reverse()
+    {
+    }
+
+    public anytype reverseStep()
+    {
+    }
+
+    public anytype start()
     {
     }
 

@@ -19,5 +19,4 @@ static void SysEnumeratorExample07_Group(Args _args)
     }
 
     info(values2set.base().toString());
-
 }

@@ -3,10 +3,10 @@
 //
 public abstract class SysEnumerator_Indexed extends xSysEnumerator
 {
-    SysSequence sequence;
+    SysSequenceInt sequence;
     int currentIdx;
 
-    public anytype currentIdx()
+    public int currentIdx()
     {
         return currentIdx;
     }
@@ -18,7 +18,7 @@ public abstract class SysEnumerator_Indexed extends xSysEnumerator
 
     protected int defaultEnd()
     {
-        return 0;
+        return maxint();
     }
 
     protected int defaultStart()
@@ -31,9 +31,9 @@ public abstract class SysEnumerator_Indexed extends xSysEnumerator
         return 1;
     }
 
-    public int estimatedIterations(int estimatedIterations = 0)
+    public int64 estimatedIterations(int64 estimatedIterations = 0)
     {
-        int ret = this.sequence().estimatedIterations();
+        int64 ret = this.sequence().estimatedIterations();
 
         return ret;
     }
@@ -57,7 +57,7 @@ public abstract class SysEnumerator_Indexed extends xSysEnumerator
         return ret;
     }
 
-    public void new(SysSequence _sequence = null)
+    public void new(SysSequenceInt _sequence = null)
     {;
         sequence = this.sequenceOrDefault(_sequence);
         super();
@@ -77,16 +77,16 @@ public abstract class SysEnumerator_Indexed extends xSysEnumerator
         return ret;
     }
 
-    public SysSequence sequence()
+    public SysSequenceInt sequence()
     {
         return sequence;
     }
 
-    protected SysSequence sequenceOrDefault(SysSequence _sequence = null)
+    protected SysSequenceInt sequenceOrDefault(SysSequenceInt _sequence = null)
     {
         if( _sequence == null )
         {
-            _sequence = SysSequence::construct(this.defaultStart(), this.defaultEnd(), this.defaultStep());
+            _sequence = SysSequenceInt::construct(this.defaultStart(), this.defaultEnd(), this.defaultStep());
         }
 
         return _sequence;

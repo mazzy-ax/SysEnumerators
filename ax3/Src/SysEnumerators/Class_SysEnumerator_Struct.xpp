@@ -28,7 +28,7 @@ public class SysEnumerator_Struct extends SysEnumerator_Indexed
         return ret;
     }
 
-    public anytype currentKey()
+    public str currentKey()
     {
         int idx = this.currentIdx();
         str ret = this.base().fieldName(idx);
@@ -58,14 +58,14 @@ public class SysEnumerator_Struct extends SysEnumerator_Indexed
         return ret;
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret = this.base().fields();
+        int64 ret = this.base().fields();
 
         return ret;
     }
 
-    public void new(Struct _base = null, SysSequence _idx = null)
+    public void new(Struct _base = null, SysSequenceInt _idx = null)
     {
         if( !_base )
         {
@@ -76,7 +76,7 @@ public class SysEnumerator_Struct extends SysEnumerator_Indexed
         super(_idx);
     }
 
-    public static SysEnumerator_Struct construct(Struct base = null, SysRange idx = null)
+    public static SysEnumerator_Struct construct(Struct base = null, SysSequenceInt idx = null)
     {
         SysEnumerator_Struct enumerator = new SysEnumerator_Struct(base, idx);
 

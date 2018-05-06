@@ -22,7 +22,6 @@ public class SysEnumerator_Dictionary_Enum extends SysEnumerator_Dictionary
         return true;
     }
 
-    //TODO mazzy: SysDictClass??
     public DictEnum currentValue()
     {
         return this.base().enumObject(this.current());

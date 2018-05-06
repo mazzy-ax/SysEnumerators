@@ -55,9 +55,9 @@ public class SysEnumerator_Sequence extends xSysEnumerator
         return this.current();
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
     {
-        int64 ret = this.base().estimatedIterations();
+        SysIterations ret = this.base().estimatedIterations();
 
         return ret;
     }

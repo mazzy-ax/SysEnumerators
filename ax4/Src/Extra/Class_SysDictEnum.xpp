@@ -1,4 +1,111 @@
-﻿
+﻿public class SysDictEnum extends DictEnum
+{
+    #Properties
+
+    /*
+        returns the effective DisplayLength (in chars) of the enum
+        defined or
+        effective based on enumerators
+    */
+    int displayLength()
+    {
+        throw error(strfmt("@SYS75628",funcname(),this.name()));
+    }
+
+
+    /*
+        Returns the combined typeId used in the dialog system
+    */
+    extendedTypeId extendedTypeId()
+    {
+        return this.id() << 16 | Types::Enum;
+    }
+
+    int firstValue()
+    {
+        ;
+        return this.index2Value(0);
+    }
+
+    /*
+        returns the labelId of the enum's Help
+    */
+    LabelId helpLabelId()
+    {
+        setprefix(this.name());
+
+        if (isSysId(this.id()))
+        {
+            return '';
+        }
+        if (this.help()) // a Help is defined here
+        {
+            return findProperty(this.treeNode().AOTgetProperties(),#PropertyHelp);
+        }
+        return '';
+    }
+
+    /*
+        returns the labelId of the enum's Label
+    */
+    LabelId labelLabel()
+    {
+        setprefix(this.name());
+
+        if (isSysId(this.id()))
+        {
+            return '';
+        }
+        if (this.label()) // a label is defined here
+        {
+            return findProperty(this.treeNode().AOTgetProperties(),#PropertyLabel);
+        }
+        return '';
+    }
+
+    int lastValue()
+    {
+        return this.index2Value(this.values() - 1);
+    }
+
+    int nextValue(int value)
+    {
+        Counter     idx = this.value2Index(value);
+        Counter     newIdx = idx + 1;
+        ;
+        if (idx == this.values() - 1)
+            newIdx = 0;
+        return this.index2Value(newIdx);
+    }
+
+    xRefPath path()
+    {
+        return xRefNames::calcPath(xRefKind::Enum,this.name(),'',this.id());
+    }
+
+    TreeNode treeNode()
+    {
+        TreeNode treeNode = TreeNode::findNode(this.path());
+        if (!treeNode)
+        {
+            throw error(strfmt("@SYS28152",this.path()));
+        }
+        return treeNode;
+    }
+
+    int value2Index(int value)
+    {
+        Counter     enumChoices = this.values();
+        Counter     idx;
+
+        for (idx = 0; idx < enumChoices; idx++)
+        {
+            if (this.index2Symbol(idx) == this.value2Symbol(value))
+                return idx;
+        }
+        throw error(strfmt("@SYS54195", funcname()));
+    }
+
     public static SysDictEnum newFrom(anytype enum)
     {
         DictEnum            dictEnum;
@@ -49,40 +156,23 @@
     ;
         Debug::assert(enum != null);
 
-        switch( enumClassId )
+        if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysDictEnum)) )
         {
-            case classnum(SysDictEnum):
-                sysDictEnum = enum;
-                break;
-
-            case classnum(DictEnum):
-                sysDictEnum = fromDictEnum(enum);
-                break;
-
-            case classnum(SysEnumerator_Enum):
-                sysDictEnum = fromSysEnumerator_Enum(enum);
-                break;
-
-            default:
-                // extra slow calculations
-                if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysDictEnum)) )
-                {
-                    sysDictEnum = enum;
-                }
-                else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(DictEnum)) )
-                {
-                    sysDictEnum = fromDictEnum(enum);
-                }
-                else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysEnumerator_Enum)) )
-                {
-                    sysDictEnum = fromSysEnumerator_Enum(enum);
-                }
-                else
-                {
-                    throw error(Error::wrongUseOfFunction(funcname()));
-                }
-                break;
+            sysDictEnum = enum;
+        }
+        else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(DictEnum)) )
+        {
+            sysDictEnum = fromDictEnum(enum);
+        }
+        else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysEnumerator_Enum)) )
+        {
+            sysDictEnum = fromSysEnumerator_Enum(enum);
+        }
+        else
+        {
+            throw error(Error::wrongUseOfFunction(funcname()));
         }
 
         return sysDictEnum;
     }
+}

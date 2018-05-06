@@ -4,20 +4,20 @@
 public class SysEnumerator_DictMethod_Parameter extends SysEnumerator_DictMethod
 {
 
-    public anytype current()
+    public str current()
     {
         int idx = this.currentIdx();
-        str ret = extendedTypeId2DisplayName(this.base().parameterType(idx), this.base().parameterId(idx));
+        str ret = this.base().parameterName(idx);
 
         return ret;
     }
 
-    public anytype currentKey()
+    public int currentKey()
     {
         return this.currentIdx();
     }
 
-    public anytype currentValue()
+    public str currentValue()
     {
         return this.current();
     }
@@ -29,7 +29,7 @@ public class SysEnumerator_DictMethod_Parameter extends SysEnumerator_DictMethod
         return ret;
     }
 
-    public static SysEnumerator_DictMethod_Parameter construct(DictMethod base, SysRange idx = null)
+    public static SysEnumerator_DictMethod_Parameter construct(DictMethod base, SysSequenceInt idx = null)
     {
         SysEnumerator_DictMethod_Parameter enumerator = new SysEnumerator_DictMethod_Parameter(base, idx);
 

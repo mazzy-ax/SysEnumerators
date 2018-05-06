@@ -17,7 +17,6 @@ public class SysEnumerator_DictClass_StaticMethod extends SysEnumerator_DictClas
         return this.current();
     }
 
-    //TODO mazzy: sysDictMethod??
     public DictMethod currentValue()
     {
         int idx = this.currentIdx();

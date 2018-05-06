@@ -22,7 +22,6 @@ public class SysEnumerator_Dictionary_Table extends SysEnumerator_Dictionary
         return true;
     }
 
-    //TODO mazzy: SysDictClass??
     public DictTable currentValue()
     {
         return this.base().tableObject(this.current());

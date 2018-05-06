@@ -3,20 +3,20 @@
 //
 public class SysEnumerator_Sequence extends xSysEnumerator
 {
-    SysSequence    sequence;
+    ISysSequence    sequence;
     anytype         current;
 
-    public SysSequence base()
+    public ISysSequence base()
     {
         return sequence;
     }
 
 
-    protected SysSequence baseOrDefault(SysSequence _sequence = null)
+    protected ISysSequence baseOrDefault(ISysSequence _sequence = null)
     {
         if( !_sequence )
         {
-            _sequence = SysSequence::construct(1, 0, 1);
+            _sequence = SysSequenceInt::construct(1, 0);
         }
 
         return _sequence;
@@ -55,9 +55,9 @@ public class SysEnumerator_Sequence extends xSysEnumerator
         return this.current();
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret = this.base().estimatedIterations();
+        int64 ret = this.base().estimatedIterations();
 
         return ret;
     }
@@ -69,7 +69,7 @@ public class SysEnumerator_Sequence extends xSysEnumerator
         return ret;
     }
 
-    public void new(SysSequence _sequence = null)
+    public void new(ISysSequence _sequence = null)
     {;
         sequence = this.baseOrDefault(_sequence);
         super();
@@ -87,7 +87,7 @@ public class SysEnumerator_Sequence extends xSysEnumerator
         return ret;
     }
 
-    public static SysEnumerator_Sequence construct(SysSequence sequence = null)
+    public static SysEnumerator_Sequence construct(ISysSequence sequence = null)
     {
         SysEnumerator_Sequence enumerator = new SysEnumerator_Sequence(sequence);
 

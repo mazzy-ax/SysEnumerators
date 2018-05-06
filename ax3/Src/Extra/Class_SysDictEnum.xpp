@@ -26,7 +26,7 @@
 
     public static SysDictEnum newFromEnum(anytype enum)
     {
-        enumId          enumId          = SysDictEnum::value2id(enum);
+        enumId          enumId          = DictEnum::value2id(enum);
         SysDictEnum     sysDictEnum     = new SysDictEnum(enumId);
 
         return sysDictEnum;
@@ -34,8 +34,8 @@
 
     public static SysDictEnum newFromObject(object enum)
     {
-        SysDictEnum sysDictEnum;
-        classId enumClassId = classidget(enum);
+        SysDictEnum  sysDictEnum;
+        classId  enumClassId = classidget(enum);
 
         SysDictEnum fromDictEnum(DictEnum obj)
         {
@@ -86,26 +86,3 @@
 
         return sysDictEnum;
     }
-
-    // Thanks AndyD, https://axforum.info/forums/showthread.php?p=97771#post97771
-    public static EnumId value2id(AnyType enum)
-    {
-        ContainerClass  contClass;
-        str             sEnum;
-        EnumId          enumId = 0;
-    ;
-        if (typeOf(enum) != Types::Enum)
-            return 0;
-
-        contClass = New ContainerClass([enum]);
-        sEnum = BinData::dataToString(contClass.toBlob());
-        if (sEnum && strlen(sEnum) == 12)
-        {
-            if (hex2int(substr(sEnum, 1, 2)) == 0x07 && hex2int(substr(sEnum, 3, 2)) == 0x04)
-            {
-                enumId = (hex2int(substr(sEnum, 9, 2)) << 8) | hex2int(substr(sEnum, 7, 2));
-            }
-        }
-        return enumId;
-    }
-

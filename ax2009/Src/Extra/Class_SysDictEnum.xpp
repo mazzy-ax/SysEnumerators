@@ -49,39 +49,21 @@
     ;
         Debug::assert(enum != null);
 
-        switch( enumClassId )
+        if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysDictEnum)) )
         {
-            case classnum(SysDictEnum):
-                sysDictEnum = enum;
-                break;
-
-            case classnum(DictEnum):
-                sysDictEnum = fromDictEnum(enum);
-                break;
-
-            case classnum(SysEnumerator_Enum):
-                sysDictEnum = fromSysEnumerator_Enum(enum);
-                break;
-
-            default:
-                // extra slow calculations
-                if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysDictEnum)) )
-                {
-                    sysDictEnum = enum;
-                }
-                else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(DictEnum)) )
-                {
-                    sysDictEnum = fromDictEnum(enum);
-                }
-                else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysEnumerator_Enum)) )
-                {
-                    sysDictEnum = fromSysEnumerator_Enum(enum);
-                }
-                else
-                {
-                    throw error(Error::wrongUseOfFunction(funcname()));
-                }
-                break;
+            sysDictEnum = enum;
+        }
+        else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(DictEnum)) )
+        {
+            sysDictEnum = fromDictEnum(enum);
+        }
+        else if( SysDictClass::isEqualOrSuperclass(enumClassId, classnum(SysEnumerator_Enum)) )
+        {
+            sysDictEnum = fromSysEnumerator_Enum(enum);
+        }
+        else
+        {
+            throw error(Error::wrongUseOfFunction(funcname()));
         }
 
         return sysDictEnum;

@@ -16,7 +16,7 @@ public class SysEnumerator_TextBufferTest extends SysTestCase
         se = SysEnumerator_TextBuffer::newSplit(text);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -58,7 +58,7 @@ public class SysEnumerator_TextBufferTest extends SysTestCase
         SysEnumerator_TextBuffer se = SysEnumerator_TextBuffer::construct(text);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertFalse(se.moveNext());
@@ -69,7 +69,6 @@ public class SysEnumerator_TextBufferTest extends SysTestCase
     {
         TextBuffer text = new TextBuffer();
         SysEnumerator_TextBuffer se;
-        int64 zero64;
 
         text.appendText(@'line1
     line2,'+'\t'+@' хвост2
@@ -78,7 +77,7 @@ public class SysEnumerator_TextBufferTest extends SysTestCase
         se = SysEnumerator_TextBuffer::newLine(text);
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 3, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(3), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -111,7 +110,7 @@ public class SysEnumerator_TextBufferTest extends SysTestCase
         SysEnumerator_TextBuffer se = SysEnumerator_TextBuffer::construct(null);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertFalse(se.moveNext());
@@ -130,7 +129,7 @@ public class SysEnumerator_TextBufferTest extends SysTestCase
         se = SysEnumerator_TextBuffer::newTabs(text);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -171,7 +170,7 @@ public class SysEnumerator_TextBufferTest extends SysTestCase
         se = SysEnumerator_TextBuffer::construct(text);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());

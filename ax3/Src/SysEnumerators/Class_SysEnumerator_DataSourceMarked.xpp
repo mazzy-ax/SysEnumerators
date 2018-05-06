@@ -27,29 +27,29 @@ public class SysEnumerator_DataSourceMarked extends xSysEnumerator
         return ret;
     }
 
-    public anytype current()
+    public Common current()
     {
         return record;
     }
 
-    public anytype currentIdx()
+    public Common currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    public Common currentKey()
     {
         return this.currentValue();
     }
 
-    public anytype currentValue()
+    public Common currentValue()
     {
         return this.current();
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret = 0;
+        int64 ret = 0;
 
         if( this.base() )
         {

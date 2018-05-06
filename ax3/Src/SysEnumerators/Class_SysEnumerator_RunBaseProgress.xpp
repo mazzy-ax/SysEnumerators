@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int
+public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int64
 {
     #AviFiles
 
@@ -14,7 +14,7 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int
 
     protected RunbaseProgress baseOrDefault( RunbaseProgress _base = null
                                            , Caption caption = ''
-                                           , int total = 0
+                                           , int64 total = 0
                                            , Filename animation = #AviStopwatch
                                            )
 
@@ -37,9 +37,9 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int
         return ret;
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret;
+        int64 ret;
 
         if( estimatedIterations >= 0 )
         {
@@ -56,9 +56,21 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int
         return ret;
     }
 
+    public boolean moveNext()
+    {
+        boolean ret = super();
+
+        if( !ret )
+        {
+            this.base().reset(); // hide progress
+        }
+
+        return ret;
+    }
+
     public void new( RunbaseProgress _base = null
                    , Caption caption = ''
-                   , int total = 0
+                   , int64 total = 0
                    , Filename animation = #AviStopwatch
                    )
     {
@@ -86,7 +98,7 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int
 
     public static SysEnumerator_RunBaseProgress construct( RunbaseProgress base = null
                                                          , Caption   caption    = ''
-                                                         , int       total      = 0
+                                                         , int64     total      = 0
                                                          , Filename  animation  = #AviStopwatch
                                                          )
     {
@@ -97,7 +109,7 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int
 
     public static SysEnumerator_RunBaseProgress newFromRunBase( Runbase   runbase    = null
                                                               , Caption   caption    = ''
-                                                              , int       total      = 0
+                                                              , int64     total      = 0
                                                               , Filename  animation  = #AviStopwatch
                                                               )
     {
@@ -121,7 +133,7 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int
 
     public static SysEnumerator_RunBaseProgress newGeneral( Filename    animation = #AviStopwatch
                                                           , Caption     caption = ''
-                                                          , int         total = 0
+                                                          , int64       total = 0
                                                           )
     {
         SysEnumerator_RunBaseProgress enumerator = SysEnumerator_RunBaseProgress::construct(null, caption, total, animation);

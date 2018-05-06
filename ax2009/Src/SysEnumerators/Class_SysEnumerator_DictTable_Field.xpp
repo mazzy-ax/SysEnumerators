@@ -22,7 +22,6 @@ public class SysEnumerator_DictTable_Field extends SysEnumerator_DictTable
         return true;
     }
 
-    //TODO mazzy: SysDictField??
     public DictField currentValue()
     {
         return this.base().fieldObject(this.current());

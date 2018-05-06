@@ -8,10 +8,9 @@ public class SysEnumerator_SequenceTest extends SysTestCase
     {
         SysSequenceInt sequence = SysSequenceInt::construct(1, 5, 2);
         SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(sequence);
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 3, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(3), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -37,7 +36,7 @@ public class SysEnumerator_SequenceTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(zero64 + 3, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(3), se.estimatedIterations());
     }
 
     public void testSequenceEmpty()
@@ -71,10 +70,9 @@ public class SysEnumerator_SequenceTest extends SysTestCase
     {
         SysSequenceInt    sequence = SysSequenceInt::construct(1, 5, 2);
         SysEnumerator_Sequence se = SysEnumerator_Sequence::construct(sequence);
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 3, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(3), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -118,6 +116,6 @@ public class SysEnumerator_SequenceTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(zero64 + 3, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(3), se.estimatedIterations());
     }
 }

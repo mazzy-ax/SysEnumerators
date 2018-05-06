@@ -28,9 +28,9 @@ public class SysEnumerator_TreeNodeChildren extends SysEnumerator_TreeNodeSiblin
         return ret;
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
     {
-        int64 ret = 0;
+        SysIterations ret = 0;
 
         if( this.origin() )
         {

@@ -10,7 +10,7 @@ public class SysEnumerator_XmlNodeListIndex extends SysEnumerator_Indexed
         return base;
     }
 
-    public anytype current()
+    public XmlNode current()
     {
         XmlNode ret;
         int idx;
@@ -24,12 +24,12 @@ public class SysEnumerator_XmlNodeListIndex extends SysEnumerator_Indexed
         return ret;
     }
 
-    public anytype currentKey()
+    public int currentKey()
     {
         return this.currentIdx();
     }
 
-    public anytype currentValue()
+    public XmlNode currentValue()
     {
         return this.current();
     }
@@ -58,13 +58,13 @@ public class SysEnumerator_XmlNodeListIndex extends SysEnumerator_Indexed
         return ret;
     }
 
-    public void new(XmlNodeList _base = null, SysSequence _idx = null)
+    public void new(XmlNodeList _base = null, SysSequenceInt _idx = null)
     {
         base = _base;
         super(_idx);
     }
 
-    public static SysEnumerator_XmlNodeListIndex construct(XmlNodeList base, SysRange idx = null)
+    public static SysEnumerator_XmlNodeListIndex construct(XmlNodeList base, SysSequenceInt idx = null)
     {
         SysEnumerator_XmlNodeListIndex enumerator = new SysEnumerator_XmlNodeListIndex(base, idx);
 

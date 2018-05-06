@@ -12,7 +12,7 @@ public class SysEnumerator_RecordTest extends SysTestCase
         SysEnumerator_Record se = SysEnumerator_Record::construct(sysUserInfo);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         while(se.moveNext())
@@ -21,7 +21,7 @@ public class SysEnumerator_RecordTest extends SysTestCase
         }
 
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
     }
 
     public void testRecordEmpty()

@@ -1,0 +1,51 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class PerfSysEnumeratorSequenceTest extends SysTestCase
+{
+    #define.loopCount(5000)
+
+    public void testSequenceAnyType()
+    {
+        int dummy;
+        SysEnumerator se = SysSequenceAnytype::construct(1, #loopCount, 1).getEnumerator();
+
+        while(se.moveNext())
+        {
+            dummy = se.current();
+        }
+    }
+
+    public void testSequenceDate()
+    {
+        int dummy;
+        SysEnumerator se = SysSequenceDate::construct(DateNull(), DateNull() + #loopCount).getEnumerator();
+
+        while(se.moveNext())
+        {
+            dummy = se.current();
+        }
+    }
+
+    public void testSequenceInt()
+    {
+        int dummy;
+        SysEnumerator se = SysSequenceInt::construct(1, #loopCount).getEnumerator();
+
+        while(se.moveNext())
+        {
+            dummy = se.current();
+        }
+    }
+
+    public void testSequenceReal()
+    {
+        int dummy;
+        SysEnumerator se = SysSequenceReal::construct(1, #loopCount).getEnumerator();
+
+        while(se.moveNext())
+        {
+            dummy = se.current();
+        }
+    }
+}

@@ -39,9 +39,9 @@ public class SysEnumerator_XmlNodeList extends xSysEnumerator
         return this.current();
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
     {
-        int64 ret = this.base().length();
+        SysIterations ret = this.base().length();
 
         return ret;
     }

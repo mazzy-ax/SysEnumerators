@@ -4,7 +4,7 @@
 public class SysEnumerator_DictClass_Implements extends SysEnumerator_DictClass
 {
 
-    public anytype current()
+    public classId current()
     {
         int idx = this.currentIdx();
         configurationKeyId ret = this.base().implements(idx);
@@ -12,12 +12,12 @@ public class SysEnumerator_DictClass_Implements extends SysEnumerator_DictClass
         return ret;
     }
 
-    public anytype currentKey()
+    public int currentKey()
     {
         return this.currentIdx();
     }
 
-    public anytype currentValue()
+    public classId currentValue()
     {
         return this.current();
     }
@@ -29,7 +29,7 @@ public class SysEnumerator_DictClass_Implements extends SysEnumerator_DictClass
         return ret;
     }
 
-    public static SysEnumerator_DictClass_Implements construct(DictClass base, SysRange idx = null)
+    public static SysEnumerator_DictClass_Implements construct(DictClass base, SysSequenceInt idx = null)
     {
         SysEnumerator_DictClass_Implements enumerator = new SysEnumerator_DictClass_Implements(base, idx);
 

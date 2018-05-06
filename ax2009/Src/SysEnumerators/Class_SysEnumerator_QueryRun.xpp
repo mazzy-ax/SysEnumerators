@@ -5,7 +5,7 @@ public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
 {
     QueryRun base;
 
-    int64 estimatedIterations;
+    SysIterations estimatedIterations;
 
     public QueryRun base()
     {
@@ -19,26 +19,33 @@ public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
         return ret;
     }
 
-    public Common current(int dataSourceNo = 1)
+    public Common current(tableId tableId = 0, int occurrence = 1)
     {
         Common ret;
 
         if( this.base() )
         {
-            ret = this.base().getNo(dataSourceNo);
+            if( tableId )
+            {
+                ret = this.base().get(tableId, occurrence);
+            }
+            else
+            {
+                ret = this.base().getNo(1);
+            }
         }
 
         return ret;
     }
 
-    public Common currentKey(int dataSourceNo = 1)
+    public Common currentKey(tableId tableId = 0, int occurrence = 1)
     {
-        return this.current(dataSourceNo);
+        return this.current(tableId, occurrence);
     }
 
-    public Common currentValue(int dataSourceNo = 1)
+    public Common currentValue(tableId tableId = 0, int occurrence = 1)
     {
-        return this.current(dataSourceNo);
+        return this.current(tableId, occurrence);
     }
 
     protected boolean currentValueProvided()
@@ -46,14 +53,14 @@ public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
         return true;
     }
 
-    public int64 estimatedIterations(int64 _estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations _estimatedIterations = -1)
     {
         if( estimatedIterations < 0
          && this.base()
          && this.base().query()
          && this.base().query().dataSourceCount() )
         {
-            estimatedIterations = SysQuery::countTotal(this.base());
+            estimatedIterations = SysQuery::countLoops(this.base());
         }
         else
         {
@@ -63,7 +70,7 @@ public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
         return estimatedIterations;
     }
 
-    public void new(QueryRun _base = null, int64 _estimatedIterations = -1)
+    public void new(QueryRun _base = null, SysIterations _estimatedIterations = -1)
     {
         base = _base;
         estimatedIterations = _estimatedIterations;
@@ -86,7 +93,7 @@ public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
         super();
     }
 
-    public static SysEnumerator_QueryRun construct(QueryRun base = null, int64 estimatedIterations = -1)
+    public static SysEnumerator_QueryRun construct(QueryRun base = null, SysIterations estimatedIterations = -1)
     {
         SysEnumerator_QueryRun enumerator = new SysEnumerator_QueryRun(base, estimatedIterations);
 

@@ -21,7 +21,6 @@ public class SysEnumerator_DictTable_Index extends SysEnumerator_DictTable
         return true;
     }
 
-    //TODO mazzy: SysDictField??
     public DictIndex currentValue()
     {
         int idx = this.currentIdx();

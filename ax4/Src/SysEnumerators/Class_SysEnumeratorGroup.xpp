@@ -4,32 +4,42 @@
 public abstract class SysEnumeratorGroup extends xSysEnumerator
 {
     Set enumerators;
+    Map enumeratorNames;
+
     ISysEnumerator currentEnumerator;
     ISysEnumerator currentIdxEnumerator;
     ISysEnumerator currentKeyEnumerator;
     ISysEnumerator currentValueEnumerator;
 
-    public SysEnumeratorGroup add(xSysEnumerator enumerator)
+    public SysEnumeratorGroup add(xSysEnumerator enumerator, str name = '')
     {
-        // Circular references are not checked
-        if( !this.isNotMe(enumerator) )
+        if( enumerator )
         {
-            throw error(Error::wrongUseOfFunction(funcname()));
+            // Circular references are not checked
+            if( !this.isNotMe(enumerator) )
+            {
+                throw error(Error::wrongUseOfFunction(funcname()));
+            }
+
+            if( !this.enumerators().add(enumerator) )
+            {
+                throw error(Error::wrongUseOfFunction(funcname()));
+            }
+
+            if( name )
+            {
+                this.names().insert(name, enumerator);
+            }
+
+            this.currentEnumerator(enumerator);
+            this.currentIdxEnumerator(enumerator);
+            this.currentKeyEnumerator(enumerator);
+            this.currentValueEnumerator(enumerator);
+
+            this.estimatedIterations(this.estimatedIterations());
+
+            enumerator.eventAddedToGroup(this);
         }
-
-        if( !this.enumerators().add(enumerator) )
-        {
-            throw error(Error::wrongUseOfFunction(funcname()));
-        }
-
-        this.currentEnumerator(enumerator);
-        this.currentIdxEnumerator(enumerator);
-        this.currentKeyEnumerator(enumerator);
-        this.currentValueEnumerator(enumerator);
-
-        this.estimatedIterations(this.estimatedIterations());
-
-        enumerator.eventAddedToGroup(this);
 
         return this;
     }
@@ -135,9 +145,9 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return enumerators;
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
     {
-        int64 ret = super();
+        SysIterations ret = super(estimatedIterations);
         SetEnumerator se = this.enumerators().getEnumerator();
         xSysEnumerator enumerator;
 
@@ -149,6 +159,13 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
                 ret = min(enumerator.estimatedIterations(estimatedIterations), ret);
             }
         }
+
+        return ret;
+    }
+
+    public xSysEnumerator get(str name)
+    {
+        xSysEnumerator ret = this.names().lookup(name);
 
         return ret;
     }
@@ -168,9 +185,15 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
+    public Map names()
+    {
+        return enumeratorNames;
+    }
+
     public void new()
     {
         enumerators = new Set(Types::Class);
+        enumeratorNames = new Map(Types::String, Types::Class);
         super();
     }
 

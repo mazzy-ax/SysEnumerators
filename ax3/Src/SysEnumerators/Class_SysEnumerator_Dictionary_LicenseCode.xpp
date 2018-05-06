@@ -4,7 +4,7 @@
 public class SysEnumerator_Dictionary_LicenseCode extends SysEnumerator_Dictionary
 {
 
-    public anytype current()
+    public licenseCodeId current()
     {
         int idx = this.currentIdx();
         configurationKeyId ret = this.base().licenseCodeCnt2Id(idx);
@@ -12,7 +12,7 @@ public class SysEnumerator_Dictionary_LicenseCode extends SysEnumerator_Dictiona
         return ret;
     }
 
-    public anytype currentKey()
+    public str currentKey()
     {
         return this.base().licenseCodeName(this.current());
     }
@@ -22,7 +22,8 @@ public class SysEnumerator_Dictionary_LicenseCode extends SysEnumerator_Dictiona
         return true;
     }
 
-    public anytype currentValue()
+    //TODO mazzy: SysDictClass??
+    public DictLicenseCode currentValue()
     {
         return this.base().licenseCodeObject(this.current());
     }
@@ -39,7 +40,7 @@ public class SysEnumerator_Dictionary_LicenseCode extends SysEnumerator_Dictiona
         return ret;
     }
 
-    public static SysEnumerator_Dictionary_LicenseCode construct(Dictionary base, SysRange idx = null)
+    public static SysEnumerator_Dictionary_LicenseCode construct(Dictionary base, SysSequenceInt idx = null)
     {
         SysEnumerator_Dictionary_LicenseCode enumerator = new SysEnumerator_Dictionary_LicenseCode(base, idx);
 

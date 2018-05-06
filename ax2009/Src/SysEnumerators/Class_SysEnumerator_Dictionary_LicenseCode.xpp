@@ -22,7 +22,6 @@ public class SysEnumerator_Dictionary_LicenseCode extends SysEnumerator_Dictiona
         return true;
     }
 
-    //TODO mazzy: SysDictClass??
     public DictLicenseCode currentValue()
     {
         return this.base().licenseCodeObject(this.current());

@@ -23,22 +23,22 @@ public abstract class SysEnumerator_FillSet extends xSysEnumerator
         return values;
     }
 
-    public anytype current()
+    public Set current()
     {
         return values;
     }
 
-    public anytype currentIdx()
+    public Set currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    public Set currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public Set currentValue()
     {
         return this.current();
     }

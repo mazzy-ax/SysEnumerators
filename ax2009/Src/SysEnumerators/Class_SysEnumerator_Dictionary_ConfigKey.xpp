@@ -22,7 +22,6 @@ public class SysEnumerator_Dictionary_ConfigKey extends SysEnumerator_Dictionary
         return true;
     }
 
-    //TODO mazzy: SysDictClass??
     public DictConfigurationKey currentValue()
     {
         return this.base().configurationKeyObject(this.current());

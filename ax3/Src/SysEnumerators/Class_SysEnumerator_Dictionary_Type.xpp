@@ -4,7 +4,7 @@
 public class SysEnumerator_Dictionary_Type extends SysEnumerator_Dictionary
 {
 
-    public anytype current()
+    public extendedTypeId current()
     {
         int idx = this.currentIdx();
         enumId ret = this.base().typeCnt2Id(idx);
@@ -12,7 +12,7 @@ public class SysEnumerator_Dictionary_Type extends SysEnumerator_Dictionary
         return ret;
     }
 
-    public anytype currentKey()
+    public str currentKey()
     {
         return this.base().typeName(this.current());
     }
@@ -22,7 +22,8 @@ public class SysEnumerator_Dictionary_Type extends SysEnumerator_Dictionary
         return true;
     }
 
-    public anytype currentValue()
+    //TODO mazzy: SysDictClass??
+    public DictType currentValue()
     {
         return this.base().typeObject(this.current());
     }
@@ -39,7 +40,7 @@ public class SysEnumerator_Dictionary_Type extends SysEnumerator_Dictionary
         return ret;
     }
 
-    public static SysEnumerator_Dictionary_Type construct(Dictionary base, SysRange idx = null)
+    public static SysEnumerator_Dictionary_Type construct(Dictionary base, SysSequenceInt idx = null)
     {
         SysEnumerator_Dictionary_Type enumerator = new SysEnumerator_Dictionary_Type(base, idx);
 

@@ -22,22 +22,22 @@ public class SysEnumerator_Io extends xSysEnumerator
         return ret;
     }
 
-    public anytype current()
+    public container current()
     {
         return current;
     }
 
-    public anytype currentIdx()
+    public container currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    public container currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public container currentValue()
     {
         return this.current();
     }

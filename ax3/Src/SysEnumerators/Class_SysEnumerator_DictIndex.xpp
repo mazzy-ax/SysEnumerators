@@ -10,7 +10,7 @@ public class SysEnumerator_DictIndex extends SysEnumerator_Indexed
         return base;
     }
 
-    public anytype current()
+    public fieldId current()
     {
         int idx = this.currentIdx();
         fieldId ret = this.base().field(idx);
@@ -18,12 +18,12 @@ public class SysEnumerator_DictIndex extends SysEnumerator_Indexed
         return ret;
     }
 
-    public anytype currentKey()
+    public fieldId currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public fieldId currentValue()
     {
         return this.current();
     }
@@ -35,7 +35,7 @@ public class SysEnumerator_DictIndex extends SysEnumerator_Indexed
         return ret;
     }
 
-    public void new(DictIndex _base, SysSequence _idx = null)
+    public void new(DictIndex _base, SysSequenceInt _idx = null)
     {;
         Debug::assert(_base != null);
 
@@ -43,7 +43,7 @@ public class SysEnumerator_DictIndex extends SysEnumerator_Indexed
         super(_idx);
     }
 
-    public static SysEnumerator_DictIndex construct(DictIndex base, SysRange idx = null)
+    public static SysEnumerator_DictIndex construct(DictIndex base, SysSequenceInt idx = null)
     {
         SysEnumerator_DictIndex enumerator = new SysEnumerator_DictIndex(base, idx);
 

@@ -12,7 +12,7 @@ public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
 
     protected ConfigurationKeySet baseOrDefault(ConfigurationKeySet _base = null)
     {
-        if ( !_base )
+        if( _base == null )
         {
             _base = new ConfigurationKeySet();
         }
@@ -20,7 +20,7 @@ public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
         return _base;
     }
 
-    public anytype current()
+    public configurationKeyId current()
     {
         int idx = this.currentIdx();
         configurationKeyId ret = this.base().cnt2Id(idx);
@@ -28,12 +28,12 @@ public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
         return ret;
     }
 
-    public anytype currentKey()
+    public int currentKey()
     {
         return this.currentIdx();
     }
 
-    public anytype currentValue()
+    public SysDictConfigurationKey currentValue()
     {
         SysDictConfigurationKey configurationKey = new SysDictConfigurationKey(this.current());
 
@@ -57,13 +57,13 @@ public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
         return ret;
     }
 
-    public void new(ConfigurationKeySet _base = null, SysSequence _idx = null)
+    public void new(ConfigurationKeySet _base = null, SysSequenceInt _idx = null)
     {
-        base = this.baseOrDefault(_base);
+        base = this.baseOrDefault();
         super(_idx);
     }
 
-    public static SysEnumerator_ConfigurationKeySet construct(ConfigurationKeySet base = null, SysRange idx = null)
+    public static SysEnumerator_ConfigurationKeySet construct(ConfigurationKeySet base = null, SysSequenceInt idx = null)
     {
         SysEnumerator_ConfigurationKeySet enumerator = new SysEnumerator_ConfigurationKeySet(base, idx);
 

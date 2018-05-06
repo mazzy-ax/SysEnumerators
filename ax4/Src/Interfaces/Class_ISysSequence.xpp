@@ -8,7 +8,7 @@ public interface ISysSequence extends ISysRange
     {
     }
 
-    public int64 estimatedIterations()
+    public SysIterations estimatedIterations()
     {
     }
 

@@ -69,9 +69,9 @@ public class SysEnumerator_RecordSortedList extends xSysEnumerator
         return true;
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
     {
-        int64 ret = this.base().len();
+        SysIterations ret = this.base().len();
 
         return ret;
     }

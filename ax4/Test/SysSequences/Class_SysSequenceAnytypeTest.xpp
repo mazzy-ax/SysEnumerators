@@ -9,7 +9,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = 2;
         int end = 5;
         int step = 1;
-        int64 iterations = 4;
+        SysIterations iterations = 4;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -27,7 +27,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = 2;
         int end = 5;
         int step = 3;
-        int64 iterations = 2;
+        SysIterations iterations = 2;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -45,7 +45,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = 2;
         int end = 5;
         int step = 9;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -63,7 +63,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = 5;
         int end = 2;
         int step = 1;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -106,7 +106,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = minint();
         int end = maxint();
         int step = 1;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -124,7 +124,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = minint();
         int end = maxint();
         int step = 2;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -142,7 +142,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = minint();
         int end = maxint();
         int step = 3;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -160,7 +160,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -1;
         int end = maxint();
         int step = 1;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -178,7 +178,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -1;
         int end = maxint();
         int step = 2;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -196,7 +196,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -1;
         int end = maxint();
         int step = 3;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -214,7 +214,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -5;
         int end = 2;
         int step = 1;
-        int64 iterations = 8;
+        SysIterations iterations = 8;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -232,7 +232,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -5;
         int end = 2;
         int step = 2;
-        int64 iterations = 4;
+        SysIterations iterations = 4;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -250,7 +250,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -5;
         int end = 2;
         int step = 3;
-        int64 iterations = 3;
+        SysIterations iterations = 3;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -268,7 +268,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -5;
         int end = 2;
         int step = 9;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step);
 
@@ -286,7 +286,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -5;
         int end = 2;
         int step = 1;
-        int64 iterations = 8;
+        SysIterations iterations = 8;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step).reverse();
 
@@ -304,7 +304,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -5;
         int end = 2;
         int step = 3;
-        int64 iterations = 3;
+        SysIterations iterations = 3;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step).reverse();
 
@@ -322,7 +322,7 @@ public class SysSequenceAnytypeTest extends SysTestCase
         int start = -5;
         int end = 2;
         int step = 9;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceAnytype sequence = SysSequenceAnytype::construct(start, end, step).reverse();
 

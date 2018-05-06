@@ -7,16 +7,15 @@ public class SysEnumeratorGroupTest extends SysTestCase
     public void testAdd()
     {
         SysEnumerator se = SysEnumerator::construct();
-        int64 zero64;
 
         this.assertNotNull(se);
         this.assertNotNull(se.enumerators());
-        this.assertEquals(0, se.enumerators().elements());
+        this.assertEquals(SysEnumerator::Iterations(0), se.enumerators().elements());
 
         se.add(SysEnumerator_Int::newFromTo(1,100));
         this.assertEquals(1, se.enumerators().elements());
 
-        this.assertEquals(zero64 + 100, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(100), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -26,12 +25,11 @@ public class SysEnumeratorGroupTest extends SysTestCase
     public void testEmpty()
     {
         SysEnumerator se = SysEnumerator::construct();
-        int64 zero64;
 
         this.assertNotNull(se);
         this.assertNotNull(se.enumerators());
         this.assertEquals(0, se.enumerators().elements());
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertFalse(se.moveNext());
@@ -45,7 +43,6 @@ public class SysEnumeratorGroupTest extends SysTestCase
         SysEnumerator_First first5 = SysEnumerator_First::construct(5);
 
         SysEnumerator se = SysEnumerator::construct();
-        int64 zero64;
 
         this.assertNotNull(se);
         this.assertNotNull(se.enumerators());
@@ -53,11 +50,11 @@ public class SysEnumeratorGroupTest extends SysTestCase
 
         se.add(intEnumerator);
         this.assertEquals(1, se.enumerators().elements());
-        this.assertEquals(zero64 + 100, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(100), se.estimatedIterations());
 
         se.add(first5);
         this.assertEquals(2, se.enumerators().elements());
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
 
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 

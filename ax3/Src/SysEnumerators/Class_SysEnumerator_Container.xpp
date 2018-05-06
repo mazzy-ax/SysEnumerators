@@ -18,7 +18,7 @@ public class SysEnumerator_Container extends SysEnumerator_Indexed
         return ret;
     }
 
-    public anytype currentKey()
+    public int currentKey()
     {
         return this.currentIdx();
     }
@@ -40,13 +40,13 @@ public class SysEnumerator_Container extends SysEnumerator_Indexed
         return ret;
     }
 
-    public void new(container _base, SysSequence _idx = null)
+    public void new(container _base, SysSequenceInt _idx = null)
     {
         base = _base;
         super(_idx);
     }
 
-    public static SysEnumerator_Container construct(container base, SysRange idx = null)
+    public static SysEnumerator_Container construct(container base, SysSequenceInt idx = null)
     {
         SysEnumerator_Container enumerator = new SysEnumerator_Container(base, idx);
 

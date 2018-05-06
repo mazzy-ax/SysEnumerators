@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int
+public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
 {
     #AviFiles
 
@@ -29,9 +29,9 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int
         return ret;
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret;
+        int64 ret;
 
         if( estimatedIterations >= 0 )
         {
@@ -48,13 +48,25 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int
         return ret;
     }
 
+    public boolean moveNext()
+    {
+        boolean ret = super();
+
+        if( !ret )
+        {
+            this.base().reset(); // hide progress
+        }
+
+        return ret;
+    }
+
     public void new(SysOperationProgressBase _base = null)
     {
         base = this.baseOrDefault(_base);
 
         if( base.getTotal() )
         {
-            super(SysSequence::construct(1, base.getTotal(), 1));
+            super(SysSequenceInt64::construct(_base.getCount_RU(), base.getTotal()));
         }
         else
         {
@@ -90,7 +102,7 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int
     public static SysEnumerator_SysOperationProgress newGeneral(
         Filename    animation = #AviStopwatch,
         Caption     caption = '',
-        int         total = 0)
+        int64       total = 0)
     {
         SysEnumerator_SysOperationProgress enumerator = SysEnumerator_SysOperationProgress::construct();
         SysOperationProgress progress = enumerator.base();

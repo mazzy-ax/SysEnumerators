@@ -262,6 +262,6 @@ public class SysRangeAnytypeTest extends SysTestCase
         SysRangeAnytype range = SysRangeAnytype::construct(start, end);
 
         this.assertNotNull(range);
-        this.assertEquals(strfmt('%1..%2', start, end), range.toString());
+        this.assertEquals(strfmt('[%1..%2]', start, end), range.toString());
     }
 }

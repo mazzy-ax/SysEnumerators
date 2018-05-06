@@ -9,14 +9,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = 2.0;
         Real end = 5.0;
         Real step = 1.0;
-        int64 iterations = 4;
+        SysIterations iterations = 4;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -27,14 +27,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = 2.0;
         Real end = 5.0;
         Real step = 3.0;
-        int64 iterations = 2;
+        SysIterations iterations = 2;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -45,14 +45,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = 2.0;
         Real end = 5.0;
         Real step = 9.0;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -65,7 +65,7 @@ public class SysSequenceRealTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(1.0, sequence.start());
         this.assertEquals(RealMax(), sequence.end());
-        this.assertEquals(RealMax(), sequence.distance());
+        this.assertEquals(RealMax(), sequence.range().distance());
         this.assertEquals(1.0, sequence.step());
 
         this.assertEquals(int64Max(), sequence.estimatedIterations());
@@ -76,14 +76,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = 5.0;
         Real end = 2.0;
         Real step = 1.0;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -119,14 +119,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = RealMax();
         Real end = RealMin();
         Real step = 1.0;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -137,14 +137,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = RealMax();
         Real end = RealMin();
         Real step = 2.0;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -155,14 +155,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = RealMax();
         Real end = RealMin();
         Real step = 3.0;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -173,14 +173,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = RealMin();
         Real end = RealMax();
         Real step = 1.0;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -191,14 +191,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = RealMin();
         Real end = RealMax();
         Real step = 2.0;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -209,14 +209,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = RealMin();
         Real end = RealMax();
         Real step = 3.0;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -227,14 +227,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = -1;
         Real end = RealMax();
         Real step = 1.0;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -245,14 +245,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = -1;
         Real end = RealMax();
         Real step = 2.0;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -263,14 +263,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = -1;
         Real end = RealMax();
         Real step = 3.0;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -281,14 +281,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = -5.0;
         Real end = 2.0;
         Real step = 1.0;
-        int64 iterations = 8;
+        SysIterations iterations = 8;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -299,14 +299,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = -5.0;
         Real end = 2.0;
         Real step = 3.0;
-        int64 iterations = 3;
+        SysIterations iterations = 3;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -317,14 +317,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = -5.0;
         Real end = 2.0;
         Real step = 9.0;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -335,14 +335,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = -5.0;
         Real end = 2.0;
         Real step = 1.0;
-        int64 iterations = 8;
+        SysIterations iterations = 8;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step).reverse();
 
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
-        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(start - end, sequence.range().distance());
         this.assertEquals(-step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -353,14 +353,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = -5.0;
         Real end = 2.0;
         Real step = 3.0;
-        int64 iterations = 3;
+        SysIterations iterations = 3;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step).reverse();
 
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
-        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(start - end, sequence.range().distance());
         this.assertEquals(-step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -371,14 +371,14 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = -5.0;
         Real end = 2.0;
         Real step = 9.0;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step).reverse();
 
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
-        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(start - end, sequence.range().distance());
         this.assertEquals(-step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -389,7 +389,7 @@ public class SysSequenceRealTest extends SysTestCase
         Real start = 2.0;
         Real end = 5.0;
         Real step = 1.0;
-        int64 iterations = 4;
+        SysIterations iterations = 4;
 
         SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
 

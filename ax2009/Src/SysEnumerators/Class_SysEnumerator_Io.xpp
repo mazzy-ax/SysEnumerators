@@ -5,7 +5,7 @@
 /// <summary>
 /// Базовый энумератор для CommaIo, AsciiIo, TextIo, BynaryIo, CommaTxtIo
 /// </summary>
-public class SysEnumerator_Io extends xSysEnumerator
+public abstract class SysEnumerator_Io extends xSysEnumerator
 {
     Io base;
     container current;
@@ -76,12 +76,4 @@ public class SysEnumerator_Io extends xSysEnumerator
     {
         throw error(Error::wrongUseOfFunction(funcname()));
     }
-
-    public static SysEnumerator_Io construct(Io base = null)
-    {
-        SysEnumerator_Io enumerator = new SysEnumerator_Io(base);
-
-        return enumerator;
-    }
-
 }

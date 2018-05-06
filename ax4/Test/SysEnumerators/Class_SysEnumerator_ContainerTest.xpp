@@ -8,10 +8,9 @@ public class SysEnumerator_ContainerTest extends SysTestCase
     {
         container con = ['a','b','c','d','e'];
         SysEnumerator_Container se = SysEnumerator_Container::construct(con);
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -51,7 +50,7 @@ public class SysEnumerator_ContainerTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
     }
 
     public void testContainerEmpty()
@@ -72,10 +71,9 @@ public class SysEnumerator_ContainerTest extends SysTestCase
     {
         container con = ['a','b','c','d','e'];
         SysEnumerator_Container se = SysEnumerator_Container::construct(con);
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.skip());
@@ -98,6 +96,6 @@ public class SysEnumerator_ContainerTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
     }
 }

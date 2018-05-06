@@ -4,12 +4,14 @@
 public abstract class SysEnumeratorGroup extends xSysEnumerator
 {
     Set enumerators;
-    SysEnumerator currentEnumerator;
-    SysEnumerator currentIdxEnumerator;
-    SysEnumerator currentKeyEnumerator;
-    SysEnumerator currentValueEnumerator;
+    Map enumeratorNames;
 
-    public SysEnumeratorGroup add(xSysEnumerator enumerator)
+    ISysEnumerator currentEnumerator;
+    ISysEnumerator currentIdxEnumerator;
+    ISysEnumerator currentKeyEnumerator;
+    ISysEnumerator currentValueEnumerator;
+
+    public SysEnumeratorGroup add(xSysEnumerator enumerator, str name = '')
     {
         // Circular references are not checked
         if( !this.isNotMe(enumerator) )
@@ -20,6 +22,11 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         if( !this.enumerators().add(enumerator) )
         {
             throw error(Error::wrongUseOfFunction(funcname()));
+        }
+
+        if( name )
+        {
+            this.names().insert(name, enumerator);
         }
 
         this.currentEnumerator(enumerator);
@@ -48,7 +55,7 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
-    protected SysEnumerator currentEnumerator(SysEnumerator enumerator = null)
+    protected ISysEnumerator currentEnumerator(SysEnumerator enumerator = null)
     {
         if( !prmisdefault(enumerator) )
         {
@@ -68,7 +75,7 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
-    protected SysEnumerator currentIdxEnumerator(SysEnumerator enumerator = null)
+    protected ISysEnumerator currentIdxEnumerator(SysEnumerator enumerator = null)
     {
         if( !prmisdefault(enumerator)
          && (enumerator.currentIdxProvided() || (currentIdxEnumerator == null)) )
@@ -89,7 +96,7 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
-    protected SysEnumerator currentKeyEnumerator(SysEnumerator enumerator = null)
+    protected ISysEnumerator currentKeyEnumerator(SysEnumerator enumerator = null)
     {
         if( !prmisdefault(enumerator)
          && (enumerator.currentKeyProvided() || (currentKeyEnumerator == null)) )
@@ -110,7 +117,7 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
-    protected SysEnumerator currentValueEnumerator(SysEnumerator enumerator = null)
+    protected ISysEnumerator currentValueEnumerator(SysEnumerator enumerator = null)
     {
         if( !prmisdefault(enumerator)
          && (enumerator.currentValueProvided() || (currentValueEnumerator == null)) )
@@ -135,9 +142,9 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return enumerators;
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret = super();
+        int64 ret = super();
         SetEnumerator se = this.enumerators().getEnumerator();
         xSysEnumerator enumerator;
 
@@ -153,9 +160,16 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
-    protected boolean isNotMe(SysEnumerator enumerator)
+    public xSysEnumerator get(str name)
     {
-        SysEnumerator self = this;
+        xSysEnumerator ret = this.names().lookup(name);
+
+        return ret;
+    }
+
+    protected boolean isNotMe(ISysEnumerator enumerator)
+    {
+        ISysEnumerator self = this;
         boolean ret = (enumerator && (enumerator != self));
 
         return ret;
@@ -168,15 +182,21 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
+    public Map names()
+    {
+        return enumeratorNames;
+    }
+
     public void new()
     {
         enumerators = new Set(Types::Class);
+        enumeratorNames = new Map(Types::String, Types::Class);
         super();
     }
 
     protected boolean next()
     {
-        boolean ret = super() && this.more();
+        boolean ret = super() && this.enumerators();
         SetEnumerator se;
         xSysEnumerator enumerator;
 

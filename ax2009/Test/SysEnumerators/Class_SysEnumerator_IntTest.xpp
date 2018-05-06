@@ -7,10 +7,9 @@ public class SysEnumerator_IntTest extends SysTestCase
     public void testInt()
     {
         SysEnumerator_Int se = SysEnumerator_Int::construct();
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + maxint(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(maxint()), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());

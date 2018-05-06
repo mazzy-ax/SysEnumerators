@@ -19,29 +19,29 @@ public class SysEnumerator_XmlNodeList extends xSysEnumerator
         return ret;
     }
 
-    public anytype current()
+    public XmlNode current()
     {
         return node;
     }
 
-    public anytype currentIdx()
+    public int currentIdx()
     {
         return idx;
     }
 
-    public anytype currentKey()
+    public int currentKey()
     {
         return this.currentIdx();
     }
 
-    public anytype currentValue()
+    public XmlNode currentValue()
     {
         return this.current();
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret = this.base().length();
+        int64 ret = this.base().length();
 
         return ret;
     }

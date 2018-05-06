@@ -12,22 +12,22 @@ public class SysEnumerator_XmlSibling extends xSysEnumerator
         return node;
     }
 
-    public anytype current()
+    public XmlNode current()
     {
         return node;
     }
 
-    public anytype currentIdx()
+    public int currentIdx()
     {
         return idx;
     }
 
-    public anytype currentKey()
+    public int currentKey()
     {
         return this.currentIdx();
     }
 
-    public anytype currentValue()
+    public XmlNode currentValue()
     {
         return this.current();
     }

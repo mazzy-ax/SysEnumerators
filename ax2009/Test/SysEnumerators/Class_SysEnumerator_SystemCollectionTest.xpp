@@ -17,7 +17,7 @@ public class SysEnumerator_SystemCollectionTest extends SysTestCase
 
         this.assertNotNull(se);
 
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -57,7 +57,7 @@ public class SysEnumerator_SystemCollectionTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
     }
 
     public void testSystemCollectionReset()
@@ -136,11 +136,11 @@ public class SysEnumerator_SystemCollectionTest extends SysTestCase
         this.assertNotNull(se);
         this.assertNotNull(se.base());
 
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
     }
 }

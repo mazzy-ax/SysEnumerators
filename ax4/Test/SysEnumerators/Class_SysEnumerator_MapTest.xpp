@@ -10,7 +10,6 @@ public class SysEnumerator_MapTest extends SysTestCase
 
         Map m = new Map(Types::Integer,Types::String);
         SysEnumerator_Map se;
-        int64 zero64;
 
         m.insert(10, 'a');
         m.insert(50, 'e');
@@ -19,7 +18,7 @@ public class SysEnumerator_MapTest extends SysTestCase
         m.insert(40, 'd');
 
         se = SysEnumerator_Map::construct(m);
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertNotNull(se);
@@ -61,7 +60,7 @@ public class SysEnumerator_MapTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
     }
 
     public void testMapEmpty()

@@ -58,9 +58,9 @@ public class SysEnumerator_Struct extends SysEnumerator_Indexed
         return ret;
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
     {
-        int64 ret = this.base().fields();
+        SysIterations ret = this.base().fields();
 
         return ret;
     }

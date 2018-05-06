@@ -37,9 +37,9 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int64
         return ret;
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
     {
-        int64 ret;
+        SysIterations ret;
 
         if( estimatedIterations >= 0 )
         {

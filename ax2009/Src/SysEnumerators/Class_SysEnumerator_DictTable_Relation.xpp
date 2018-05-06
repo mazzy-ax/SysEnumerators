@@ -17,7 +17,6 @@ public class SysEnumerator_DictTable_Relation extends SysEnumerator_DictTable
         return this.current();
     }
 
-    //TODO mazzy: SysDictField??
     public DictRelation currentValue()
     {
         DictRelation dictRelation = new DictRelation(this.base().id());

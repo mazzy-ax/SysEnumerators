@@ -23,29 +23,29 @@ public class SysEnumerator_LastAotSelection extends xSysEnumerator
         return ret;
     }
 
-    public anytype current()
+    public TreeNode current()
     {
         return current;
     }
 
-    public anytype currentIdx()
+    public TreeNode currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    public TreeNode currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public TreeNode currentValue()
     {
         return this.current();
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret = this.base().selectionCount();
+        int64 ret = this.base().selectionCount();
 
         return ret;
     }

@@ -18,32 +18,31 @@ public class SysSequenceReal extends SysRangeReal implements ISysSequence, Enume
         return ret;
     }
 
-    public int64 estimatedIterations()
+    public SysIterations estimatedIterations()
     {
-        int64 ret = int64Max();
+        SysIterations ret = SysEnumerator::IterationsMax();
         Amount distance = this.distance();
         boolean overflow = this.cover(0) && (distance <= 0.00001);
 
-        if( overflow )
+        if( !overflow )
         {
-            ret = int64Max();
-        }
-        else if( distance == 0 )
-        {
-            ret = 1;
-        }
-        else if( ((distance < 0) && (this.step() > 0))
-              || ((distance > 0) && (this.step() < 0)) )
-        {
-            ret = 0;
-        }
-        else if( step == 1 )
-        {
-            ret = any2int64(distance + 1.0);
-        }
-        else
-        {
-            ret = any2int64(distance / this.step() + 1.0);
+            if( distance == 0 )
+            {
+                ret = 1;
+            }
+            else if( ((distance < 0) && (this.step() > 0))
+                  || ((distance > 0) && (this.step() < 0)) )
+            {
+                ret = 0;
+            }
+            else if( step == 1 )
+            {
+                ret = any2int64(distance + 1.0);
+            }
+            else
+            {
+                ret = any2int64(distance / this.step() + 1.0);
+            }
         }
 
         return ret;

@@ -11,22 +11,22 @@ public class SysEnumerator_TreeNodeSibling extends xSysEnumerator
         return node;
     }
 
-    public anytype current()
+    public TreeNode current()
     {
         return node;
     }
 
-    public anytype currentIdx()
+    public TreeNode currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    public TreeNode currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public TreeNode currentValue()
     {
         return this.current();
     }

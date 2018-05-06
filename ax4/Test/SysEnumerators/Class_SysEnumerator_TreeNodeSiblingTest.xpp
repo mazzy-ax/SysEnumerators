@@ -8,10 +8,9 @@ public class SysEnumerator_TreeNodeSiblingTest extends SysTestCase
     {
         SysDictTable    sysDictTable = new SysDictTable(tablenum(CustTable));
         SysEnumerator_TreeNodeSibling se = SysEnumerator_TreeNodeSibling::construct(sysDictTable.treeNode().AOTfirstChild());
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -58,20 +57,19 @@ public class SysEnumerator_TreeNodeSiblingTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
     }
 
     public void testEmpty()
     {
         SysEnumerator_TreeNodeSibling se = SysEnumerator_TreeNodeSibling::construct(null);
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
     }
 }

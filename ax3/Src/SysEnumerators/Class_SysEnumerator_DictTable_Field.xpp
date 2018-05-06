@@ -4,7 +4,7 @@
 public class SysEnumerator_DictTable_Field extends SysEnumerator_DictTable
 {
 
-    public anytype current()
+    public fieldId current()
     {
         int idx = this.currentIdx();
         fieldId ret = this.base().fieldCnt2Id(idx);
@@ -12,7 +12,7 @@ public class SysEnumerator_DictTable_Field extends SysEnumerator_DictTable
         return ret;
     }
 
-    public anytype currentKey()
+    public str currentKey()
     {
         return this.base().fieldName(this.current());
     }
@@ -22,7 +22,8 @@ public class SysEnumerator_DictTable_Field extends SysEnumerator_DictTable
         return true;
     }
 
-    public anytype currentValue()
+    //TODO mazzy: SysDictField??
+    public DictField currentValue()
     {
         return this.base().fieldObject(this.current());
     }
@@ -39,7 +40,7 @@ public class SysEnumerator_DictTable_Field extends SysEnumerator_DictTable
         return ret;
     }
 
-    public static SysEnumerator_DictTable_Field construct(DictTable base, SysRange idx = null)
+    public static SysEnumerator_DictTable_Field construct(DictTable base, SysSequenceInt idx = null)
     {
         SysEnumerator_DictTable_Field enumerator = new SysEnumerator_DictTable_Field(base, idx);
 

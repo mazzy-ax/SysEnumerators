@@ -10,7 +10,7 @@ public class SysEnumerator_DictView_Datasource extends SysEnumerator_Indexed
         return base;
     }
 
-    public anytype current()
+    public tableId current()
     {
         int idx = this.currentIdx();
         tableId ret = this.base().datasourceTableId(idx);
@@ -18,12 +18,12 @@ public class SysEnumerator_DictView_Datasource extends SysEnumerator_Indexed
         return ret;
     }
 
-    public anytype currentKey()
+    public tableId currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public tableId currentValue()
     {
         return this.current();
     }
@@ -35,7 +35,7 @@ public class SysEnumerator_DictView_Datasource extends SysEnumerator_Indexed
         return ret;
     }
 
-    public void new(DictView _base, SysSequence _idx = null)
+    public void new(DictView _base, SysSequenceInt _idx = null)
     {;
         Debug::assert(_base != null);
 
@@ -43,7 +43,7 @@ public class SysEnumerator_DictView_Datasource extends SysEnumerator_Indexed
         super(_idx);
     }
 
-    public static SysEnumerator_DictView_Datasource construct(DictView base, SysRange idx = null)
+    public static SysEnumerator_DictView_Datasource construct(DictView base, SysSequenceInt idx = null)
     {
         SysEnumerator_DictView_Datasource enumerator = new SysEnumerator_DictView_Datasource(base, idx);
 

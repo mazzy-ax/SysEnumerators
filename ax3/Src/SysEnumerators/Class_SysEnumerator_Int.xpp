@@ -4,23 +4,23 @@
 public class SysEnumerator_Int extends SysEnumerator_Indexed
 {
 
-    public SysSequence base()
+    public SysSequenceInt base()
     {
         return sequence;
     }
 
 
-    public anytype current()
+    public int current()
     {
         return this.currentIdx();
     }
 
-    public anytype currentKey()
+    public int currentKey()
     {
         return this.currentIdx();
     }
 
-    public anytype currentValue()
+    public int currentValue()
     {
         return this.currentIdx();
     }
@@ -30,12 +30,12 @@ public class SysEnumerator_Int extends SysEnumerator_Indexed
         return maxint();
     }
 
-    public void new(SysSequence _sequence = null)
+    public void new(SysSequenceInt _sequence = null)
     {
         super(_sequence);
     }
 
-    public static SysEnumerator_Int construct(SysSequence sequence = null)
+    public static SysEnumerator_Int construct(SysSequenceInt sequence = null)
     {
         SysEnumerator_Int enumerator = new SysEnumerator_Int(sequence);
 
@@ -44,7 +44,7 @@ public class SysEnumerator_Int extends SysEnumerator_Indexed
 
     public static SysEnumerator_Int newFromTo(int start = 1, int end = maxint(), int step = 1)
     {
-        SysSequence sequence = SysSequence::construct(start, end, step);
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
         SysEnumerator_Int enumerator = SysEnumerator_Int::construct(sequence);
 
         return enumerator;

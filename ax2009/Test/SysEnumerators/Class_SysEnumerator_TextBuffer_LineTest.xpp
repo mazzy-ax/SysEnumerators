@@ -8,7 +8,6 @@ public class SysEnumerator_TextBuffer_LineTest extends SysTestCase
     {
         TextBuffer text = new TextBuffer();
         SysEnumerator_TextBuffer_Line se;
-        int64 zero64;
         str line1 = strrep('-',1024);
         str line2 = strrep('=',1024);
 
@@ -19,7 +18,7 @@ public class SysEnumerator_TextBuffer_LineTest extends SysTestCase
         se = SysEnumerator_TextBuffer_Line::construct(text);
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 2, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(2), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -44,7 +43,6 @@ public class SysEnumerator_TextBuffer_LineTest extends SysTestCase
     {
         TextBuffer text = new TextBuffer();
         SysEnumerator_TextBuffer_Line se;
-        int64 zero64;
         str line1 = strrep('-',1048574);
         str line2 = strrep('=',1048574);
 
@@ -55,7 +53,7 @@ public class SysEnumerator_TextBuffer_LineTest extends SysTestCase
         se = SysEnumerator_TextBuffer_Line::construct(text);
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 2, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(2), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -78,7 +76,6 @@ public class SysEnumerator_TextBuffer_LineTest extends SysTestCase
     {
         TextBuffer text = new TextBuffer();
         SysEnumerator_TextBuffer_Line se;
-        int64 zero64;
 
         text.appendText(@'line1
     line2,'+'\t'+@' хвост2
@@ -87,7 +84,7 @@ public class SysEnumerator_TextBuffer_LineTest extends SysTestCase
         se = SysEnumerator_TextBuffer_Line::construct(text);
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 3, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(3), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());

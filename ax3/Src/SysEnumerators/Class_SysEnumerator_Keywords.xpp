@@ -21,22 +21,22 @@ public abstract class SysEnumerator_Keywords extends xSysEnumerator
         return _base;
     }
 
-    public anytype current()
+    public str current()
     {
         return current;
     }
 
-    public anytype currentIdx()
+    public str currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    public str currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public str currentValue()
     {
         return this.current();
     }

@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int64
+public class SysEnumerator_RunBaseProgress extends SysEnumerator_Indexed64
 {
     #AviFiles
 
@@ -37,9 +37,24 @@ public class SysEnumerator_RunBaseProgress extends SysEnumerator_Int64
         return ret;
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public int64 current()
     {
-        int64 ret;
+        return this.currentIdx();
+    }
+
+    public int64 currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public int64 currentValue()
+    {
+        return this.currentIdx();
+    }
+
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
+    {
+        SysIterations ret;
 
         if( estimatedIterations >= 0 )
         {

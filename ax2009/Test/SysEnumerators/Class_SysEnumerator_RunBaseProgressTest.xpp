@@ -6,13 +6,13 @@ public class SysEnumerator_RunBaseProgressTest extends SysTestCase
 
     public void testEstimatedIterations()
     {
-        int64 estimated = 123;
+        SysIterations estimated = 123;
         SysEnumerator_RunBaseProgress se = SysEnumerator_RunBaseProgress::construct();
 
         this.assertNotNull(se);
 
-        this.assertEquals(int64Max(), se.estimatedIterations());    // total not defined
-        this.assertEquals(int64Max(), se.estimatedIterations(0));   // total = 0
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());    // total not defined
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations(0));   // total = 0
 
         this.assertEquals(estimated, se.estimatedIterations(estimated));
 

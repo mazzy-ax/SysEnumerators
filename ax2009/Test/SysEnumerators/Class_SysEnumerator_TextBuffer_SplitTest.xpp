@@ -16,7 +16,7 @@ public class SysEnumerator_TextBuffer_SplitTest extends SysTestCase
         se = SysEnumerator_TextBuffer_Split::construct(text);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -58,7 +58,7 @@ public class SysEnumerator_TextBuffer_SplitTest extends SysTestCase
         SysEnumerator_TextBuffer_Split se = SysEnumerator_TextBuffer_Split::construct(text);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertFalse(se.moveNext());
@@ -70,7 +70,7 @@ public class SysEnumerator_TextBuffer_SplitTest extends SysTestCase
         SysEnumerator_TextBuffer_Split se = SysEnumerator_TextBuffer_Split::construct(null);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertFalse(se.moveNext());
@@ -89,7 +89,7 @@ public class SysEnumerator_TextBuffer_SplitTest extends SysTestCase
         se = SysEnumerator_TextBuffer_Split::newWithTabs(text);
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());

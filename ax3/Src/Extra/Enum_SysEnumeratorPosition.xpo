@@ -3,18 +3,13 @@ Formatversion: 1
 
 ***Element: DBE
 
-; Microsoft Business Solutions-Axapta Enumtype : SysEnumeratorPosition unloaded at Sunday 4/15/2018
+; Microsoft Dynamics AX Enumtype : SysEnumeratorPosition unloaded
 ; --------------------------------------------------------------------------------
   ENUMTYPEVERSION 1
   
   ENUMTYPE #SysEnumeratorPosition
     PROPERTIES
       Name                #SysEnumeratorPosition
-      Label               #
-      Help                #
-      DisplayLength       #Auto
-      Style               #Combo box
-      ConfigurationKey    #
       UseEnumValue        #Yes
     ENDPROPERTIES
     
@@ -23,7 +18,6 @@ Formatversion: 1
       PROPERTIES
         Name                #BeforeFirstElement
         Label               #BeforeFirstElement
-        ConfigurationKey    #
         EnumValue           #0
       ENDPROPERTIES
       
@@ -31,7 +25,6 @@ Formatversion: 1
       PROPERTIES
         Name                #Inside
         Label               #Inside
-        ConfigurationKey    #
         EnumValue           #1
       ENDPROPERTIES
       
@@ -39,7 +32,6 @@ Formatversion: 1
       PROPERTIES
         Name                #Outside
         Label               #Outside
-        ConfigurationKey    #
         EnumValue           #2
       ENDPROPERTIES
       

@@ -20,7 +20,7 @@ public interface ISysEnumerator extends Enumerator
     {
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
     {
     }
 
@@ -28,7 +28,6 @@ public interface ISysEnumerator extends Enumerator
     {
     }
 
-    //TODO mazzy: extract to special interface?
     public void reset()
     {
     }

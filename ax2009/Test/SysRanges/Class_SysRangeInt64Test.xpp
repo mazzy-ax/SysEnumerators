@@ -284,6 +284,6 @@ public class SysRangeInt64Test extends SysTestCase
         SysRangeInt64 range = SysRangeInt64::construct(start, end);
 
         this.assertNotNull(range);
-        this.assertEquals(strfmt('%1..%2', start, end), range.toString());
+        this.assertEquals(strfmt('[%1..%2]', start, end), range.toString());
     }
 }

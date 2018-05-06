@@ -28,22 +28,22 @@ public class SysEnumerator_RecordLinkList extends xSysEnumerator
         return ret;
     }
 
-    public anytype current()
+    public Common current()
     {
         return record;
     }
 
-    public anytype currentIdx()
+    public Common currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    public Common currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public Common currentValue()
     {
         return this.current();
     }
@@ -53,9 +53,9 @@ public class SysEnumerator_RecordLinkList extends xSysEnumerator
         return true;
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret = this.base().len();
+        int64 ret = this.base().len();
 
         return ret;
     }

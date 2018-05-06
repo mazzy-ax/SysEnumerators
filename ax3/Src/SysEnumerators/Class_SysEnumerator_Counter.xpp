@@ -10,22 +10,34 @@ public class SysEnumerator_Counter extends xSysEnumerator
 {
     int counter;
 
-    public anytype current()
+    protected boolean begin()
+    {
+        boolean ret = super() && this.next();
+
+        return ret;
+    }
+
+    public int current()
     {
         return counter;
     }
 
-    public anytype currentIdx()
+    public int currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    protected boolean currentIdxProvided()
+    {
+        return true;
+    }
+
+    public int currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    public int currentValue()
     {
         return this.current();
     }

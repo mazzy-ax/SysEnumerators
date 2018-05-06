@@ -10,22 +10,22 @@ public class SysEnumerator_Record extends xSysEnumerator
         return base;
     }
 
-    public anytype current()
+    public common current()
     {
         return base;
     }
 
-    public anytype currentIdx()
+    public common currentIdx()
     {
         return this.current();
     }
 
-    public anytype currentKey()
+    public common currentKey()
     {
         return this.currentValue();
     }
 
-    public anytype currentValue()
+    public common currentValue()
     {
         return this.current();
     }

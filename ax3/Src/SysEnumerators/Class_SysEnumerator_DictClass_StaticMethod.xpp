@@ -4,7 +4,7 @@
 public class SysEnumerator_DictClass_StaticMethod extends SysEnumerator_DictClass
 {
 
-    public anytype current()
+    public str current()
     {
         int idx = this.currentIdx();
         str ret = this.base().staticMethod(idx);
@@ -12,12 +12,13 @@ public class SysEnumerator_DictClass_StaticMethod extends SysEnumerator_DictClas
         return ret;
     }
 
-    public anytype currentKey()
+    public str currentKey()
     {
         return this.current();
     }
 
-    public anytype currentValue()
+    //TODO mazzy: sysDictMethod??
+    public DictMethod currentValue()
     {
         int idx = this.currentIdx();
         DictMethod ret = this.base().staticMethodObject(idx);
@@ -37,7 +38,7 @@ public class SysEnumerator_DictClass_StaticMethod extends SysEnumerator_DictClas
         return ret;
     }
 
-    public static SysEnumerator_DictClass_StaticMethod construct(DictClass base, SysRange idx = null)
+    public static SysEnumerator_DictClass_StaticMethod construct(DictClass base, SysSequenceInt idx = null)
     {
         SysEnumerator_DictClass_StaticMethod enumerator = new SysEnumerator_DictClass_StaticMethod(base, idx);
 

@@ -11,7 +11,7 @@ public class SysSequenceDateTest extends SysTestCase
         int step = 1;
 
         Date current;
-        int64 iterations;
+        SysIterations iterations;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -38,7 +38,7 @@ public class SysSequenceDateTest extends SysTestCase
         int step = 3;
 
         Date current;
-        int64 iterations;
+        SysIterations iterations;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -65,7 +65,7 @@ public class SysSequenceDateTest extends SysTestCase
         int step = 9;
 
         Date current;
-        int64 iterations;
+        SysIterations iterations;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -103,7 +103,7 @@ public class SysSequenceDateTest extends SysTestCase
         Date start = 31\12\2017;
         Date end = 20\012\2017;
         int step = 1;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -146,7 +146,7 @@ public class SysSequenceDateTest extends SysTestCase
         Date start = DateMax();
         Date end = DateNull();
         int step = 1;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -164,7 +164,7 @@ public class SysSequenceDateTest extends SysTestCase
         Date start = DateMax();
         Date end = DateNull();
         int step = 2;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -182,7 +182,7 @@ public class SysSequenceDateTest extends SysTestCase
         Date start = DateMax();
         Date end = DateNull();
         int step = 3;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -200,7 +200,7 @@ public class SysSequenceDateTest extends SysTestCase
         Date start = DateNull();
         Date end = DateMax();
         int step = 1;
-        int64 iterations = 93137;
+        SysIterations iterations = 93137;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -218,7 +218,7 @@ public class SysSequenceDateTest extends SysTestCase
         Date start = DateNull();
         Date end = DateMax();
         int step = 2;
-        int64 iterations = 46569;
+        SysIterations iterations = 46569;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -236,7 +236,7 @@ public class SysSequenceDateTest extends SysTestCase
         Date start = DateNull();
         Date end = DateMax();
         int step = 3;
-        int64 iterations = 31046;
+        SysIterations iterations = 31046;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
 
@@ -256,7 +256,7 @@ public class SysSequenceDateTest extends SysTestCase
         int step = 1;
 
         Date current;
-        int64 iterations;
+        SysIterations iterations;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step).reverse();
 
@@ -283,7 +283,7 @@ public class SysSequenceDateTest extends SysTestCase
         int step = 3;
 
         Date current;
-        int64 iterations;
+        SysIterations iterations;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step).reverse();
 
@@ -310,7 +310,7 @@ public class SysSequenceDateTest extends SysTestCase
         int step = 9;
 
         Date current;
-        int64 iterations;
+        SysIterations iterations;
 
         SysSequenceDate sequence = SysSequenceDate::construct(start, end, step).reverse();
 

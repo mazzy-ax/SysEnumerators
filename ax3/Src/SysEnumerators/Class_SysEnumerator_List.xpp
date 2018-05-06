@@ -58,9 +58,9 @@ public class SysEnumerator_List extends xSysEnumerator
         return true;
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret = this.base().elements();
+        int64 ret = this.base().elements();
 
         return ret;
     }

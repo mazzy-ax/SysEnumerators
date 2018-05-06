@@ -22,7 +22,6 @@ public class SysEnumerator_Dictionary_SecurityKey extends SysEnumerator_Dictiona
         return true;
     }
 
-    //TODO mazzy: SysDictClass??
     public DictSecurityKey currentValue()
     {
         return this.base().securityKeyObject(this.current());

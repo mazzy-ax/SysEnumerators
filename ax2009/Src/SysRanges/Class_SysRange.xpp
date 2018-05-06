@@ -1,0 +1,31 @@
+﻿public abstract class SysRange
+{
+
+    public static SysRangeDate newFromDate(date start = DateNull(), date end = DateMax())
+    {
+        SysRangeDate Range = SysRangeDate::construct(start, end);
+
+        return Range;
+    }
+
+    public static SysRangeInt newFromInt(int start = 1, int end = maxint())
+    {
+        SysRangeInt Range = SysRangeInt::construct(start, end);
+
+        return Range;
+    }
+
+    public static SysRangeInt64 newFromInt64(int64 start = 1, int64 end = int64Max())
+    {
+        SysRangeInt64 Range = SysRangeInt64::construct(start, end);
+
+        return Range;
+    }
+
+    public static SysRangeReal newFromReal(real start = 1.0, real end = RealMax())
+    {
+        SysRangeReal Range = SysRangeReal::construct(start, end);
+
+        return Range;
+    }
+}

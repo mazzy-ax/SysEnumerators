@@ -9,7 +9,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = 2;
         int64 end = 5;
         int64 step = 1;
-        int64 iterations = 4;
+        SysIterations iterations = 4;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -27,7 +27,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = 2;
         int64 end = 5;
         int64 step = 3;
-        int64 iterations = 2;
+        SysIterations iterations = 2;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -45,7 +45,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = 2;
         int64 end = 5;
         int64 step = 9;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -76,7 +76,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = 5;
         int64 end = 2;
         int64 step = 1;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -93,7 +93,7 @@ public class SysSequenceInt64Test extends SysTestCase
     {
         int64 start = 2;
         int64 end = 5;
-        int64 step = 1;
+        SysIterations step = 1;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
         SysEnumerator se = sequence.getEnumerator();
@@ -119,7 +119,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = int64Min();
         int64 end = int64Max();
         int64 step = 1;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -137,7 +137,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = int64Min();
         int64 end = int64Max();
         int64 step = 2;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -155,7 +155,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = int64Min();
         int64 end = int64Max();
         int64 step = 3;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -173,7 +173,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -1;
         int64 end = int64Max();
         int64 step = 1;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -191,7 +191,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -1;
         int64 end = int64Max();
         int64 step = 2;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -209,7 +209,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -1;
         int64 end = int64Max();
         int64 step = 3;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -227,7 +227,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 1;
-        int64 iterations = 8;
+        SysIterations iterations = 8;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -245,7 +245,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 3;
-        int64 iterations = 3;
+        SysIterations iterations = 3;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -263,7 +263,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 9;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
@@ -281,7 +281,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 1;
-        int64 iterations = 8;
+        SysIterations iterations = 8;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step).reverse();
 
@@ -299,7 +299,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 3;
-        int64 iterations = 3;
+        SysIterations iterations = 3;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step).reverse();
 
@@ -317,7 +317,7 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 9;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step).reverse();
 

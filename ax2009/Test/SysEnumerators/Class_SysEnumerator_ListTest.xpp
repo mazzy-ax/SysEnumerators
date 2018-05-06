@@ -8,7 +8,6 @@ public class SysEnumerator_ListTest extends SysTestCase
     {
         List l = new List(Types::String);
         SysEnumerator_List se;
-        int64 zero64;
 
         l.addEnd('a');
         l.addEnd('b');
@@ -19,7 +18,7 @@ public class SysEnumerator_ListTest extends SysTestCase
         se = SysEnumerator_List::construct(l);
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -54,7 +53,7 @@ public class SysEnumerator_ListTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
     }
 
     public void testListEmpty()

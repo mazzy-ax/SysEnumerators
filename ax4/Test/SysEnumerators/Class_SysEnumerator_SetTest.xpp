@@ -8,7 +8,6 @@ public class SysEnumerator_SetTest extends SysTestCase
     {
         Set s = new Set(Types::String);
         SysEnumerator_Set se;
-        int64 zero64;
 
         s.add('a');
         s.add('e');
@@ -19,7 +18,7 @@ public class SysEnumerator_SetTest extends SysTestCase
         se = SysEnumerator_Set::construct(s);
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -59,7 +58,7 @@ public class SysEnumerator_SetTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
     }
 
     public void testSetEmpty()

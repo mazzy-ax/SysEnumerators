@@ -28,10 +28,9 @@ public class SysEnumerator_XmlChildrenTest extends SysTestCase
         ';
         XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
         SysEnumerator_XmlChildren se = SysEnumerator_XmlChildren::construct(xmlDoc.root());
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -57,17 +56,16 @@ public class SysEnumerator_XmlChildrenTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
     }
 
     public void testEmpty()
     {
         XmlDocument xmlDoc = XmlDocument::newBlank();
         SysEnumerator_XmlChildren se = SysEnumerator_XmlChildren::construct(xmlDoc);
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -79,7 +77,7 @@ public class SysEnumerator_XmlChildrenTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
     }
 
     public void testXPath()
@@ -106,10 +104,9 @@ public class SysEnumerator_XmlChildrenTest extends SysTestCase
         ';
         XmlDocument xmlDoc = XmlDocument::newXml(xmlStr);
         SysEnumerator_XmlChildren se = SysEnumerator_XmlChildren::construct(xmlDoc.selectSingleNode('root/element'));
-        int64 zero64;
 
         this.assertNotNull(se);
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -142,6 +139,6 @@ public class SysEnumerator_XmlChildrenTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumerator::IterationsMax(), se.estimatedIterations());
     }
 }

@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public abstract class xSysEnumerator /* TODO implements Enumerator*/
+public abstract class xSysEnumerator implements ISysEnumerator
 {
     SysEnumeratorPosition position;
 
@@ -37,30 +37,14 @@ public abstract class xSysEnumerator /* TODO implements Enumerator*/
         return true;
     }
 
-    public abstract anytype current()
-    {
-    }
-
-    public abstract anytype currentIdx()
-    {
-    }
-
     protected boolean currentIdxProvided()
     {
         return false;
     }
 
-    public abstract anytype currentKey()
-    {
-    }
-
     protected boolean currentKeyProvided()
     {
         return false;
-    }
-
-    public abstract anytype currentValue()
-    {
     }
 
     protected boolean currentValueProvided()
@@ -74,9 +58,9 @@ public abstract class xSysEnumerator /* TODO implements Enumerator*/
         return '';
     }
 
-    public int estimatedIterations(int estimatedIterations = -1)
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
     {
-        int ret = maxint();
+        int64 ret = int64Max();
 
         return ret;
     }

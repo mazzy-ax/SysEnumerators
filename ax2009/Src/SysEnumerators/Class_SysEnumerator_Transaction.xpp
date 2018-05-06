@@ -1,0 +1,114 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+
+/// <summary>
+/// Начинает и завершает транзакцию.
+/// Умеет фиксировать транзакцию через указанное число итераций (порционный ttscommit)
+/// Reset откатывает незакрытую транзакцию
+/// </summary>
+public class SysEnumerator_Transaction extends xSysEnumerator
+{
+    int64 iterationsToAutoCommit;
+    int64 current;
+
+    protected boolean begin()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            this.ttsbegin();
+        }
+
+        return ret;
+    }
+
+    public int64 current()
+    {
+        return current;
+    }
+
+    public int64 currentIdx()
+    {
+        return this.current();
+    }
+
+    public int64 currentKey()
+    {
+        return this.current();
+    }
+
+    public int64 currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean moveNextPost(boolean ret)
+    {
+        ret = super(ret);
+
+        if( ret )
+        {
+            current++;
+
+            if( iterationsToAutoCommit && current >= iterationsToAutoCommit )
+            {
+                this.ttscommit();
+                this.ttsbegin();
+            }
+        }
+        else
+        {
+            this.ttscommit();
+        }
+
+        return ret;
+    }
+
+    public void new(int64 _iterationsToAutoCommit = 0)
+    {
+        iterationsToAutoCommit = _iterationsToAutoCommit;
+        super();
+    }
+
+    public void reset()
+    {
+        this.ttsabort(); // отменяет только последний незакомиченный
+        super();
+    }
+
+    protected void ttsAbort()
+    {
+        if( current )
+        {
+            //TODO ttsabort;
+            current = 0;
+        }
+    }
+
+    protected void ttsBegin()
+    {
+        if( !current )
+        {
+            //TODO ttsbegin;
+            current = 1;
+        }
+    }
+
+    protected void ttsCommit()
+    {
+        if( current )
+        {
+            //TODO ttscommit;
+            current = 0;
+        }
+    }
+
+    public static SysEnumerator_Transaction construct(int64 iterationsToAutoCommit = 0)
+    {
+        SysEnumerator_Transaction enumerator = new SysEnumerator_Transaction(iterationsToAutoCommit);
+
+        return enumerator;
+    }
+}

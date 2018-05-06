@@ -31,9 +31,9 @@ public abstract class SysEnumerator_Indexed extends xSysEnumerator
         return 1;
     }
 
-    public int64 estimatedIterations(int64 estimatedIterations = 0)
+    public SysIterations estimatedIterations(SysIterations estimatedIterations = 0)
     {
-        int64 ret = this.sequence().estimatedIterations();
+        SysIterations ret = this.sequence().estimatedIterations();
 
         return ret;
     }

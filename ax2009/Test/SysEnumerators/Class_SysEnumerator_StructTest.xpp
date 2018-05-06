@@ -8,7 +8,6 @@ public class SysEnumerator_StructTest extends SysTestCase
     {
         Struct s = new Struct();
         SysEnumerator_Struct se;
-        int64 zero64;
 
         s.add('field1', 'a');
         s.add('field5', 'e');
@@ -19,7 +18,7 @@ public class SysEnumerator_StructTest extends SysTestCase
         se = SysEnumerator_Struct::construct(s);
 
         this.assertNotNull(se);
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
         this.assertTrue(se.moveNext());
@@ -59,7 +58,7 @@ public class SysEnumerator_StructTest extends SysTestCase
 
         this.assertFalse(se.moveNext());
         this.assertEquals(SysEnumeratorPosition::Outside, se.position());
-        this.assertEquals(zero64 + 5, se.estimatedIterations());
+        this.assertEquals(SysEnumerator::Iterations(5), se.estimatedIterations());
     }
 
     public void testStructEmpty()

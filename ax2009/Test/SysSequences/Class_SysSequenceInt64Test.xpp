@@ -9,14 +9,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = 2;
         int64 end = 5;
         int64 step = 1;
-        int64 iterations = 4;
+        SysIterations iterations = 4;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -27,14 +27,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = 2;
         int64 end = 5;
         int64 step = 3;
-        int64 iterations = 2;
+        SysIterations iterations = 2;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -45,14 +45,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = 2;
         int64 end = 5;
         int64 step = 9;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -65,7 +65,7 @@ public class SysSequenceInt64Test extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(any2int64(1), sequence.start());
         this.assertEquals(int64Max(), sequence.end());
-        this.assertEquals(int64Max()-1, sequence.distance());
+        this.assertEquals(int64Max()-1, sequence.range().distance());
         this.assertEquals(any2int64(1), sequence.step());
 
         this.assertEquals(int64Max(), sequence.estimatedIterations());
@@ -76,14 +76,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = 5;
         int64 end = 2;
         int64 step = 1;
-        int64 iterations = 0;
+        SysIterations iterations = 0;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -93,7 +93,7 @@ public class SysSequenceInt64Test extends SysTestCase
     {
         int64 start = 2;
         int64 end = 5;
-        int64 step = 1;
+        SysIterations step = 1;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
         SysEnumerator se = sequence.getEnumerator();
@@ -119,14 +119,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = int64Min();
         int64 end = int64Max();
         int64 step = 1;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -137,14 +137,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = int64Min();
         int64 end = int64Max();
         int64 step = 2;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -155,14 +155,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = int64Min();
         int64 end = int64Max();
         int64 step = 3;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -173,14 +173,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -1;
         int64 end = int64Max();
         int64 step = 1;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -191,14 +191,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -1;
         int64 end = int64Max();
         int64 step = 2;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -209,14 +209,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -1;
         int64 end = int64Max();
         int64 step = 3;
-        int64 iterations = int64Max();
+        SysIterations iterations = SysEnumerator::IterationsMax();
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -227,14 +227,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 1;
-        int64 iterations = 8;
+        SysIterations iterations = 8;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -245,14 +245,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 3;
-        int64 iterations = 3;
+        SysIterations iterations = 3;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -263,14 +263,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 9;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
 
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -281,14 +281,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 1;
-        int64 iterations = 8;
+        SysIterations iterations = 8;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step).reverse();
 
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
-        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(start - end, sequence.range().distance());
         this.assertEquals(-step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -299,14 +299,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 3;
-        int64 iterations = 3;
+        SysIterations iterations = 3;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step).reverse();
 
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
-        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(start - end, sequence.range().distance());
         this.assertEquals(-step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -317,14 +317,14 @@ public class SysSequenceInt64Test extends SysTestCase
         int64 start = -5;
         int64 end = 2;
         int64 step = 9;
-        int64 iterations = 1;
+        SysIterations iterations = 1;
 
         SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step).reverse();
 
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
-        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(start - end, sequence.range().distance());
         this.assertEquals(-step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
