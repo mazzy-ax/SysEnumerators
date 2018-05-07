@@ -1,6 +1,9 @@
 # SysEnumerators
 
-*SysEnumerators* - это набор классов на языке X++, который позволяет разработчику единообразно "пробежать" по:
+[project]:https://github.com/mazzy-ax/SysEnumerators
+[license]:https://github.com/mazzy-ax/SysEnumerators/blob/master/LICENSE
+
+[SysEnumerators][project] &ndash; это набор классов на языке X++, который позволяет разработчику единообразно "пробежать" по:
 
 * интервалу чисел;
 * интервалу дат;
@@ -18,7 +21,7 @@
 * строкам, словам и regexp-токенам из `TextBuffer`;
 * и прочим системным коллекциям Аксапты.
 
-Подробнее о *SysEnumerators* для [Microsoft Dynamics AX 2009](/ax2009), [Microsoft Dynamics AX 2012](/ax2012), [Axapta 3.0](/ax3) и [Axapta 4.0](/ax4).
+Подробнее о *SysEnumerators* для [Microsoft Dynamics AX 2009](ax2009), [Microsoft Dynamics AX 2012](ax2012), [Axapta 3.0](ax3) и [Axapta 4.0](ax4).
 
 ## Пример использования SysEnumerators
 
@@ -34,11 +37,11 @@ while( se.moveNext() )
 }
 ```
 
-Больше примеров с описанием и скриншотами результатов можно найти в каталоге [Examples](ax2009/Src/Examples).
+Больше примеров с описанием и скриншотами результатов можно найти в каталоге [Examples](ax2009/Examples).
 
 ## Отличия проектов для разных версий Аксапты
 
-Первичная разработка ведется в [ax2009](/ax2009).
+Первичная разработка ведется в [ax2009](ax2009).
 
 |Код| Отличие | ax2012 | ax2009 | ax4 | ax3 |
 |---|---------|:------:|:------:|:---:|:---:|
@@ -68,6 +71,8 @@ while( se.moveNext() )
 
 * [op]: операторы `is` и `as` появились в ax2012. В предыдущих версиях вместо них использовались методы `SysDictClass::is` и `SysDictClass::as`.
 
+* [ref]:  энумераторы по системным коллекциям .net, которые объявляются в Аксапте в AOT\reference.
+
 * [real]: из-за особенностей арифметики с real, в ax2012 в тестах используются "магические" константы.
 
 ## Благодарности
@@ -89,6 +94,6 @@ while( se.moveNext() )
 
 ## Помощь проекту
 
-Буду признателен за ваши замечания, предложения, советы в разделе [Issues](https://github.com/mazzy-ax/SysEnumerators/issues) и [Pull requests](https://github.com/mazzy-ax/SysEnumerators/pulls) по проекту, а также в виде письма на адрес [mazzy@mazzy.ru](mailto:mazzy@mazzy.ru)
+Буду признателен за ваши замечания, предложения, советы в разделе [Issues](https://github.com/mazzy-ax/SysEnumerators/issues) и [Pull requests](https://github.com/mazzy-ax/SysEnumerators/pulls) по проекту, а также в виде письма на адрес <mazzy@mazzy.ru>
 
 Мазуркин Сергей (mazzy)
