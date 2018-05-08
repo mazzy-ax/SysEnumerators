@@ -29,7 +29,7 @@
 
 ```java
 container c = ['a', 'b', 1, 'd', systemdateget(), 'f'];
-SysEnumerator se = SysEnumerator::newFromContainer(c);
+SysEnumerator se = SysEnumerator::container(c);
 
 while( se.moveNext() )
 {
