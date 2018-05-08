@@ -59,12 +59,12 @@ while( se.moveNext() )
 ![SysEnumeratorExample05_Fields](../Media/Example05.png)
 
 ```java
-LedgerTransType transType;
-SysEnumerator se = SysEnumerator::enum(transType);
+CustTable custTable;
+SysEnumerator_DictTable_Field se = SysEnumerator_DictTable_Field::construct(new DictTable(custTable.TableId));
 
 while( se.moveNext() )
 {
-    info(strfmt("%1 %2 %3 %4", se.current(), se.currentIdx(), se.currentKey(), se.currentValue()));
+    info(strfmt("%1, %2, %3", se.current(), se.currentKey(), se.currentValue().toString()));
 }
 ```
 
