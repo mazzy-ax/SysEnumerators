@@ -10,11 +10,19 @@ public abstract class SysEnumerator_Dictionary extends SysEnumerator_Indexed
         return base;
     }
 
-    public void new(Dictionary _base, SysSequenceInt _idx = null)
-    {;
-        Debug::assert(_base != null);
+    protected Dictionary baseOrDefault(Dictionary _base = null)
+    {
+        if( !_base )
+        {
+            _base = new Dictionary();
+        }
 
-        base = _base;
+        return _base;
+    }
+
+    public void new(Dictionary _base = null, SysSequenceInt _idx = null)
+    {
+        base = this.baseOrDefault(_base);
         super(_idx);
     }
 }

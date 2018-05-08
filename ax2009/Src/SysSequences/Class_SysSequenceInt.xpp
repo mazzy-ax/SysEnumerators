@@ -63,7 +63,7 @@ public class SysSequenceInt extends SysSequence implements ISysSequence
 
     public SysEnumerator getEnumerator()
     {
-        return SysEnumerator::newFromSequenceInt(this);
+        return SysEnumerator::sequenceInt(this);
     }
 
     public int getNext(int value)

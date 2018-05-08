@@ -3,7 +3,7 @@
 //
 static void SysEnumeratorExample01_Int(Args _args)
 {
-    SysEnumerator se = SysEnumerator::newFromToInt(2, 9, 3);
+    SysEnumerator se = SysEnumerator::int(2, 9, 3);
 
     while( se.moveNext() )
     {

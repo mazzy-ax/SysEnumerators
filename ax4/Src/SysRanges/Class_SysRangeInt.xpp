@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysRangeInt implements ISysRange
+public class SysRangeInt extends SysRange implements ISysRange
 {
     int start;
     int end;
@@ -98,12 +98,12 @@ public class SysRangeInt implements ISysRange
     public str toString()
     {
         // SysQuery::range() is not nice
-        return strfmt('%1..%2', this.start(), this.end());
+        return strfmt('[%1..%2]', this.start(), this.end());
     }
 
-    public static SysRangeInt construct(int _start = 1, int _end = maxint())
+    public static SysRangeInt construct(int start = 1, int end = maxint())
     {
-        SysRangeInt range = new SysRangeInt(_start, _end);
+        SysRangeInt range = new SysRangeInt(start, end);
 
         return range;
     }

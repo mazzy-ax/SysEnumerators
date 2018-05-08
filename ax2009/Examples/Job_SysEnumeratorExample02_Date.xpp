@@ -3,7 +3,7 @@
 //
 static void SysEnumeratorExample02_Date(Args _args)
 {
-    SysEnumerator se = SysEnumerator::newFromToDate(01\04\2018, 30\04\2018, 5);
+    SysEnumerator se = SysEnumerator::date(01\04\2018, 30\04\2018, 5);
 
     while( se.moveNext() )
     {

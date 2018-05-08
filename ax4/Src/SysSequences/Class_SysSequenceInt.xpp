@@ -1,28 +1,41 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysSequenceInt extends SysRangeInt implements ISysSequence, Enumerable
+public class SysSequenceInt extends SysSequence implements ISysSequence
 {
+    SysRangeInt range;
     int step;
 
     public SysSequenceInt clone()
     {
-        SysSequenceInt range = SysSequenceInt::construct(this.start(), this.end(), this.step());
+        SysSequenceInt sequence = SysSequenceInt::construct(this.range().start(), this.range().end(), this.step());
 
-        return range;
+        return sequence;
+    }
+
+    protected SysRangeInt defaultRange()
+    {
+        return SysRangeInt::construct();
+    }
+
+    public int end()
+    {
+        return this.range().end();
     }
 
     public boolean equal(SysSequenceInt sequence)
     {
-        boolean ret = super(sequence) && (this.step() == sequence.step());
+        boolean ret = sequence
+                      && (this.range().equal(sequence.range()))
+                      && (this.step() == sequence.step());
         return ret;
     }
 
     public SysIterations estimatedIterations()
     {
         SysIterations ret = SysEnumerator::IterationsMax();
-        int distance = this.distance();
-        boolean overflow = this.cover(0) && (distance <= 0);
+        int distance = this.range().distance();
+        boolean overflow = this.range().cover(0) && (distance <= 0);
 
         if( !overflow )
         {
@@ -50,7 +63,7 @@ public class SysSequenceInt extends SysRangeInt implements ISysSequence, Enumera
 
     public SysEnumerator getEnumerator()
     {
-        return SysEnumerator::newFromSequenceInt(this);
+        return SysEnumerator::sequenceInt(this);
     }
 
     public int getNext(int value)
@@ -58,24 +71,55 @@ public class SysSequenceInt extends SysRangeInt implements ISysSequence, Enumera
         return value + this.step();
     }
 
-    public void new(int _start = 1, int _end = maxint(), int _step = 1)
+    public void new(SysRangeInt _range, int _step = 1)
     {;
         Debug::assert(_step != 0);
 
-        super(_start, _end);
+        if ( !_range )
+        {
+            _range = this.defaultRange();
+        }
+
+        range = _range;
         step = _step;
+    }
+
+    public SysSequenceInt normalize()
+    {
+        SysSequenceInt sequence;
+
+        if( this.range().reversed() )
+        {
+            sequence = this.reverse();
+        }
+        else
+        {
+            sequence = this.clone();
+        }
+
+        return sequence;
+    }
+
+    public SysRangeInt range()
+    {
+        return range;
     }
 
     public SysSequenceInt reverse()
     {
-        SysSequenceInt sequence = SysSequenceInt::construct(this.end(), this.start(), this.reverseStep());
+        SysSequenceInt sequence = SysSequenceInt::construct(this.range().end(), this.range().start(), this.reverseStep());
 
         return sequence;
     }
 
     public int reverseStep()
     {
-        return -step;
+        return 0-step;
+    }
+
+    public int start()
+    {
+        return this.range().start();
     }
 
     public int step()
@@ -85,12 +129,20 @@ public class SysSequenceInt extends SysRangeInt implements ISysSequence, Enumera
 
     public str toString()
     {
-        return strfmt('%1:[%2]', this.step(), super());
+        return strfmt('%1:%2', this.step(), this.range().toString());
     }
 
-    public static SysSequenceInt construct(int _start = 1, int _end = maxint(), int _step = 1)
+    public static SysSequenceInt construct(int start = 1, int end = maxint(), int step = 1)
     {
-        SysSequenceInt sequence = new SysSequenceInt(_start, _end, _step);
+        SysRangeInt range = SysRangeInt::construct(start, end);
+        SysSequenceInt sequence = new SysSequenceInt(range, step);
+
+        return sequence;
+    }
+
+    public static SysSequenceInt newFromRange(SysRangeInt range, int step = 1)
+    {
+        SysSequenceInt sequence = new SysSequenceInt(range, step);
 
         return sequence;
     }

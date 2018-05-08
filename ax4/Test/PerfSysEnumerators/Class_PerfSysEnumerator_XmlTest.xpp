@@ -31,7 +31,7 @@ public class PerfSysEnumerator_XmlTest extends SysTestCase
         SysEnumerator_XmlNodeList se;
         int64 zero64;
 
-        SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        SysEnumerator loop = SysEnumerator::int(1, #loopCount);
         while(loop.moveNext())
         {
             se = SysEnumerator_XmlNodeList::construct(xmlDoc.selectNodes('root/element[1]/sub'));
@@ -91,7 +91,7 @@ public class PerfSysEnumerator_XmlTest extends SysTestCase
         SysEnumerator_XmlNodeListIndex se;
         int64 zero64;
 
-        SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        SysEnumerator loop = SysEnumerator::int(1, #loopCount);
         while(loop.moveNext())
         {
             se = SysEnumerator_XmlNodeListIndex::construct(xmlDoc.selectNodes('root/element[1]/sub'));
@@ -151,7 +151,7 @@ public class PerfSysEnumerator_XmlTest extends SysTestCase
         SysEnumerator_XmlSibling se;
         int64 zero64;
 
-        SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        SysEnumerator loop = SysEnumerator::int(1, #loopCount);
         while(loop.moveNext())
         {
             se = SysEnumerator_XmlSibling::construct(xmlDoc.root().firstChild().firstChild());

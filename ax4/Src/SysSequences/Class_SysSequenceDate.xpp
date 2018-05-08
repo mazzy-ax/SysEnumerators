@@ -1,27 +1,40 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysSequenceDate extends SysRangeDate implements ISysSequence, Enumerable
+public class SysSequenceDate extends SysSequence implements ISysSequence
 {
+    SysRangeDate range;
     int step;
 
     public SysSequenceDate clone()
     {
-        SysSequenceDate range = SysSequenceDate::construct(this.start(), this.end(), this.step());
+        SysSequenceDate sequence = SysSequenceDate::construct(this.range().start(), this.range().end(), this.step());
 
-        return range;
+        return sequence;
+    }
+
+    protected SysRangeDate defaultRange()
+    {
+        return SysRangeDate::construct();
+    }
+
+    public Date end()
+    {
+        return this.range().end();
     }
 
     public boolean equal(SysSequenceDate sequence)
     {
-        boolean ret = super(sequence) && (this.step() == sequence.step());
+        boolean ret = sequence
+                      && (this.range().equal(sequence.range()))
+                      && (this.step() == sequence.step());
         return ret;
     }
 
     public SysIterations estimatedIterations()
     {
         SysIterations ret = SysEnumerator::IterationsMax();
-        int distance = this.distance();
+        int distance = this.range().distance();
 
         if( distance == 0 )
         {
@@ -46,7 +59,7 @@ public class SysSequenceDate extends SysRangeDate implements ISysSequence, Enume
 
     public SysEnumerator getEnumerator()
     {
-        return SysEnumerator::newFromSequence(this);
+        return SysEnumerator::sequence(this);
     }
 
     public Date getNext(Date value)
@@ -54,17 +67,43 @@ public class SysSequenceDate extends SysRangeDate implements ISysSequence, Enume
         return value + this.step();
     }
 
-    public void new(date _start = DateNull(), date _end = DateMax(), int _step = 1)
+    public void new(SysRangeDate _range, int _step = 1)
     {;
         Debug::assert(_step != 0);
 
-        super(_start, _end);
+        if( !_range )
+        {
+            _range = this.defaultRange();
+        }
+
+        range = _range;
         step = _step;
+    }
+
+    public SysSequenceDate normalize()
+    {
+        SysSequenceDate sequence;
+
+        if( this.range().reversed() )
+        {
+            sequence = this.reverse();
+        }
+        else
+        {
+            sequence = this.clone();
+        }
+
+        return sequence;
+    }
+
+    public SysRangeDate range()
+    {
+        return range;
     }
 
     public SysSequenceDate reverse()
     {
-        SysSequenceDate sequence = SysSequenceDate::construct(this.end(), this.start(), this.reverseStep());
+        SysSequenceDate sequence = SysSequenceDate::construct(this.range().end(), this.range().start(), this.reverseStep());
 
         return sequence;
     }
@@ -74,6 +113,11 @@ public class SysSequenceDate extends SysRangeDate implements ISysSequence, Enume
         return 0-step;
     }
 
+    public Date start()
+    {
+        return this.range().start();
+    }
+
     public int step()
     {
         return step;
@@ -81,12 +125,20 @@ public class SysSequenceDate extends SysRangeDate implements ISysSequence, Enume
 
     public str toString()
     {
-        return strfmt('%1:[%2]', this.step(), super());
+        return strfmt('%1:%2', this.step(), this.range().toString());
     }
 
-    public static SysSequenceDate construct(date _start = DateNull(), date _end = DateMax(), int _step = 1)
+    public static SysSequenceDate construct(date start = DateNull(), date end = DateMax(), int step = 1)
     {
-        SysSequenceDate sequence = new SysSequenceDate(_start, _end, _step);
+        SysRangeDate range = SysRangeDate::construct(start, end);
+        SysSequenceDate sequence = new SysSequenceDate(range, step);
+
+        return sequence;
+    }
+
+    public static SysSequenceDate newFromRange(SysRangeDate range, int step = 1)
+    {
+        SysSequenceDate sequence = new SysSequenceDate(range, step);
 
         return sequence;
     }

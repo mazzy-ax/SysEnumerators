@@ -13,7 +13,7 @@ public class SysEnumeratorTest extends SysTestCase
         select dataArea;
         args.record(dataArea);
 
-        se = SysEnumerator::newFromArgsRecord(args);
+        se = SysEnumerator::argsRecord(args);
         this.assertNotNull(se);
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
 
@@ -86,7 +86,7 @@ public class SysEnumeratorTest extends SysTestCase
     public void testEnum()
     {
         ABC enum;
-        SysEnumerator se = SysEnumerator::newFromEnum(enum);
+        SysEnumerator se = SysEnumerator::enum(enum);
 
         this.assertNotNull(se);
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
@@ -121,7 +121,7 @@ public class SysEnumeratorTest extends SysTestCase
 
     public void testEnumId()
     {
-        SysEnumerator se = SysEnumerator::newFromEnumId(enumnum(ABC));
+        SysEnumerator se = SysEnumerator::enumId(enumnum(ABC));
 
         this.assertNotNull(se);
         this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());

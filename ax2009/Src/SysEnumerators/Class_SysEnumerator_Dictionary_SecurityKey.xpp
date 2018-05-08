@@ -39,7 +39,7 @@ public class SysEnumerator_Dictionary_SecurityKey extends SysEnumerator_Dictiona
         return ret;
     }
 
-    public static SysEnumerator_Dictionary_SecurityKey construct(Dictionary base, SysSequenceInt idx = null)
+    public static SysEnumerator_Dictionary_SecurityKey construct(Dictionary base = null, SysSequenceInt idx = null)
     {
         SysEnumerator_Dictionary_SecurityKey enumerator = new SysEnumerator_Dictionary_SecurityKey(base, idx);
 

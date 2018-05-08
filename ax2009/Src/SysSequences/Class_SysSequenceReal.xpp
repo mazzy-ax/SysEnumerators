@@ -63,7 +63,7 @@ public class SysSequenceReal extends SysSequence implements ISysSequence
 
     public SysEnumerator getEnumerator()
     {
-        return SysEnumerator::newFromToReal(this.range().start(), this.range().end(), this.step());
+        return SysEnumerator::real(this.range().start(), this.range().end(), this.step());
     }
 
     public real getNext(real value)

@@ -1,8 +1,12 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public interface ISysSequence extends ISysRange
+public interface ISysSequence
 {
+
+    public anyType end()
+    {
+    }
 
     public boolean equal(ISysSequence sequence)
     {
@@ -12,11 +16,31 @@ public interface ISysSequence extends ISysRange
     {
     }
 
+    public SysEnumerator getEnumerator()
+    {
+    }
+
     public anytype getNext(anytype value)
     {
     }
 
+    public SysSequenceAnytype normalize()
+    {
+    }
+
+    public SysRangeAnytype range()
+    {
+    }
+
     public ISysSequence reverse()
+    {
+    }
+
+    public anytype reverseStep()
+    {
+    }
+
+    public anytype start()
     {
     }
 

@@ -13,7 +13,7 @@ Formatversion: 1
     #//
     #static void SysEnumeratorExample01_Int(Args _args)
     #{
-    #    SysEnumerator se = SysEnumerator::newFromToInt(2, 9, 3);
+    #    SysEnumerator se = SysEnumerator::int(2, 9, 3);
     #
     #    while( se.moveNext() )
     #    {
@@ -34,7 +34,7 @@ Formatversion: 1
     #//
     #static void SysEnumeratorExample02_Date(Args _args)
     #{
-    #    SysEnumerator se = SysEnumerator::newFromToDate(01\04\2018, 30\04\2018, 5);
+    #    SysEnumerator se = SysEnumerator::date(01\04\2018, 30\04\2018, 5);
     #
     #    while( se.moveNext() )
     #    {
@@ -56,7 +56,7 @@ Formatversion: 1
     #static void SysEnumeratorExample03_Container(Args _args)
     #{
     #    container c = ['a', 'b', 1, 'd', systemdateget(), 'f'];
-    #    SysEnumerator se = SysEnumerator::newFromContainer(c);
+    #    SysEnumerator se = SysEnumerator::container(c);
     #
     #    while( se.moveNext() )
     #    {
@@ -78,7 +78,7 @@ Formatversion: 1
     #static void SysEnumeratorExample04_Enum(Args _args)
     #{
     #    LedgerTransType transType;
-    #    SysEnumerator se = SysEnumerator::newFromEnum(transType);
+    #    SysEnumerator se = SysEnumerator::enum(transType);
     #
     #    while( se.moveNext() )
     #    {
@@ -3404,7 +3404,7 @@ ENDDOC
       SOURCE #getEnumerator
         #public SysEnumerator getEnumerator()
         #{
-        #    return SysEnumerator::newFromSequence(this);
+        #    return SysEnumerator::sequence(this);
         #}
       ENDSOURCE
       SOURCE #getNext
@@ -3975,7 +3975,7 @@ ENDDOC
       SOURCE #getEnumerator
         #public SysEnumerator getEnumerator()
         #{
-        #    return SysEnumerator::newFromSequence(this);
+        #    return SysEnumerator::sequence(this);
         #}
       ENDSOURCE
       SOURCE #getNext
@@ -4542,7 +4542,7 @@ ENDDOC
       SOURCE #getEnumerator
         #public SysEnumerator getEnumerator()
         #{
-        #    return SysEnumerator::newFromSequenceInt(this);
+        #    return SysEnumerator::sequenceInt(this);
         #}
       ENDSOURCE
       SOURCE #getNext
@@ -4728,7 +4728,7 @@ ENDDOC
       SOURCE #getEnumerator
         #public SysEnumerator getEnumerator()
         #{
-        #    return SysEnumerator::newFromSequenceInt64(this);
+        #    return SysEnumerator::sequenceInt64(this);
         #}
       ENDSOURCE
       SOURCE #getNext
@@ -5696,7 +5696,7 @@ ENDDOC
       SOURCE #getEnumerator
         #public SysEnumerator getEnumerator()
         #{
-        #    return SysEnumerator::newFromToReal(this.range().start(), this.range().end(), this.step());
+        #    return SysEnumerator::real(this.range().start(), this.range().end(), this.step());
         #}
       ENDSOURCE
       SOURCE #getNext
@@ -6273,6 +6273,38 @@ ENDDOC
         #{
         #}
       ENDSOURCE
+      SOURCE #amount
+        #public static SysEnumerator amount(amount start = 0, amount end = RealMax(), amount step = 1)
+        #{
+        #    SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+        #    SysEnumerator enumerator = SysEnumerator::sequence(sequence);
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #ArgsRecord
+        #public static SysEnumerator argsRecord(Args _args)
+        #{
+        #    SysEnumerator enumerator;
+        #;
+        #    Debug::assert(_args != null);
+        #
+        #    enumerator = SysEnumerator::RecordMarked(_args.record());
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #Array
+        #public static SysEnumerator array(Array array, SysSequenceInt sequence = null)
+        #{
+        #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Array::construct(array, sequence));
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
       SOURCE #construct
         #public static SysEnumerator construct(xSysEnumerator enumerator = null, str name = '')
         #{
@@ -6280,6 +6312,72 @@ ENDDOC
         #;
         #    sysEnumerator.add(enumerator);
         #    return sysEnumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #container
+        #public static SysEnumerator container(container con, SysSequenceInt sequence = null)
+        #{
+        #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Container::construct(con, sequence));
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #date
+        #public static SysEnumerator date(date start = DateNull(), date end = DateMax(), int step = 1)
+        #{
+        #    SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
+        #    SysEnumerator enumerator = SysEnumerator::sequence(sequence);
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #enum
+        #public static SysEnumerator enum(anytype enum, SysSequenceInt sequence = null)
+        #{
+        #    SysEnumerator enumerator = SysEnumerator::enumId(DictEnum::value2id(enum), sequence);
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #enumFromTo
+        #public static SysEnumerator enumFromTo(anytype enumValueStart, anytype enumValueEnd = null)
+        #{
+        #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Enum::newFromTo(enumValueStart, enumValueEnd));
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #enumId
+        #public static SysEnumerator enumId(EnumId enumId, SysSequenceInt sequence = null)
+        #{
+        #    SysEnumerator enumerator = SysEnumerator::sysDictEnum(new SysDictEnum(enumId), sequence);
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #int
+        #public static SysEnumerator int(int start = 1, int end = maxint(), int step = 1)
+        #{
+        #    SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+        #    SysEnumerator enumerator = SysEnumerator::sequenceInt(sequence);
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #int64
+        #public static SysEnumerator int64(int64 start = 1, int64 end = maxRecId(), int64 step = 1)
+        #{
+        #    SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
+        #    SysEnumerator enumerator = SysEnumerator::sequenceInt64(sequence);
+        #
+        #    return enumerator;
         #}
         #
       ENDSOURCE
@@ -6296,57 +6394,8 @@ ENDDOC
         #    return int64Max();
         #}
       ENDSOURCE
-      SOURCE #newFromArgsRecord
-        #public static SysEnumerator newFromArgsRecord(Args _args)
-        #{
-        #    SysEnumerator enumerator;
-        #;
-        #    Debug::assert(_args != null);
-        #
-        #    enumerator = SysEnumerator::newFromRecordMarked(_args.record());
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromArray
-        #public static SysEnumerator newFromArray(Array array, SysSequenceInt sequence = null)
-        #{
-        #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Array::construct(array, sequence));
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromContainer
-        #public static SysEnumerator newFromContainer(container con, SysSequenceInt sequence = null)
-        #{
-        #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Container::construct(con, sequence));
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromEnum
-        #public static SysEnumerator newFromEnum(anytype enum, SysSequenceInt sequence = null)
-        #{
-        #    SysEnumerator enumerator = SysEnumerator::newFromEnumId(DictEnum::value2id(enum), sequence);
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromEnumId
-        #public static SysEnumerator newFromEnumId(EnumId enumId, SysSequenceInt sequence = null)
-        #{
-        #    SysEnumerator enumerator = SysEnumerator::newFromSysDictEnum(new SysDictEnum(enumId), sequence);
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromList
-        #public static SysEnumerator newFromList(List list)
+      SOURCE #list
+        #public static SysEnumerator list(List list)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_List::construct(list));
         #
@@ -6354,8 +6403,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromMap
-        #public static SysEnumerator newFromMap(Map map)
+      SOURCE #map
+        #public static SysEnumerator map(Map map)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Map::construct(map));
         #
@@ -6363,10 +6412,10 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromPackedContainer
-        #public static SysEnumerator newFromPackedContainer(container con, SysSequenceInt sequence = null)
+      SOURCE #packedContainer
+        #public static SysEnumerator packedContainer(container con, SysSequenceInt sequence = null)
         #{
-        #    SysEnumerator enumerator = SysEnumerator::newFromContainer(con, sequence);
+        #    SysEnumerator enumerator = SysEnumerator::container(con, sequence);
         #;
         #    enumerator.skip(); // first value - version
         #
@@ -6374,8 +6423,27 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromRecord
-        #public static SysEnumerator newFromRecord(Common record)
+      SOURCE #queryRun
+        #public static SysEnumerator queryRun(QueryRun queryRun, str name = 'queryRun')
+        #{
+        #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_QueryRun::construct(queryRun), name);
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #real
+        #public static SysEnumerator real(real start = 0, real end = RealMax(), real step = 1)
+        #{
+        #    SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+        #    SysEnumerator enumerator = SysEnumerator::sequence(sequence);
+        #
+        #    return enumerator;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #record
+        #public static SysEnumerator record(Common record)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Record::construct(record));
         #
@@ -6383,8 +6451,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromRecordMarked
-        #public static SysEnumerator newFromRecordMarked(Common record)
+      SOURCE #recordMarked
+        #public static SysEnumerator recordMarked(Common record)
         #{
         #    SysEnumerator   enumerator;
         #    FormDataSource  formDataSource;
@@ -6397,19 +6465,19 @@ ENDDOC
         #
         #    if( !enumerator )
         #    {
-        #        enumerator = SysEnumerator::newFromRecord(record);
+        #        enumerator = SysEnumerator::record(record);
         #    }
         #
         #    return enumerator;
         #}
         #
       ENDSOURCE
-      SOURCE #newFromRunBaseProgress
+      SOURCE #runBaseProgress
         ##AviFiles
-        #public static SysEnumerator newFromRunBaseProgress( RunBase runbase
-        #                                                  , Caption   caption    = ''
-        #                                                  , int64     total      = 0
-        #                                                  , Filename  animation  = #AviStopwatch)
+        #public static SysEnumerator runBaseProgress( RunBase runbase
+        #                                           , Caption   caption    = ''
+        #                                           , int64     total      = 0
+        #                                           , Filename  animation  = #AviStopwatch)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_RunBaseProgress::newFromRunBase(runbase, caption, total, animation), 'progress');
         #
@@ -6417,8 +6485,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromSequence
-        #public static SysEnumerator newFromSequence(ISysSequence sequence)
+      SOURCE #sequence
+        #public static SysEnumerator sequence(ISysSequence sequence)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Sequence::construct(sequence));
         #
@@ -6426,8 +6494,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromSequenceInt
-        #public static SysEnumerator newFromSequenceInt(SysSequenceInt sequence)
+      SOURCE #sequenceInt
+        #public static SysEnumerator sequenceInt(SysSequenceInt sequence)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Int::construct(sequence));
         #
@@ -6435,8 +6503,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromSequenceInt64
-        #public static SysEnumerator newFromSequenceInt64(SysSequenceInt64 sequence)
+      SOURCE #sequenceInt64
+        #public static SysEnumerator sequenceInt64(SysSequenceInt64 sequence)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Int64::construct(sequence));
         #
@@ -6444,8 +6512,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromSet
-        #public static SysEnumerator newFromSet(Set set)
+      SOURCE #set
+        #public static SysEnumerator set(Set set)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Set::construct(set));
         #
@@ -6453,8 +6521,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromStruct
-        #public static SysEnumerator newFromStruct(Struct struct, SysSequenceInt sequence = null)
+      SOURCE #struct
+        #public static SysEnumerator struct(Struct struct, SysSequenceInt sequence = null)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Struct::construct(struct, sequence));
         #
@@ -6462,8 +6530,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromSysDictEnum
-        #public static SysEnumerator newFromSysDictEnum(SysDictEnum sysDictEnum, SysSequenceInt sequence = null)
+      SOURCE #sysDictEnum
+        #public static SysEnumerator sysDictEnum(SysDictEnum sysDictEnum, SysSequenceInt sequence = null)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Enum::construct(sysDictEnum, sequence));
         #
@@ -6471,9 +6539,9 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromSysOperationProgress
+      SOURCE #sysOperationProgress
         ##AviFiles
-        #public static SysEnumerator newFromSysOperationProgress( SysOperationProgress progress = null
+        #public static SysEnumerator sysOperationProgress( SysOperationProgress progress = null
         #                                                       , Caption   caption     = ''
         #                                                       , int64     total       = 0
         #                                                       , Filename  animation   = #AviStopwatch)
@@ -6484,8 +6552,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromSystemCollection
-        #public static SysEnumerator newFromSystemCollection(System.Collections.IEnumerable collection)
+      SOURCE #systemCollection
+        #public static SysEnumerator systemCollection(System.Collections.IEnumerable collection)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_SystemCollection::construct(collection));
         #
@@ -6493,67 +6561,8 @@ ENDDOC
         #}
         #
       ENDSOURCE
-      SOURCE #newFromToAmount
-        #public static SysEnumerator newFromToAmount(amount start = 0, amount end = RealMax(), amount step = 1)
-        #{
-        #    SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
-        #    SysEnumerator enumerator = SysEnumerator::newFromSequence(sequence);
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromToDate
-        #public static SysEnumerator newFromToDate(date start = DateNull(), date end = DateMax(), int step = 1)
-        #{
-        #    SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-        #    SysEnumerator enumerator = SysEnumerator::newFromSequence(sequence);
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromToEnum
-        #public static SysEnumerator newFromToEnum(anytype enumValueStart, anytype enumValueEnd = null)
-        #{
-        #    SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Enum::newFromTo(enumValueStart, enumValueEnd));
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromToInt
-        #public static SysEnumerator newFromToInt(int start = 1, int end = maxint(), int step = 1)
-        #{
-        #    SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
-        #    SysEnumerator enumerator = SysEnumerator::newFromSequenceInt(sequence);
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromToInt64
-        #public static SysEnumerator newFromToInt64(int64 start = 1, int64 end = maxRecId(), int64 step = 1)
-        #{
-        #    SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
-        #    SysEnumerator enumerator = SysEnumerator::newFromSequenceInt64(sequence);
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromToReal
-        #public static SysEnumerator newFromToReal(real start = 0, real end = RealMax(), real step = 1)
-        #{
-        #    SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
-        #    SysEnumerator enumerator = SysEnumerator::newFromSequence(sequence);
-        #
-        #    return enumerator;
-        #}
-        #
-      ENDSOURCE
-      SOURCE #newFromXml
-        #public static SysEnumerator newFromXml(XmlNodeList node, SysSequenceInt sequence = null)
+      SOURCE #xml
+        #public static SysEnumerator xml(XmlNodeList node, SysSequenceInt sequence = null)
         #{
         #    SysEnumerator enumerator = SysEnumerator::construct();
         #
@@ -17709,7 +17718,7 @@ ENDDOC
         #    select dataArea;
         #    args.record(dataArea);
         #
-        #    se = SysEnumerator::newFromArgsRecord(args);
+        #    se = SysEnumerator::argsRecord(args);
         #    this.assertNotNull(se);
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
         #
@@ -17785,7 +17794,7 @@ ENDDOC
         #public void testEnum()
         #{
         #    ABC enum;
-        #    SysEnumerator se = SysEnumerator::newFromEnum(enum);
+        #    SysEnumerator se = SysEnumerator::enum(enum);
         #
         #    this.assertNotNull(se);
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
@@ -17821,7 +17830,7 @@ ENDDOC
       SOURCE #testEnumId
         #public void testEnumId()
         #{
-        #    SysEnumerator se = SysEnumerator::newFromEnumId(enumnum(ABC));
+        #    SysEnumerator se = SysEnumerator::enumId(enumnum(ABC));
         #
         #    this.assertNotNull(se);
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
@@ -17908,7 +17917,7 @@ ENDDOC
         #    SysEnumerator_XmlNodeList se;
         #    int64 zero64;
         #
-        #    SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        #    SysEnumerator loop = SysEnumerator::int(1, #loopCount);
         #    while(loop.moveNext())
         #    {
         #        se = SysEnumerator_XmlNodeList::construct(xmlDoc.selectNodes('root/element[1]/sub'));
@@ -17969,7 +17978,7 @@ ENDDOC
         #    SysEnumerator_XmlNodeListIndex se;
         #    int64 zero64;
         #
-        #    SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        #    SysEnumerator loop = SysEnumerator::int(1, #loopCount);
         #    while(loop.moveNext())
         #    {
         #        se = SysEnumerator_XmlNodeListIndex::construct(xmlDoc.selectNodes('root/element[1]/sub'));
@@ -18030,7 +18039,7 @@ ENDDOC
         #    SysEnumerator_XmlSibling se;
         #    int64 zero64;
         #
-        #    SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        #    SysEnumerator loop = SysEnumerator::int(1, #loopCount);
         #    while(loop.moveNext())
         #    {
         #        se = SysEnumerator_XmlSibling::construct(xmlDoc.root().firstChild().firstChild());
@@ -19433,7 +19442,7 @@ ENDDOC
         #    SysEnumerator_XmlNodeList se;
         #    int64 zero64;
         #
-        #    SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        #    SysEnumerator loop = SysEnumerator::int(1, #loopCount);
         #    while(loop.moveNext())
         #    {
         #        se = SysEnumerator_XmlNodeList::construct(xmlDoc.selectNodes('root/element[1]/sub'));
@@ -19494,7 +19503,7 @@ ENDDOC
         #    SysEnumerator_XmlNodeListIndex se;
         #    int64 zero64;
         #
-        #    SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        #    SysEnumerator loop = SysEnumerator::int(1, #loopCount);
         #    while(loop.moveNext())
         #    {
         #        se = SysEnumerator_XmlNodeListIndex::construct(xmlDoc.selectNodes('root/element[1]/sub'));
@@ -19555,7 +19564,7 @@ ENDDOC
         #    SysEnumerator_XmlSibling se;
         #    int64 zero64;
         #
-        #    SysEnumerator loop = SysEnumerator::newFromToInt(1, #loopCount);
+        #    SysEnumerator loop = SysEnumerator::int(1, #loopCount);
         #    while(loop.moveNext())
         #    {
         #        se = SysEnumerator_XmlSibling::construct(xmlDoc.root().firstChild().firstChild());
@@ -26790,7 +26799,7 @@ ENDDOC
         #    select dataArea;
         #    args.record(dataArea);
         #
-        #    se = SysEnumerator::newFromArgsRecord(args);
+        #    se = SysEnumerator::argsRecord(args);
         #    this.assertNotNull(se);
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
         #
@@ -26866,7 +26875,7 @@ ENDDOC
         #public void testEnum()
         #{
         #    ABC enum;
-        #    SysEnumerator se = SysEnumerator::newFromEnum(enum);
+        #    SysEnumerator se = SysEnumerator::enum(enum);
         #
         #    this.assertNotNull(se);
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
@@ -26902,7 +26911,7 @@ ENDDOC
       SOURCE #testEnumId
         #public void testEnumId()
         #{
-        #    SysEnumerator se = SysEnumerator::newFromEnumId(enumnum(ABC));
+        #    SysEnumerator se = SysEnumerator::enumId(enumnum(ABC));
         #
         #    this.assertNotNull(se);
         #    this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());

@@ -1,28 +1,41 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysSequenceInt64 extends SysRangeInt64 implements ISysSequence, Enumerable
+public class SysSequenceInt64 extends SysSequence implements ISysSequence
 {
+    SysRangeInt64 range;
     int64 step;
 
     public SysSequenceInt64 clone()
     {
-        SysSequenceInt64 range = SysSequenceInt64::construct(this.start(), this.end(), this.step());
+        SysSequenceInt64 sequence = SysSequenceInt64::construct(this.range().start(), this.range().end(), this.step());
 
-        return range;
+        return sequence;
+    }
+
+    protected SysRangeInt64 defaultRange()
+    {
+        return SysRangeInt64::construct(0,0);
+    }
+
+    public int64 end()
+    {
+        return this.range().end();
     }
 
     public boolean equal(SysSequenceInt64 sequence)
     {
-        boolean ret = super(sequence) && (this.step() == sequence.step());
+        boolean ret = sequence
+                      && (this.range().equal(sequence.range()))
+                      && (this.step() == sequence.step());
         return ret;
     }
 
     public SysIterations estimatedIterations()
     {
         SysIterations ret = SysEnumerator::IterationsMax();
-        int64 distance = this.distance();
-        boolean overflow = this.cover(0) && (distance <= 0);
+        int64 distance = this.range().distance();
+        boolean overflow = this.range().cover(0) && (distance <= 0);
 
         if( !overflow )
         {
@@ -50,7 +63,7 @@ public class SysSequenceInt64 extends SysRangeInt64 implements ISysSequence, Enu
 
     public SysEnumerator getEnumerator()
     {
-        return SysEnumerator::newFromSequenceInt64(this);
+        return SysEnumerator::sequenceInt64(this);
     }
 
     public int64 getNext(int64 value)
@@ -58,24 +71,50 @@ public class SysSequenceInt64 extends SysRangeInt64 implements ISysSequence, Enu
         return value + this.step();
     }
 
-    public void new(int64 _start = 1, int64 _end = int64Max(), int64 _step = 1)
+    public void new(SysRangeInt64 _range, int64 _step = 1)
     {;
         Debug::assert(_step != 0);
 
-        super(_start, _end);
+        range = _range;
         step = _step;
+    }
+
+    public SysSequenceInt64 normalize()
+    {
+        SysSequenceInt64 sequence;
+
+        if( this.range().reversed() )
+        {
+            sequence = this.reverse();
+        }
+        else
+        {
+            sequence = this.clone();
+        }
+
+        return sequence;
+    }
+
+    public SysRangeInt64 range()
+    {
+        return range;
     }
 
     public SysSequenceInt64 reverse()
     {
-        SysSequenceInt64 sequence = SysSequenceInt64::construct(this.end(), this.start(), this.reverseStep());
+        SysSequenceInt64 sequence = SysSequenceInt64::construct(this.range().end(), this.range().start(), this.reverseStep());
 
         return sequence;
     }
 
     public int64 reverseStep()
     {
-        return -step;
+        return 0-step;
+    }
+
+    public int64 start()
+    {
+        return this.range().start();
     }
 
     public int64 step()
@@ -85,12 +124,20 @@ public class SysSequenceInt64 extends SysRangeInt64 implements ISysSequence, Enu
 
     public str toString()
     {
-        return strfmt('%1:[%2]', this.step(), super());
+        return strfmt('%1:%2', this.step(), this.range().toString());
     }
 
-    public static SysSequenceInt64 construct(int64 _start = 1, int64 _end = int64Max(), int64 _step = 1)
+    public static SysSequenceInt64 construct(int64 start = 1, int64 end = int64Max(), int64 step = 1)
     {
-        SysSequenceInt64 sequence = new SysSequenceInt64(_start, _end, _step);
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+        SysSequenceInt64 sequence = new SysSequenceInt64(range, step);
+
+        return sequence;
+    }
+
+    public static SysSequenceInt64 newFromRange(SysRangeInt64 range, int64 step = 1)
+    {
+        SysSequenceInt64 sequence = new SysSequenceInt64(range, step);
 
         return sequence;
     }

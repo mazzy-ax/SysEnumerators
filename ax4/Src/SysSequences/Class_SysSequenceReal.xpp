@@ -1,28 +1,41 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysSequenceReal extends SysRangeReal implements ISysSequence, Enumerable
+public class SysSequenceReal extends SysSequence implements ISysSequence
 {
+    SysRangeReal range;
     real step;
 
     public SysSequenceReal clone()
     {
-        SysSequenceReal range = SysSequenceReal::construct(this.start(), this.end(), this.step());
+        SysSequenceReal sequence = SysSequenceReal::construct(this.range().start(), this.range().end(), this.step());
 
-        return range;
+        return sequence;
+    }
+
+    protected SysRangeReal defaultRange()
+    {
+        return SysRangeReal::construct();
+    }
+
+    public real end()
+    {
+        return this.range().end();
     }
 
     public boolean equal(SysSequenceReal sequence)
     {
-        boolean ret = super(sequence) && (this.step() == sequence.step());
+        boolean ret = sequence
+                      && (this.range().equal(sequence.range()))
+                      && (this.step() == sequence.step());
         return ret;
     }
 
     public SysIterations estimatedIterations()
     {
         SysIterations ret = SysEnumerator::IterationsMax();
-        Amount distance = this.distance();
-        boolean overflow = this.cover(0) && (distance <= 0.00001);
+        Amount distance = this.range().distance();
+        boolean overflow = this.range().cover(0) && (distance <= 0.00001);
 
         if( !overflow )
         {
@@ -50,7 +63,7 @@ public class SysSequenceReal extends SysRangeReal implements ISysSequence, Enume
 
     public SysEnumerator getEnumerator()
     {
-        return SysEnumerator::newFromToReal(this.start(), this.end(), this.step());
+        return SysEnumerator::real(this.range().start(), this.range().end(), this.step());
     }
 
     public real getNext(real value)
@@ -58,17 +71,43 @@ public class SysSequenceReal extends SysRangeReal implements ISysSequence, Enume
         return value + this.step();
     }
 
-    public void new(real _start = 1.0, real _end = RealMax(), real _step = 1.0)
+    public void new(SysRangeReal _range, real _step = 1.0)
     {;
         Debug::assert(_step != 0.0);
 
-        super(_start, _end);
+        if ( !_range )
+        {
+            _range = this.defaultRange();
+        }
+
+        range = _range;
         step = _step;
+    }
+
+    public SysSequenceReal normalize()
+    {
+        SysSequenceReal sequence;
+
+        if( this.range().reversed() )
+        {
+            sequence = this.reverse();
+        }
+        else
+        {
+            sequence = this.clone();
+        }
+
+        return sequence;
+    }
+
+    public SysRangeReal range()
+    {
+        return range;
     }
 
     public SysSequenceReal reverse()
     {
-        SysSequenceReal sequence = SysSequenceReal::construct(this.end(), this.start(), this.reverseStep());
+        SysSequenceReal sequence = SysSequenceReal::construct(this.range().end(), this.range().start(), this.reverseStep());
 
         return sequence;
     }
@@ -78,6 +117,11 @@ public class SysSequenceReal extends SysRangeReal implements ISysSequence, Enume
         return -step;
     }
 
+    public real start()
+    {
+        return this.range().start();
+    }
+
     public real step()
     {
         return step;
@@ -85,12 +129,20 @@ public class SysSequenceReal extends SysRangeReal implements ISysSequence, Enume
 
     public str toString()
     {
-        return strfmt('%1:[%2]', this.step(), super());
+        return strfmt('%1:%2', this.step(), this.range().toString());
     }
 
-    public static SysSequenceReal construct(real _start = 1, real _end = RealMax(), real _step = 1)
+    public static SysSequenceReal construct(real start = 1.0, real end = RealMax(), real step = 1.0)
     {
-        SysSequenceReal sequence = new SysSequenceReal(_start, _end, _step);
+        SysRangeReal range = SysRangeReal::construct(start, end);
+        SysSequenceReal sequence = new SysSequenceReal(range, step);
+
+        return sequence;
+    }
+
+    public static SysSequenceReal newFromRange(SysRangeReal range, real step = 1.0)
+    {
+        SysSequenceReal sequence = new SysSequenceReal(range, step);
 
         return sequence;
     }

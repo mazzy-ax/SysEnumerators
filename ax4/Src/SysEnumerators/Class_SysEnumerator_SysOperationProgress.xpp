@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
+public class SysEnumerator_SysOperationProgress extends SysEnumerator_Indexed64
 {
     #AviFiles
 
@@ -31,6 +31,21 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
         boolean ret = super() && this.next();
 
         return ret;
+    }
+
+    public int64 current()
+    {
+        return this.currentIdx();
+    }
+
+    public int64 currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public int64 currentValue()
+    {
+        return this.currentIdx();
     }
 
     public SysIterations estimatedIterations(SysIterations estimatedIterations = -1)
@@ -98,6 +113,23 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
     {
         this.base().reset();
         super();
+    }
+
+    public str toString()
+    {
+        str ret;
+        SysIterations estimated = this.estimatedIterations();
+
+        if( estimated <= 0 || estimated == SysEnumerator::IterationsMax() )
+        {
+            ret = strfmt('%1', this.currentIdx());
+        }
+        else
+        {
+            ret = strfmt('%1/%2', this.currentIdx(), estimated);
+        }
+
+        return ret;
     }
 
     public static SysEnumerator_SysOperationProgress construct(SysOperationProgress base = null

@@ -1,7 +1,7 @@
 ﻿//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
-public class SysRangeDate implements ISysRange
+public class SysRangeDate extends SysRange implements ISysRange
 {
     date start;
     date end;
@@ -55,7 +55,7 @@ public class SysRangeDate implements ISysRange
         return (value == this.start()) || (value == this.end());
     }
 
-    public void new(date _start = datenull(), date _end = dateMax())
+    public void new(date _start = dateNull(), date _end = dateMax())
     {
         start = _start;
         end = _end;
@@ -98,7 +98,7 @@ public class SysRangeDate implements ISysRange
     public str toString()
     {
         // SysQuery::range() is not nice
-        return strfmt('%1..%2', this.start(), this.end());
+        return strfmt('[%1..%2]', this.start(), this.end());
     }
 
     public static SysRangeDate construct(Date start = dateNull(), date end = dateMax())

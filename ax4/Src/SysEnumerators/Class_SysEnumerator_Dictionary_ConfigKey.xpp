@@ -39,7 +39,7 @@ public class SysEnumerator_Dictionary_ConfigKey extends SysEnumerator_Dictionary
         return ret;
     }
 
-    public static SysEnumerator_Dictionary_ConfigKey construct(Dictionary base, SysSequenceInt idx = null)
+    public static SysEnumerator_Dictionary_ConfigKey construct(Dictionary base = null, SysSequenceInt idx = null)
     {
         SysEnumerator_Dictionary_ConfigKey enumerator = new SysEnumerator_Dictionary_ConfigKey(base, idx);
 

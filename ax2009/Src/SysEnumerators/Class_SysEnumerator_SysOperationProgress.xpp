@@ -115,6 +115,23 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Indexed64
         super();
     }
 
+    public str toString()
+    {
+        str ret;
+        SysIterations estimated = this.estimatedIterations();
+
+        if( estimated <= 0 || estimated == SysEnumerator::IterationsMax() )
+        {
+            ret = strfmt('%1', this.currentIdx());
+        }
+        else
+        {
+            ret = strfmt('%1/%2', this.currentIdx(), estimated);
+        }
+
+        return ret;
+    }
+
     public static SysEnumerator_SysOperationProgress construct(SysOperationProgress base = null
                                                              , Caption   caption    = ''
                                                              , int64     total      = 0

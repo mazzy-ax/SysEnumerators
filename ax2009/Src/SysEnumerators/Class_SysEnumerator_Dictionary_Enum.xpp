@@ -39,7 +39,7 @@ public class SysEnumerator_Dictionary_Enum extends SysEnumerator_Dictionary
         return ret;
     }
 
-    public static SysEnumerator_Dictionary_Enum construct(Dictionary base, SysSequenceInt idx = null)
+    public static SysEnumerator_Dictionary_Enum construct(Dictionary base = null, SysSequenceInt idx = null)
     {
         SysEnumerator_Dictionary_Enum enumerator = new SysEnumerator_Dictionary_Enum(base, idx);
 

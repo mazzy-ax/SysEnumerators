@@ -18,12 +18,100 @@
 public class SysEnumerator extends SysEnumeratorGroup
 {
 
-    public static SysEnumerator construct(xSysEnumerator enumerator = null)
+    public static SysEnumerator amount(amount start = 0, amount end = RealMax(), amount step = 1)
+    {
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+        SysEnumerator enumerator = SysEnumerator::sequence(sequence);
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator argsRecord(Args _args)
+    {
+        SysEnumerator enumerator;
+    ;
+        Debug::assert(_args != null);
+
+        enumerator = SysEnumerator::RecordMarked(_args.record());
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator array(Array array, SysSequenceInt sequence = null)
+    {
+        SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Array::construct(array, sequence));
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator construct(xSysEnumerator enumerator = null, str name = '')
     {
         SysEnumerator sysEnumerator = new SysEnumerator();
     ;
         sysEnumerator.add(enumerator);
         return sysEnumerator;
+    }
+
+
+    public static SysEnumerator container(container con, SysSequenceInt sequence = null)
+    {
+        SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Container::construct(con, sequence));
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator date(date start = DateNull(), date end = DateMax(), int step = 1)
+    {
+        SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
+        SysEnumerator enumerator = SysEnumerator::sequence(sequence);
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator enum(anytype enum, SysSequenceInt sequence = null)
+    {
+        SysEnumerator enumerator = SysEnumerator::enumId(DictEnum::value2id(enum), sequence);
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator enumFromTo(anytype enumValueStart, anytype enumValueEnd = null)
+    {
+        SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Enum::newFromTo(enumValueStart, enumValueEnd));
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator enumId(EnumId enumId, SysSequenceInt sequence = null)
+    {
+        SysEnumerator enumerator = SysEnumerator::sysDictEnum(new SysDictEnum(enumId), sequence);
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator int(int start = 1, int end = maxint(), int step = 1)
+    {
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+        SysEnumerator enumerator = SysEnumerator::sequenceInt(sequence);
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator int64(int64 start = 1, int64 end = maxRecId(), int64 step = 1)
+    {
+        SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
+        SysEnumerator enumerator = SysEnumerator::sequenceInt64(sequence);
+
+        return enumerator;
     }
 
 
@@ -38,51 +126,7 @@ public class SysEnumerator extends SysEnumeratorGroup
         return int64Max();
     }
 
-    public static SysEnumerator newFromArgsRecord(Args _args)
-    {
-        SysEnumerator enumerator;
-    ;
-        Debug::assert(_args != null);
-
-        enumerator = SysEnumerator::newFromRecordMarked(_args.record());
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromArray(Array array, SysSequenceInt sequence = null)
-    {
-        SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Array::construct(array, sequence));
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromContainer(container con, SysSequenceInt sequence = null)
-    {
-        SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Container::construct(con, sequence));
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromEnum(anytype enum, SysSequenceInt sequence = null)
-    {
-        SysEnumerator enumerator = SysEnumerator::newFromEnumId(DictEnum::value2id(enum), sequence);
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromEnumId(EnumId enumId, SysSequenceInt sequence = null)
-    {
-        SysEnumerator enumerator = SysEnumerator::newFromSysDictEnum(new SysDictEnum(enumId), sequence);
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromList(List list)
+    public static SysEnumerator list(List list)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_List::construct(list));
 
@@ -90,7 +134,7 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromMap(Map map)
+    public static SysEnumerator map(Map map)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Map::construct(map));
 
@@ -98,9 +142,9 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromPackedContainer(container con, SysSequenceInt sequence = null)
+    public static SysEnumerator packedContainer(container con, SysSequenceInt sequence = null)
     {
-        SysEnumerator enumerator = SysEnumerator::newFromContainer(con, sequence);
+        SysEnumerator enumerator = SysEnumerator::container(con, sequence);
     ;
         enumerator.skip(); // first value - version
 
@@ -108,7 +152,24 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromRecord(Common record)
+    public static SysEnumerator queryRun(QueryRun queryRun, str name = 'queryRun')
+    {
+        SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_QueryRun::construct(queryRun), name);
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator real(real start = 0, real end = RealMax(), real step = 1)
+    {
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+        SysEnumerator enumerator = SysEnumerator::sequence(sequence);
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator record(Common record)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Record::construct(record));
 
@@ -116,7 +177,7 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromRecordMarked(Common record)
+    public static SysEnumerator recordMarked(Common record)
     {
         SysEnumerator   enumerator;
         FormDataSource  formDataSource;
@@ -129,7 +190,7 @@ public class SysEnumerator extends SysEnumeratorGroup
 
         if( !enumerator )
         {
-            enumerator = SysEnumerator::newFromRecord(record);
+            enumerator = SysEnumerator::record(record);
         }
 
         return enumerator;
@@ -137,18 +198,18 @@ public class SysEnumerator extends SysEnumeratorGroup
 
 
     #AviFiles
-    public static SysEnumerator newFromRunBaseProgress( RunBase runbase
-                                                      , Caption   caption    = ''
-                                                      , int64     total      = 0
-                                                      , Filename  animation  = #AviStopwatch)
+    public static SysEnumerator runBaseProgress( RunBase runbase
+                                               , Caption   caption    = ''
+                                               , int64     total      = 0
+                                               , Filename  animation  = #AviStopwatch)
     {
-        SysEnumerator enumerator = SysEnumerator::construct().add(SysEnumerator_RunBaseProgress::newFromRunBase(runbase, caption, total, animation), 'progress');
+        SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_RunBaseProgress::newFromRunBase(runbase, caption, total, animation), 'progress');
 
         return enumerator;
     }
 
 
-    public static SysEnumerator newFromSequence(ISysSequence sequence)
+    public static SysEnumerator sequence(ISysSequence sequence)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Sequence::construct(sequence));
 
@@ -156,7 +217,7 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromSequenceInt(SysSequenceInt sequence)
+    public static SysEnumerator sequenceInt(SysSequenceInt sequence)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Int::construct(sequence));
 
@@ -164,7 +225,7 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromSequenceInt64(SysSequenceInt64 sequence)
+    public static SysEnumerator sequenceInt64(SysSequenceInt64 sequence)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Int64::construct(sequence));
 
@@ -172,7 +233,7 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromSet(Set set)
+    public static SysEnumerator set(Set set)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Set::construct(set));
 
@@ -180,7 +241,7 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromStruct(Struct struct, SysSequenceInt sequence = null)
+    public static SysEnumerator struct(Struct struct, SysSequenceInt sequence = null)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Struct::construct(struct, sequence));
 
@@ -188,7 +249,7 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromSysDictEnum(SysDictEnum sysDictEnum, SysSequenceInt sequence = null)
+    public static SysEnumerator sysDictEnum(SysDictEnum sysDictEnum, SysSequenceInt sequence = null)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Enum::construct(sysDictEnum, sequence));
 
@@ -196,7 +257,19 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromSystemCollection(System.Collections.IEnumerable collection)
+    #AviFiles
+    public static SysEnumerator sysOperationProgress( SysOperationProgress progress = null
+                                                           , Caption   caption     = ''
+                                                           , int64     total       = 0
+                                                           , Filename  animation   = #AviStopwatch)
+    {
+        SysEnumerator   enumerator  = SysEnumerator::construct(SysEnumerator_SysOperationProgress::construct(progress, caption, total, animation), 'progress');
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator systemCollection(System.Collections.IEnumerable collection)
     {
         SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_SystemCollection::construct(collection));
 
@@ -204,60 +277,7 @@ public class SysEnumerator extends SysEnumeratorGroup
     }
 
 
-    public static SysEnumerator newFromToAmount(amount start = 0, amount end = RealMax(), amount step = 1)
-    {
-        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
-        SysEnumerator enumerator = SysEnumerator::newFromSequence(sequence);
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromToDate(date start = DateNull(), date end = DateMax(), int step = 1)
-    {
-        SysSequenceDate sequence = SysSequenceDate::construct(start, end, step);
-        SysEnumerator enumerator = SysEnumerator::newFromSequence(sequence);
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromToEnum(anytype enumValueStart, anytype enumValueEnd = null)
-    {
-        SysEnumerator enumerator = SysEnumerator::construct(SysEnumerator_Enum::newFromTo(enumValueStart, enumValueEnd));
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromToInt(int start = 1, int end = maxint(), int step = 1)
-    {
-        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
-        SysEnumerator enumerator = SysEnumerator::newFromSequenceInt(sequence);
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromToInt64(int64 start = 1, int64 end = maxRecId(), int64 step = 1)
-    {
-        SysSequenceInt64 sequence = SysSequenceInt64::construct(start, end, step);
-        SysEnumerator enumerator = SysEnumerator::newFromSequenceInt64(sequence);
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromToReal(real start = 0, real end = RealMax(), real step = 1)
-    {
-        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
-        SysEnumerator enumerator = SysEnumerator::newFromSequence(sequence);
-
-        return enumerator;
-    }
-
-
-    public static SysEnumerator newFromXml(XmlNodeList node, SysSequenceInt sequence = null)
+    public static SysEnumerator xml(XmlNodeList node, SysSequenceInt sequence = null)
     {
         SysEnumerator enumerator = SysEnumerator::construct();
 

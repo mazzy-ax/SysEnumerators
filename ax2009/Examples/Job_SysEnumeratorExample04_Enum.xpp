@@ -4,7 +4,7 @@
 static void SysEnumeratorExample04_Enum(Args _args)
 {
     LedgerTransType transType;
-    SysEnumerator se = SysEnumerator::newFromEnum(transType);
+    SysEnumerator se = SysEnumerator::enum(transType);
 
     while( se.moveNext() )
     {

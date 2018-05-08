@@ -58,7 +58,7 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
-    protected ISysEnumerator currentEnumerator(SysEnumerator enumerator = null)
+    protected ISysEnumerator currentEnumerator(xSysEnumerator enumerator = null)
     {
         if( !prmisdefault(enumerator) )
         {
@@ -78,7 +78,7 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
-    protected ISysEnumerator currentIdxEnumerator(SysEnumerator enumerator = null)
+    protected ISysEnumerator currentIdxEnumerator(xSysEnumerator enumerator = null)
     {
         if( !prmisdefault(enumerator)
          && (enumerator.currentIdxProvided() || (currentIdxEnumerator == null)) )
@@ -99,7 +99,7 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
-    protected ISysEnumerator currentKeyEnumerator(SysEnumerator enumerator = null)
+    protected ISysEnumerator currentKeyEnumerator(xSysEnumerator enumerator = null)
     {
         if( !prmisdefault(enumerator)
          && (enumerator.currentKeyProvided() || (currentKeyEnumerator == null)) )
@@ -120,7 +120,7 @@ public abstract class SysEnumeratorGroup extends xSysEnumerator
         return ret;
     }
 
-    protected ISysEnumerator currentValueEnumerator(SysEnumerator enumerator = null)
+    protected ISysEnumerator currentValueEnumerator(xSysEnumerator enumerator = null)
     {
         if( !prmisdefault(enumerator)
          && (enumerator.currentValueProvided() || (currentValueEnumerator == null)) )

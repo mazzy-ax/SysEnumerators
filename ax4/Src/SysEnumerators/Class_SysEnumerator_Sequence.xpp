@@ -64,7 +64,7 @@ public class SysEnumerator_Sequence extends xSysEnumerator
 
     protected boolean more()
     {
-        boolean ret = this.base().contains(current);
+        boolean ret = this.base().range().contains(current);
 
         return ret;
     }

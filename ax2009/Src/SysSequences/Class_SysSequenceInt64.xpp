@@ -63,7 +63,7 @@ public class SysSequenceInt64 extends SysSequence implements ISysSequence
 
     public SysEnumerator getEnumerator()
     {
-        return SysEnumerator::newFromSequenceInt64(this);
+        return SysEnumerator::sequenceInt64(this);
     }
 
     public int64 getNext(int64 value)

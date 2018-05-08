@@ -39,7 +39,7 @@ public class SysEnumerator_Dictionary_LicenseCode extends SysEnumerator_Dictiona
         return ret;
     }
 
-    public static SysEnumerator_Dictionary_LicenseCode construct(Dictionary base, SysSequenceInt idx = null)
+    public static SysEnumerator_Dictionary_LicenseCode construct(Dictionary base = null, SysSequenceInt idx = null)
     {
         SysEnumerator_Dictionary_LicenseCode enumerator = new SysEnumerator_Dictionary_LicenseCode(base, idx);
 

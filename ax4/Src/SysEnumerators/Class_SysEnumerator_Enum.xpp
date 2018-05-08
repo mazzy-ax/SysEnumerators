@@ -91,8 +91,8 @@ public class SysEnumerator_Enum extends SysEnumerator_Indexed
             endEnumIdx = base.values() - 1;
         }
 
-        sequence = new SysSequenceInt(startEnumIdx, endEnumIdx, 1);
-        enumerator = new SysEnumerator_Enum(base, sequence);
+        sequence = SysSequenceInt::construct(startEnumIdx, endEnumIdx, 1);
+        enumerator = SysEnumerator_Enum::construct(base, sequence);
 
         return enumerator;
     }

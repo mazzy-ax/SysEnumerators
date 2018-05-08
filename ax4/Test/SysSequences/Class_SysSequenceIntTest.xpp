@@ -16,7 +16,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -34,7 +34,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -52,7 +52,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -65,7 +65,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(1, sequence.start());
         this.assertEquals(maxint(), sequence.end());
-        this.assertEquals(maxint()-1, sequence.distance());
+        this.assertEquals(maxint()-1, sequence.range().distance());
         this.assertEquals(1, sequence.step());
 
         this.assertEquals(any2int64(maxint()), sequence.estimatedIterations());
@@ -83,7 +83,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -126,7 +126,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -144,7 +144,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -162,7 +162,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -180,7 +180,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -198,7 +198,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -216,7 +216,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -234,7 +234,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -252,7 +252,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -270,7 +270,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -288,7 +288,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(start, sequence.start());
         this.assertEquals(end, sequence.end());
-        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(end - start, sequence.range().distance());
         this.assertEquals(step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -306,7 +306,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
-        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(start - end, sequence.range().distance());
         this.assertEquals(-step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -324,7 +324,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
-        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(start - end, sequence.range().distance());
         this.assertEquals(-step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());
@@ -342,7 +342,7 @@ public class SysSequenceIntTest extends SysTestCase
         this.assertNotNull(sequence);
         this.assertEquals(end, sequence.start());
         this.assertEquals(start, sequence.end());
-        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(start - end, sequence.range().distance());
         this.assertEquals(-step, sequence.step());
 
         this.assertEquals(iterations, sequence.estimatedIterations());

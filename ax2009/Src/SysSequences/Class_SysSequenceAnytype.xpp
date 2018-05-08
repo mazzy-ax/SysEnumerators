@@ -40,7 +40,7 @@ public class SysSequenceAnytype extends SysSequence implements ISysSequence
 
     public SysEnumerator getEnumerator()
     {
-        return SysEnumerator::newFromSequence(this);
+        return SysEnumerator::sequence(this);
     }
 
     public anytype getNext(anytype value)

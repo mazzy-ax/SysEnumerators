@@ -59,7 +59,7 @@ public class SysSequenceDate extends SysSequence implements ISysSequence
 
     public SysEnumerator getEnumerator()
     {
-        return SysEnumerator::newFromSequence(this);
+        return SysEnumerator::sequence(this);
     }
 
     public Date getNext(Date value)
