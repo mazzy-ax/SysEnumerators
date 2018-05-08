@@ -5,7 +5,7 @@
 ![SysEnumeratorExample01_Int](../Media/Example01.png)
 
 ```java
-SysEnumerator se = SysEnumerator::newFromToInt(2, 9, 3);
+SysEnumerator se = SysEnumerator::int(2, 9, 3);
 
 while( se.moveNext() )
 {
@@ -18,7 +18,7 @@ while( se.moveNext() )
 ![SysEnumeratorExample02_Date](../Media/Example02.png)
 
 ```java
-SysEnumerator se = SysEnumerator::newFromToDate(01\04\2018, 30\04\2018, 5);
+SysEnumerator se = SysEnumerator::date(01\04\2018, 30\04\2018, 5);
 
 while( se.moveNext() )
 {
@@ -32,7 +32,7 @@ while( se.moveNext() )
 
 ```java
 container c = ['a', 'b', 1, 'd', systemdateget(), 'f'];
-SysEnumerator se = SysEnumerator::newFromContainer(c);
+SysEnumerator se = SysEnumerator::container(c);
 
 while( se.moveNext() )
 {
@@ -46,7 +46,7 @@ while( se.moveNext() )
 
 ```java
 LedgerTransType transType;
-SysEnumerator se = SysEnumerator::newFromEnum(transType);
+SysEnumerator se = SysEnumerator::enum(transType);
 
 while( se.moveNext() )
 {
@@ -60,7 +60,7 @@ while( se.moveNext() )
 
 ```java
 LedgerTransType transType;
-SysEnumerator se = SysEnumerator::newFromEnum(transType);
+SysEnumerator se = SysEnumerator::enum(transType);
 
 while( se.moveNext() )
 {
