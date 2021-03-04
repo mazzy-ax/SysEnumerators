@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
@@ -64,9 +64,9 @@ public class SysEnumerator_SysOperationProgress extends SysEnumerator_Int64
     {
         base = this.baseOrDefault(_base);
 
-        if( base.getTotal() )
+        if( base && base.getTotal() )
         {
-            super(SysSequenceInt64::construct(_base.getCount_RU(), base.getTotal()));
+            super(SysSequenceInt64::construct(base.getCount_RU(), base.getTotal()));
         }
         else
         {

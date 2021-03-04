@@ -1,0 +1,117 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+// TODO добавить SysEnumerator_SequenceDate, SysEnumerator_SequenceInt, SysEnumerator_SequenceInt64
+public class SysEnumerator_Sequence extends xSysEnumerator
+{
+    ISysSequence    sequence;
+    anytype         current;
+
+    public ISysSequence base()
+    {
+        return sequence;
+    }
+
+
+    protected ISysSequence baseOrDefault(ISysSequence _sequence = null)
+    {
+        if( !_sequence )
+        {
+            _sequence = SysSequenceInt::construct(1, 0);
+        }
+
+        return _sequence;
+    }
+
+
+    protected boolean begin()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            current = this.base().xStart();
+        }
+
+        return ret;
+    }
+
+    public anytype current()
+    {
+        return current;
+    }
+
+    public anytype currentIdx()
+    {
+        return this.current();
+    }
+
+    public anytype currentKey()
+    {
+        return this.current();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = this.base().estimatedIterations();
+
+        return ret;
+    }
+
+    protected boolean more()
+    {
+        boolean ret = this.base().xContains(current);
+
+        return ret;
+    }
+
+    public void new(ISysSequence _sequence = null)
+    {
+        sequence = this.baseOrDefault(_sequence);
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            current = this.base().xGetNext(current);
+        }
+
+        return ret;
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_Sequence construct(ISysSequence sequence = null)
+    {
+        SysEnumerator_Sequence enumerator = new SysEnumerator_Sequence(sequence);
+
+        return enumerator;
+    }
+}

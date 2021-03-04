@@ -1,0 +1,61 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictTable_FieldGroup extends SysEnumerator_DictTable
+{
+
+    public str current()
+    {
+        int idx = this.currentIdx();
+        str ret = this.base().fieldGroup(idx);
+
+        return ret;
+    }
+
+    public str currentKey()
+    {
+        return this.current();
+    }
+
+    //TODO mazzy: SysDictField??
+    public DictFieldGroup currentValue()
+    {
+        DictFieldGroup dictFieldGroup = new DictFieldGroup(this.base().id(), this.current());
+
+        return dictFieldGroup;
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().fieldGroupCnt();
+
+        return ret;
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_DictTable_FieldGroup construct(DictTable base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_DictTable_FieldGroup enumerator = new SysEnumerator_DictTable_FieldGroup(base, idx);
+
+        return enumerator;
+    }
+}

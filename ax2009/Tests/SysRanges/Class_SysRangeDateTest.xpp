@@ -1,0 +1,250 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRangeDateTest extends SysTestCase
+{
+
+    void test1st()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+
+        this.assertNotNull(range);
+        this.assertEquals(start, range.start());
+        this.assertEquals(end, range.end());
+    }
+
+    void test1stDefault()
+    {
+        SysRangeDate range = SysRangeDate::construct();
+
+        this.assertNotNull(range);
+
+        this.assertEquals(DateNull(), range.start());
+        this.assertEquals(DateMax(), range.end());
+    }
+
+    void testClone()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+        SysRangeDate clone = range.clone();
+
+        this.assertNotNull(range);
+        this.assertNotNull(clone);
+
+        this.assertEquals(range.start(), clone.start());
+        this.assertEquals(range.end(), clone.end());
+        this.assertEquals(range.distance(), clone.distance());
+        this.assertEquals(range.reversed(), clone.reversed());
+    }
+
+    void testContains()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.contains(start));
+        this.assertTrue(range.contains(end));
+        this.assertTrue(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testContainsEmpty()
+    {
+        Date start = 31\12\2017;
+        Date end = 20\01\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.contains(start));
+        this.assertFalse(range.contains(end));
+        this.assertFalse(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testCover()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertTrue(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testCoverEmpty()
+    {
+        Date start = 31\12\2017;
+        Date end = 20\01\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertFalse(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testDistance()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceDefault()
+    {
+        SysRangeDate range = SysRangeDate::construct();
+
+        this.assertNotNull(range);
+
+        this.assertEquals(93136, range.distance());
+    }
+
+    void testDistanceEmpty()
+    {
+        Date start = 31\12\2017;
+        Date end = 20\01\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceMaxMin()
+    {
+        SysRangeDate range = SysRangeDate::construct(DateMax(), DateNull());
+
+        this.assertNotNull(range);
+
+        this.assertEquals(-93136, range.distance());
+    }
+
+    void testDistanceMinMax()
+    {
+        SysRangeDate range = SysRangeDate::construct(DateNull(), DateMax());
+
+        this.assertNotNull(range);
+
+        this.assertEquals(93136, range.distance());
+    }
+
+    void testEqual()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+        SysRangeDate middleRange = SysRangeDate::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.equal(range));
+        this.assertTrue(range.equal(range.clone()));
+        this.assertTrue(range.equal(range.reverse().reverse()));
+        this.assertFalse(range.equal(middleRange));
+        this.assertFalse(range.equal(null));
+    }
+
+    void testIn()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+        SysRangeDate middleRange = SysRangeDate::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.in(range));
+        this.assertTrue(middleRange.in(range));
+        this.assertFalse(range.in(middleRange));
+        this.assertFalse(range.in(null));
+    }
+
+    void testIsBoundary()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.isBoundary(start));
+        this.assertTrue(range.isBoundary(end));
+        this.assertFalse(range.isBoundary(middle));
+    }
+
+    void testReverse()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+        Date middle = 01\03\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+        SysRangeDate reverseRange = range.reverse();
+
+        this.assertNotNull(range);
+        this.assertNotNull(reverseRange);
+
+        this.assertFalse(range.reversed());
+        this.assertTrue(reverseRange.reversed());
+        this.assertEquals(range.start(), reverseRange.end());
+        this.assertEquals(range.end(), reverseRange.start());
+        this.assertEquals(-range.distance(), reverseRange.distance());
+    }
+
+    void testToString()
+    {
+        Date start = 20\01\2017;
+        Date end = 31\12\2017;
+
+        SysRangeDate range = SysRangeDate::construct(start, end);
+
+        this.assertNotNull(range);
+        this.assertEquals(strfmt('%1..%2', start, end), range.toString());
+    }
+}

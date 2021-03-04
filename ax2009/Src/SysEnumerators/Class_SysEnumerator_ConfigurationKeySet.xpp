@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
@@ -59,7 +59,7 @@ public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
 
     public void new(ConfigurationKeySet _base = null, SysSequenceInt _idx = null)
     {
-        base = this.baseOrDefault();
+        base = this.baseOrDefault(_base);
         super(_idx);
     }
 

@@ -1,0 +1,31 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_AsciiIo extends SysEnumerator_IoBase
+{
+    AsciiIo base;
+
+    public AsciiIo base()
+    {
+        return base;
+    }
+
+    public void new(AsciiIo _base = null)
+    {
+        super();
+        base = _base;
+    }
+
+    public Io xBase()
+    {
+        return this.base() as Io;
+    }
+
+    public static SysEnumerator_AsciiIo construct(AsciiIo base = null)
+    {
+        SysEnumerator_AsciiIo enumerator = new SysEnumerator_AsciiIo(base);
+
+        return enumerator;
+    }
+
+}

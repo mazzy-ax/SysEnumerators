@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public abstract class SysEnumerator_FillSet extends xSysEnumerator
@@ -28,6 +28,7 @@ public abstract class SysEnumerator_FillSet extends xSysEnumerator
         return values;
     }
 
+    // TODO можно ли сделать так, чтобы не реализовывать currentIdx?
     public Set currentIdx()
     {
         return this.current();

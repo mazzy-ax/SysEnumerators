@@ -1,0 +1,239 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysSequenceDate implements ISysSequence
+{
+    Date start;
+    Date end;
+    int  step;
+
+    public SysSequenceDate clone()
+    {
+        SysSequenceDate range = SysSequenceDate::construct(this.start(), this.end(), this.step());
+
+        return range;
+    }
+
+    public boolean contains(Date value)
+    {
+        boolean ret = (this.start() <= value && value <= this.end());
+        return ret;
+    }
+
+    public boolean cover(Date value)
+    {
+        boolean ret = (this.start() < value && value < this.end());
+        return ret;
+    }
+
+    // переполнения не бывает в  [datenull, datemax]
+    public int distance()
+    {
+        int ret = this.end() - this.start();
+
+        return ret;
+    }
+
+    public date end()
+    {
+        return end;
+    }
+
+    public boolean equal(SysSequenceDate sequence)
+    {
+        boolean ret =   sequence &&
+                        this.start() == sequence.start() &&
+                        this.end() == sequence.end() &&
+                        this.step() == sequence.step();
+
+        return ret;
+    }
+
+    public int64 estimatedIterations()
+    {
+        int64 ret = int64Max();
+        int distance = this.distance();
+
+        if( distance == 0 )
+        {
+            ret = 1;
+        }
+        else if( ((distance < 0) && (this.step() > 0))
+              || ((distance > 0) && (this.step() < 0)) )
+        {
+            ret = 0;
+        }
+        else if( step == 1 )
+        {
+            ret = distance + 1;
+        }
+        else
+        {
+            ret = distance div this.step() + 1;
+        }
+
+        return ret;
+    }
+
+    public SysEnumerator getEnumerator()
+    {
+        return SysEnumerator::newFromSequence(this);
+    }
+
+    public Date getNext(Date value)
+    {
+        return value + this.step();
+    }
+
+    public boolean in(SysSequenceDate sequence)
+    {
+        boolean ret = sequence && (sequence.start() <= this.start()) && (this.end() <= sequence.end());
+
+        return ret;
+    }
+
+    public boolean isBoundary(Date value)
+    {
+        return (value == this.start()) || (value == this.end());
+    }
+
+    public void new(date _start = DateNull(), date _end = DateMax(), int _step = 1)
+    {
+        Debug::assert(_step != 0);
+
+        start = _start;
+        end = _end;
+        step = _step;
+    }
+
+    public SysSequenceDate normalize()
+    {
+        SysSequenceDate sequence;
+
+        if( this.reversed() )
+        {
+            sequence = this.reverse();
+        }
+        else
+        {
+            sequence = this.clone();
+        }
+
+        return sequence;
+    }
+
+    public SysSequenceDate reverse()
+    {
+        SysSequenceDate sequence = SysSequenceDate::construct(this.end(), this.start(), this.reverseStep());
+
+        return sequence;
+    }
+
+    public boolean reversed()
+    {
+        boolean ret = this.start() > this.end();
+        return ret;
+    }
+
+    public int reverseStep()
+    {
+        return -step;
+    }
+
+    public date start()
+    {
+        return start;
+    }
+
+    public int step()
+    {
+        return step;
+    }
+
+    public str toString()
+    {
+        return strfmt('[%1..%2:%3]', this.start(), this.end(), this.step());
+    }
+
+    public ISysSequence xClone()
+    {
+        return this.clone();
+    }
+
+    public boolean xContains(anytype value)
+    {
+        return this.contains(value);
+    }
+
+    public boolean xCover(anytype value)
+    {
+        return this.cover(value);
+    }
+
+    public anytype xDistance()
+    {
+        return this.distance();
+    }
+
+    public anytype xEnd()
+    {
+        return this.end();
+    }
+
+    public boolean xEqual(ISysSequence sequence)
+    {
+        return this.equal(sequence as SysSequenceDate);
+    }
+
+    public anytype xGetNext(anytype value)
+    {
+        return this.getNext(value);
+    }
+
+    public boolean xIn(ISysSequence sequence)
+    {
+        return this.in(sequence as SysSequenceDate);
+    }
+
+    public boolean xIsBoundary(anytype value)
+    {
+        return this.isBoundary(value);
+    }
+
+    public ISysSequence xNormalize()
+    {
+        return this.normalize();
+    }
+
+    public ISysSequence xReverse()
+    {
+        return this.reverse();
+    }
+
+    public boolean xReversed()
+    {
+        return this.reversed();
+    }
+
+    public anytype xReverseStep()
+    {
+        return this.reverseStep();
+    }
+
+    public anytype xStart()
+    {
+        return this.start();
+    }
+
+    public anytype xStep()
+    {
+        return this.step();
+    }
+
+    public static SysSequenceDate construct(date _start = DateNull(), date _end = DateMax(), int _step = 1)
+    {
+        SysSequenceDate sequence = new SysSequenceDate(_start, _end, _step);
+
+        return sequence;
+    }
+}

@@ -1,0 +1,114 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_List extends xSysEnumerator
+{
+    List base;
+    ListEnumerator baseEnumerator;
+
+    public List base()
+    {
+        return base;
+    }
+
+    public ListEnumerator baseEnumerator()
+    {
+        return baseEnumerator;
+    }
+
+    protected List baseOrDefault(List _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new List(Types::Integer);
+        }
+
+        return _base;
+    }
+
+    protected boolean begin()
+    {
+        return super() && this.next();
+    }
+
+    public anytype current()
+    {
+        anytype ret = baseEnumerator.current();
+
+        return ret;
+    }
+
+    public anytype currentIdx()
+    {
+        return this.current();
+    }
+
+    public anytype currentKey()
+    {
+        return this.current();
+    }
+
+    public anytype currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = this.base().elements();
+
+        return ret;
+    }
+
+    public void new(List _base = null)
+    {
+        base = this.baseOrDefault(_base);
+        baseEnumerator = base.getEnumerator();
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super() && baseEnumerator.moveNext();
+
+        return ret;
+    }
+
+    public void reset()
+    {
+        baseEnumerator.reset();
+        super();
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_List construct(List base = null)
+    {
+        SysEnumerator_List enumerator = new SysEnumerator_List(base);
+
+        return enumerator;
+    }
+}

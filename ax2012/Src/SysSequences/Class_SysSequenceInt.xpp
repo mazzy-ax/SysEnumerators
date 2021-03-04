@@ -1,0 +1,244 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysSequenceInt implements ISysSequence
+{
+    int start;
+    int end;
+    int step;
+
+    public SysSequenceInt clone()
+    {
+        SysSequenceInt range = SysSequenceInt::construct(this.start(), this.end(), this.step());
+
+        return range;
+    }
+
+    public boolean contains(int value)
+    {
+        boolean ret = (this.start() <= value && value <= this.end());
+        return ret;
+    }
+
+    public boolean cover(int value)
+    {
+        boolean ret = (this.start() < value && value < this.end());
+        return ret;
+    }
+
+    // переполнение в аксапте не возбуждает исключение, а возвращает значение с отброшенными битами
+    public int distance()
+    {
+        int ret = this.end() - this.start();
+
+        return ret;
+    }
+
+    public int end()
+    {
+        return end;
+    }
+
+    public boolean equal(SysSequenceInt sequence)
+    {
+        boolean ret =   sequence &&
+                        this.start() == sequence.start() &&
+                        this.end() == sequence.end() &&
+                        this.step() == sequence.step();
+
+        return ret;
+    }
+
+    public int64 estimatedIterations()
+    {
+        int64 ret = int64Max();
+        int distance = this.distance();
+        boolean overflow = this.cover(0) && (distance <= 0);
+
+        if( overflow )
+        {
+            ret = int64Max();
+        }
+        else if( distance == 0 )
+        {
+            ret = 1;
+        }
+        else if( ((distance < 0) && (this.step() > 0))
+              || ((distance > 0) && (this.step() < 0)) )
+        {
+            ret = 0;
+        }
+        else if( step == 1 )
+        {
+            ret = distance + 1;
+        }
+        else
+        {
+            ret = distance div this.step() + 1;
+        }
+
+        return ret;
+    }
+
+    public SysEnumerator getEnumerator()
+    {
+        return SysEnumerator::newFromSequenceInt(this);
+    }
+
+    public int getNext(int value)
+    {
+        return value + this.step();
+    }
+
+    public boolean in(SysSequenceInt sequence)
+    {
+        boolean ret = sequence && (sequence.start() <= this.start()) && (this.end() <= sequence.end());
+        return ret;
+    }
+
+    public boolean isBoundary(int value)
+    {
+        return (value == this.start()) || (value == this.end());
+    }
+
+    public void new(int _start = 1, int _end = maxint(), int _step = 1)
+    {
+        Debug::assert(_step != 0);
+
+        start = _start;
+        end = _end;
+        step = _step;
+    }
+
+    public SysSequenceInt normalize()
+    {
+        SysSequenceInt sequence;
+
+        if( this.reversed() )
+        {
+            sequence = this.reverse();
+        }
+        else
+        {
+            sequence = this.clone();
+        }
+
+        return sequence;
+    }
+
+    public SysSequenceInt reverse()
+    {
+        SysSequenceInt sequence = SysSequenceInt::construct(this.end(), this.start(), this.reverseStep());
+
+        return sequence;
+    }
+
+    public boolean reversed()
+    {
+        boolean ret = this.start() > this.end();
+        return ret;
+    }
+
+    public int reverseStep()
+    {
+        return -step;
+    }
+
+    public int start()
+    {
+        return start;
+    }
+
+    public int step()
+    {
+        return step;
+    }
+
+    public str toString()
+    {
+        return strfmt('[%1..%2:%3]', this.start(), this.end(), this.step());
+    }
+
+    public ISysSequence xClone()
+    {
+        return this.clone();
+    }
+
+    public boolean xContains(anytype value)
+    {
+        return this.contains(value);
+    }
+
+    public boolean xCover(anytype value)
+    {
+        return this.cover(value);
+    }
+
+    // переполнение в аксапте не возбуждает исключение, а возвращает значение с отброшенными битами
+    public anytype xDistance()
+    {
+        return this.distance();
+    }
+
+    public anytype xEnd()
+    {
+        return this.end();
+    }
+
+    public boolean xEqual(ISysSequence range)
+    {
+        return this.equal(range as SysSequenceInt);
+    }
+
+    public anytype xGetNext(anytype value)
+    {
+        return this.getNext(value);
+    }
+
+    public boolean xIn(ISysSequence range)
+    {
+        return this.in(range as SysSequenceInt);
+    }
+
+    public boolean xIsBoundary(anytype value)
+    {
+        return this.isBoundary(value);
+    }
+
+    public ISysSequence xNormalize()
+    {
+        return this.normalize();
+    }
+
+    public ISysSequence xReverse()
+    {
+        return this.reverse();
+    }
+
+    public boolean xReversed()
+    {
+        return this.reversed();
+    }
+
+    public anytype xReverseStep()
+    {
+        return this.reverseStep();
+    }
+
+    public anytype xStart()
+    {
+        return this.start();
+    }
+
+    public anytype xStep()
+    {
+        return this.step();
+    }
+
+    public static SysSequenceInt construct(int _start = 1, int _end = maxint(), int _step = 1)
+    {
+        SysSequenceInt sequence = new SysSequenceInt(_start, _end, _step);
+
+        return sequence;
+    }
+}

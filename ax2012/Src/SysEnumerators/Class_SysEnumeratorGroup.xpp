@@ -1,0 +1,279 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public abstract class SysEnumeratorGroup extends xSysEnumerator
+{
+    Set enumerators;
+    Map enumeratorNames;
+
+    ISysEnumerator currentEnumerator;
+    ISysEnumerator currentIdxEnumerator;
+    ISysEnumerator currentKeyEnumerator;
+    ISysEnumerator currentValueEnumerator;
+
+    public SysEnumeratorGroup add(xSysEnumerator enumerator, str name = '')
+    {
+        // Circular references are not checked
+        if( !this.isNotMe(enumerator) )
+        {
+            throw error(Error::wrongUseOfFunction(funcname()));
+        }
+
+        if( !this.enumerators().add(enumerator) )
+        {
+            throw error(Error::wrongUseOfFunction(funcname()));
+        }
+
+        if( name )
+        {
+            this.names().insert(name, enumerator);
+        }
+
+        this.currentEnumerator(enumerator);
+        this.currentIdxEnumerator(enumerator);
+        this.currentKeyEnumerator(enumerator);
+        this.currentValueEnumerator(enumerator);
+
+        this.estimatedIterations(this.estimatedIterations());
+
+        enumerator.eventAddedToGroup(this);
+
+        return this;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super() && this.next();
+
+        return ret;
+    }
+
+    public anytype current()
+    {
+        anytype ret = this.currentEnumerator().xCurrent();
+
+        return ret;
+    }
+
+    protected ISysEnumerator currentEnumerator(SysEnumerator enumerator = null)
+    {
+        if( !prmisdefault(enumerator) )
+        {
+            currentEnumerator = enumerator;
+        }
+
+        Debug::assert(this.isNotMe(currentEnumerator));
+
+        return currentEnumerator;
+    }
+
+
+    public anytype currentIdx()
+    {
+        anytype ret = this.currentIdxEnumerator().xCurrentIdx();
+
+        return ret;
+    }
+
+    protected ISysEnumerator currentIdxEnumerator(SysEnumerator enumerator = null)
+    {
+        if( !prmisdefault(enumerator)
+         && (enumerator.currentIdxProvided() || (currentIdxEnumerator == null)) )
+        {
+            currentIdxEnumerator = enumerator;
+        }
+
+        Debug::assert(this.isNotMe(currentIdxEnumerator));
+
+        return currentKeyEnumerator;
+    }
+
+
+    public anytype currentKey()
+    {
+        anytype ret = this.currentKeyEnumerator().xCurrentKey();
+
+        return ret;
+    }
+
+    protected ISysEnumerator currentKeyEnumerator(SysEnumerator enumerator = null)
+    {
+        if( !prmisdefault(enumerator)
+         && (enumerator.currentKeyProvided() || (currentKeyEnumerator == null)) )
+        {
+            currentKeyEnumerator = enumerator;
+        }
+
+        Debug::assert(this.isNotMe(currentKeyEnumerator));
+
+        return currentKeyEnumerator;
+    }
+
+
+    public anytype currentValue()
+    {
+        anytype ret = this.currentValueEnumerator().xCurrentValue();
+
+        return ret;
+    }
+
+    protected ISysEnumerator currentValueEnumerator(SysEnumerator enumerator = null)
+    {
+        if( !prmisdefault(enumerator)
+         && (enumerator.currentValueProvided() || (currentValueEnumerator == null)) )
+        {
+            currentValueEnumerator = enumerator;
+        }
+
+        Debug::assert(this.isNotMe(currentValueEnumerator));
+
+        return currentValueEnumerator;
+    }
+
+
+    public str definitionString()
+    {
+        //TODO mazzy
+        return classid2name(classidget(this));
+    }
+
+    public Set enumerators()
+    {
+        return enumerators;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = super();
+        SetEnumerator se = this.enumerators().getEnumerator();
+        xSysEnumerator enumerator;
+
+        while(se.moveNext())
+        {
+            enumerator = se.current();
+            if( this.isNotMe(enumerator) )
+            {
+                ret = min(enumerator.estimatedIterations(estimatedIterations), ret);
+            }
+        }
+
+        return ret;
+    }
+
+    public xSysEnumerator get(str name)
+    {
+        xSysEnumerator ret = this.names().lookup(name);
+
+        return ret;
+    }
+
+    protected boolean isNotMe(ISysEnumerator enumerator)
+    {
+        ISysEnumerator self = this;
+        boolean ret = (enumerator && (enumerator != self));
+
+        return ret;
+    }
+
+    protected boolean more()
+    {
+        boolean ret = super() && !this.enumerators().empty();
+
+        return ret;
+    }
+
+    public Map names()
+    {
+        return enumeratorNames;
+    }
+
+    public void new()
+    {
+        enumerators = new Set(Types::Class);
+        enumeratorNames = new Map(Types::String, Types::Class);
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super() && this.enumerators();
+        SetEnumerator se;
+        xSysEnumerator enumerator;
+
+        if( ret )
+        {
+            se = this.enumerators().getEnumerator();
+            while(se.moveNext())
+            {
+                enumerator = se.current();
+                if( this.isNotMe(enumerator) )
+                {
+                    ret = enumerator.moveNext() && ret; // It calls all hooks anyway.
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    public void reset()
+    {
+        SetEnumerator se = this.enumerators().getEnumerator();
+        xSysEnumerator enumerator;
+
+        while(se.moveNext())
+        {
+            enumerator = se.current();
+            if( this.isNotMe(enumerator) )
+            {
+                enumerator.reset();
+            }
+        }
+
+        super();
+    }
+
+    public str toString()
+    {
+        str ret;
+        anytype emptyStr = '';
+
+        //TODO mazzy
+        if( this.position() == SysEnumeratorPosition::Inside )
+        {
+            ret = strfmt('[%2,%3,%4]:{%1}',
+                this.enumerators().elements(),
+                this.currentEnumerator() ? this.current() : emptyStr,
+                this.currentKeyEnumerator() ? this.currentKey() : emptyStr,
+                this.currentValueEnumerator() ? this.currentValue() : emptyStr);
+        }
+        else
+        {
+            ret = strfmt('[%2]:{%1}',
+                this.enumerators().elements(),
+                this.position());
+        }
+
+        return ret;
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+}

@@ -1,0 +1,114 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_Enum extends SysEnumerator_Indexed
+{
+    SysDictEnum base;
+
+    public SysDictEnum base()
+    {
+        return base;
+    }
+
+    public int current()
+    {
+        return this.currentValue();
+    }
+
+    public str currentKey()
+    {
+        int idx = this.currentIdx();
+        str ret = this.base().index2Symbol(idx);
+
+        return ret;
+    }
+
+    protected boolean currentKeyProvided()
+    {
+        return true;
+    }
+
+    public int currentValue()
+    {
+        int idx = this.currentIdx();
+        int ret = this.base().index2Value(idx);
+
+        return ret;
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().values() - 1;
+
+        return ret;
+    }
+
+    protected int defaultStart()
+    {
+        return 0;
+    }
+
+    public void new(SysDictEnum _base, SysSequenceInt _idx = null)
+    {;
+        Debug::assert(_base != null);
+
+        base = _base;
+        super(_idx);
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_Enum construct(SysDictEnum base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_Enum enumerator = new SysEnumerator_Enum(base, idx);
+
+        return enumerator;
+    }
+
+
+    public static SysEnumerator_Enum newFromTo(anytype startEnumValue, anytype endEnumValue = null)
+    {
+        SysEnumerator_Enum  enumerator;
+        SysSequenceInt      sequence;
+        SysDictEnum         base  = SysDictEnum::newFrom(startEnumValue);
+        int                 startEnumIdx = 0;
+        int                 endEnumIdx;
+    ;
+        if( typeof(startEnumValue) == types::Enum )
+        {
+            startEnumIdx = base.value2Index(startEnumValue);
+        }
+
+        if( typeof(startEnumValue) == types::Enum )
+        {
+            endEnumIdx = base.value2Index(endEnumValue);
+        }
+        else
+        {
+            endEnumIdx = base.values() - 1;
+        }
+
+        sequence = new SysSequenceInt(startEnumIdx, endEnumIdx, 1);
+        enumerator = new SysEnumerator_Enum(base, sequence);
+
+        return enumerator;
+    }
+}

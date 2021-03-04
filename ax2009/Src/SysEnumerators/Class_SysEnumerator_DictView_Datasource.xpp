@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public class SysEnumerator_DictView_Datasource extends SysEnumerator_Indexed
@@ -23,6 +23,7 @@ public class SysEnumerator_DictView_Datasource extends SysEnumerator_Indexed
         return this.current();
     }
 
+    // TODO DictTable? SysDictTable?
     public tableId currentValue()
     {
         return this.current();

@@ -1,0 +1,31 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_CommaTextIo extends SysEnumerator_IoBase
+{
+    CommaTextIo base;
+
+    public CommaTextIo base()
+    {
+        return base;
+    }
+
+    public void new(CommaTextIo _base = null)
+    {
+        super();
+        base = _base;
+    }
+
+    public Io xBase()
+    {
+        return this.base() as Io;
+    }
+
+    public static SysEnumerator_CommaTextIo construct(CommaTextIo base = null)
+    {
+        SysEnumerator_CommaTextIo enumerator = new SysEnumerator_CommaTextIo(base);
+
+        return enumerator;
+    }
+
+}

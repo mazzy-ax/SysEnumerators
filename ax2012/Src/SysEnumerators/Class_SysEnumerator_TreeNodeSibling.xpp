@@ -1,0 +1,101 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_TreeNodeSibling extends xSysEnumerator
+{
+    TreeNode node;
+    TreeNode origin;
+
+    public TreeNode base()
+    {
+        return node;
+    }
+
+    public TreeNode current()
+    {
+        return node;
+    }
+
+    public TreeNode currentIdx()
+    {
+        return this.current();
+    }
+
+    public TreeNode currentKey()
+    {
+        return this.current();
+    }
+
+    public TreeNode currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean more()
+    {
+        boolean ret = super() && this.base();
+
+        return ret;
+    }
+
+    public void new(TreeNode _node = null)
+    {
+        node = _node;
+        origin = _node;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret && this.base() )
+        {
+            node = this.base().AOTnextSibling();
+        }
+        else
+        {
+            node = null;
+        }
+
+        return ret;
+    }
+
+    public TreeNode origin()
+    {
+        return origin;
+    }
+
+    public void reset()
+    {
+        node = origin;
+        super();
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_TreeNodeSibling construct(TreeNode node = null)
+    {
+        SysEnumerator_TreeNodeSibling enumerator = new SysEnumerator_TreeNodeSibling(node);
+
+        return enumerator;
+    }
+}

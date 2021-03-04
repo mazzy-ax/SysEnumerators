@@ -1,0 +1,110 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_QueryRun extends SysEnumerator_Indexed64
+{
+    QueryRun base;
+
+    int64 estimatedIterations;
+
+    public QueryRun base()
+    {
+        return base;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super() && this.next();
+
+        return ret;
+    }
+
+    public Common current(int dataSourceNo = 1)
+    {
+        Common ret;
+
+        if( this.base() )
+        {
+            ret = this.base().getNo(dataSourceNo);
+        }
+
+        return ret;
+    }
+
+    public Common currentKey(int dataSourceNo = 1)
+    {
+        return this.current(dataSourceNo);
+    }
+
+    public Common currentValue(int dataSourceNo = 1)
+    {
+        return this.current(dataSourceNo);
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    public int64 estimatedIterations(int64 _estimatedIterations = -1)
+    {
+        if( estimatedIterations < 0
+         && this.base()
+         && this.base().query()
+         && this.base().query().dataSourceCount() )
+        {
+            estimatedIterations = SysQuery::countTotal(this.base());
+        }
+        else
+        {
+            return max(0, estimatedIterations);
+        }
+
+        return estimatedIterations;
+    }
+
+    public void new(QueryRun _base = null, int64 _estimatedIterations = -1)
+    {
+        base = _base;
+        estimatedIterations = _estimatedIterations;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super() && this.base() && this.base().next();
+
+        return ret;
+    }
+
+    public void reset()
+    {
+        if( this.base() )
+        {
+            this.base().reset();
+        }
+        super();
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_QueryRun construct(QueryRun base = null, int64 estimatedIterations = -1)
+    {
+        SysEnumerator_QueryRun enumerator = new SysEnumerator_QueryRun(base, estimatedIterations);
+
+        return enumerator;
+    }
+}

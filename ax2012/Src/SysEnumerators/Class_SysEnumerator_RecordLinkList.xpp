@@ -1,0 +1,108 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_RecordLinkList extends xSysEnumerator
+{
+    RecordLinkList base;
+    Common record;
+
+    public RecordLinkList base()
+    {
+        return base;
+    }
+
+    protected RecordLinkList baseOrDefault(RecordLinkList _base = null)
+    {
+        if( !_base )
+        {
+            _base = new RecordLinkList();
+        }
+
+        return _base;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super() && this.base().first(record);
+
+        return ret;
+    }
+
+    public Common current()
+    {
+        return record;
+    }
+
+    public Common currentIdx()
+    {
+        return this.current();
+    }
+
+    public Common currentKey()
+    {
+        return this.current();
+    }
+
+    public Common currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = this.base().len();
+
+        return ret;
+    }
+
+    public void new(RecordLinkList _base = null)
+    {
+        base = this.baseOrDefault(_base);
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super() && this.base().next(record);
+
+        return true;
+    }
+
+    public common record()
+    {
+        return record;
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_RecordLinkList construct(RecordLinkList base = null)
+    {
+        SysEnumerator_RecordLinkList enumerator = new SysEnumerator_RecordLinkList(base);
+
+        return enumerator;
+    }
+
+}

@@ -1,0 +1,616 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysSequenceIntTest extends SysTestCase
+{
+
+    void test1st()
+    {
+        int start = 2;
+        int end = 5;
+        int step = 1;
+        int64 iterations = 4;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void test1stDefault()
+    {
+        SysSequenceInt range = SysSequenceInt::construct();
+
+        this.assertNotNull(range);
+
+        this.assertEquals(1, range.start());
+        this.assertEquals(maxint(), range.end());
+    }
+
+    void test3()
+    {
+        int start = 2;
+        int end = 5;
+        int step = 3;
+        int64 iterations = 2;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void test9()
+    {
+        int start = 2;
+        int end = 5;
+        int step = 9;
+        int64 iterations = 1;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testClone()
+    {
+        int start = 2;
+        int end = 5;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+        SysSequenceInt clone = range.clone();
+
+        this.assertNotNull(range);
+        this.assertNotNull(clone);
+
+        this.assertEquals(range.start(), clone.start());
+        this.assertEquals(range.end(), clone.end());
+        this.assertEquals(range.distance(), clone.distance());
+        this.assertEquals(range.reversed(), clone.reversed());
+    }
+
+    void testContains()
+    {
+        int start = 2;
+        int end = 5;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.contains(start));
+        this.assertTrue(range.contains(end));
+        this.assertTrue(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testContainsEmpty()
+    {
+        int start = 5;
+        int end = 2;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.contains(start));
+        this.assertFalse(range.contains(end));
+        this.assertFalse(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testContainsZero()
+    {
+        int start = -5;
+        int end = 2;
+        int middle = 0;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.contains(start));
+        this.assertTrue(range.contains(end));
+        this.assertTrue(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testCover()
+    {
+        int start = 2;
+        int end = 5;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertTrue(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testCoverEmpty()
+    {
+        int start = 5;
+        int end = 2;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertFalse(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testCoverZero()
+    {
+        int start = -5;
+        int end = 2;
+        int middle = 0;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertTrue(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testDefault()
+    {
+        SysSequenceInt sequence = SysSequenceInt::construct();
+
+        this.assertNotNull(sequence);
+        this.assertEquals(1, sequence.start());
+        this.assertEquals(maxint(), sequence.end());
+        this.assertEquals(maxint()-1, sequence.distance());
+        this.assertEquals(1, sequence.step());
+
+        this.assertEquals(any2int64(maxint()), sequence.estimatedIterations());
+    }
+
+    void testDistance()
+    {
+        int start = 2;
+        int end = 5;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceDefault()
+    {
+        SysSequenceInt range = SysSequenceInt::construct();
+
+        this.assertNotNull(range);
+
+        this.assertEquals(maxint()-1, range.distance());
+    }
+
+    void testDistanceEmpty()
+    {
+        int start = 5;
+        int end = 2;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceMaxMin()
+    {
+        SysSequenceInt range = SysSequenceInt::construct(maxint(), minint());
+
+        this.assertNotNull(range);
+
+        this.assertEquals(0.00, round(range.distance(),4));
+    }
+
+    void testDistanceMinMax()
+    {
+        SysSequenceInt range = SysSequenceInt::construct(minint(), maxint());
+
+        this.assertNotNull(range);
+
+        this.assertEquals(0.00, round(range.distance(),4));
+    }
+
+    void testEmpty()
+    {
+        int start = 5;
+        int end = 2;
+        int step = 1;
+        int64 iterations = 0;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testEqual()
+    {
+        int start = 2;
+        int end = 5;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+        SysSequenceInt middleRange = SysSequenceInt::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.equal(range));
+        this.assertTrue(range.equal(range.clone()));
+        this.assertTrue(range.equal(range.reverse().reverse()));
+        this.assertFalse(range.equal(middleRange));
+        this.assertFalse(range.equal(null));
+    }
+
+    void testGetEnumerator()
+    {
+        int start = 2;
+        int end = 5;
+        int step = 1;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+        SysEnumerator se = sequence.getEnumerator();
+
+        this.assertNotNull(se);
+        this.assertNotNull(se.enumerators());
+    }
+
+    void testGetNext()
+    {
+        int start = 2;
+        int end = 5;
+        int step = 1;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertEquals(start + step, sequence.getNext(start));
+        this.assertEquals(end + step, sequence.getNext(end));
+    }
+
+    void testIn()
+    {
+        int start = 2;
+        int end = 5;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+        SysSequenceInt middleRange = SysSequenceInt::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.in(range));
+        this.assertTrue(middleRange.in(range));
+        this.assertFalse(range.in(middleRange));
+        this.assertFalse(range.in(null));
+    }
+
+    void testIsBoundary()
+    {
+        int start = 2;
+        int end = 5;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.isBoundary(start));
+        this.assertTrue(range.isBoundary(end));
+        this.assertFalse(range.isBoundary(middle));
+    }
+
+    void testMinMax1()
+    {
+        int start = minint();
+        int end = maxint();
+        int step = 1;
+        int64 iterations = int64Max();
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinMax2()
+    {
+        int start = minint();
+        int end = maxint();
+        int step = 2;
+        int64 iterations = int64Max();
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinMax3()
+    {
+        int start = minint();
+        int end = maxint();
+        int step = 3;
+        int64 iterations = int64Max();
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinusMax1()
+    {
+        int start = -1;
+        int end = maxint();
+        int step = 1;
+        int64 iterations = int64Max();
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinusMax2()
+    {
+        int start = -1;
+        int end = maxint();
+        int step = 2;
+        int64 iterations = int64Max();
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinusMax3()
+    {
+        int start = -1;
+        int end = maxint();
+        int step = 3;
+        int64 iterations = int64Max();
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testNegative1()
+    {
+        int start = -5;
+        int end = 2;
+        int step = 1;
+        int64 iterations = 8;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testNegative2()
+    {
+        int start = -5;
+        int end = 2;
+        int step = 2;
+        int64 iterations = 4;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testNegative3()
+    {
+        int start = -5;
+        int end = 2;
+        int step = 3;
+        int64 iterations = 3;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testNegative9()
+    {
+        int start = -5;
+        int end = 2;
+        int step = 9;
+        int64 iterations = 1;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testReverse()
+    {
+        int start = 2;
+        int end = 5;
+        int middle = 3;
+
+        SysSequenceInt range = SysSequenceInt::construct(start, end);
+        SysSequenceInt reverseRange = range.reverse();
+
+        this.assertNotNull(range);
+        this.assertNotNull(reverseRange);
+
+        this.assertFalse(range.reversed());
+        this.assertTrue(reverseRange.reversed());
+        this.assertEquals(range.start(), reverseRange.end());
+        this.assertEquals(range.end(), reverseRange.start());
+        this.assertEquals(-range.distance(), reverseRange.distance());
+    }
+
+    void testReverse1()
+    {
+        int start = -5;
+        int end = 2;
+        int step = 1;
+        int64 iterations = 8;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step).reverse();
+
+        this.assertNotNull(sequence);
+        this.assertEquals(end, sequence.start());
+        this.assertEquals(start, sequence.end());
+        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(-step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testReverse3()
+    {
+        int start = -5;
+        int end = 2;
+        int step = 3;
+        int64 iterations = 3;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step).reverse();
+
+        this.assertNotNull(sequence);
+        this.assertEquals(end, sequence.start());
+        this.assertEquals(start, sequence.end());
+        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(-step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testReverse9()
+    {
+        int start = -5;
+        int end = 2;
+        int step = 9;
+        int64 iterations = 1;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step).reverse();
+
+        this.assertNotNull(sequence);
+        this.assertEquals(end, sequence.start());
+        this.assertEquals(start, sequence.end());
+        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(-step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testToString()
+    {
+        int start = 2;
+        int end = 5;
+        int step = 1;
+
+        SysSequenceInt sequence = SysSequenceInt::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(strfmt('[%1..%2:%3]', start, end, step), sequence.toString());
+    }
+}

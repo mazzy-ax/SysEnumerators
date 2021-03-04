@@ -1,0 +1,62 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_RecordTest extends SysTestCase
+{
+
+    public void testRecord()
+    {
+        // see also combined Record + value2set
+
+        SysUserInfo sysUserInfo = SysUserInfo::find();
+        SysEnumerator_Record se = SysEnumerator_Record::construct(sysUserInfo);
+
+        this.assertNotNull(se);
+        this.assertEquals(int64Max(), se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        while(se.moveNext())
+        {
+            this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        }
+
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(int64Max(), se.estimatedIterations());
+    }
+
+    public void testRecordEmpty()
+    {
+        SysUserInfo sysUserInfo;
+        SysEnumerator_Record se = SysEnumerator_Record::construct(sysUserInfo);
+
+        this.assertNotNull(se);
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+    }
+
+    public void testRecordNull()
+    {
+        SysEnumerator_Record se = SysEnumerator_Record::construct(null);
+
+        this.assertNotNull(se);
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+    }
+
+    public void testRecordReset()
+    {
+        SysUserInfo sysUserInfo = SysUserInfo::find();
+        SysEnumerator_Record se = SysEnumerator_Record::construct(sysUserInfo);
+
+        this.assertNotNull(se);
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.parmExceptionExpected(true);
+
+        se.reset();
+    }
+}

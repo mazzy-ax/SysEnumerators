@@ -1,0 +1,106 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_LastAotSelection extends xSysEnumerator
+{
+    LastAotSelection base;
+    TreeNode current;
+
+    public LastAotSelection base()
+    {
+        return base;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            current = this.base().first();
+        }
+
+        return ret;
+    }
+
+    public TreeNode current()
+    {
+        return current;
+    }
+
+    public TreeNode currentIdx()
+    {
+        return this.current();
+    }
+
+    public TreeNode currentKey()
+    {
+        return this.current();
+    }
+
+    public TreeNode currentValue()
+    {
+        return this.current();
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = this.base().selectionCount();
+
+        return ret;
+    }
+
+    protected boolean more()
+    {
+        boolean ret = super() && (current != null);
+
+        return ret;
+    }
+
+    public void new(LastAotSelection _base)
+    {;
+        Debug::assert(_base != null);
+
+        base = _base;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            current = this.base().next();
+        }
+
+        return ret;
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_LastAotSelection construct(LastAotSelection base)
+    {
+        SysEnumerator_LastAotSelection enumerator = new SysEnumerator_LastAotSelection(base);
+
+        return enumerator;
+    }
+}

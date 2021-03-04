@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public interface ISysEnumerator extends Enumerator
@@ -33,6 +33,7 @@ public interface ISysEnumerator extends Enumerator
     {
     }
 
+    // TODO int64?
     public boolean skip(int items = 1)
     {
     }

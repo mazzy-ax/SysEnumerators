@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public class SysEnumerator_DictTable_FieldGroup extends SysEnumerator_DictTable
@@ -17,7 +17,7 @@ public class SysEnumerator_DictTable_FieldGroup extends SysEnumerator_DictTable
         return this.current();
     }
 
-    //TODO mazzy: SysDictField??
+    //TODO mazzy: SysDictFieldGroup??
     public DictFieldGroup currentValue()
     {
         DictFieldGroup dictFieldGroup = new DictFieldGroup(this.base().id(), this.current());

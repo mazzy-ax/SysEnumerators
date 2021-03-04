@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public abstract class xSysEnumerator implements ISysEnumerator
@@ -210,12 +210,9 @@ public abstract class xSysEnumerator implements ISysEnumerator
     {
         boolean ret = this.skipPre();
 
-        if( ret )
+        while(ret && (items > 0) && this.moveNext())
         {
-            while((items > 0) && this.moveNext())
-            {
-                items--;
-            }
+            items--;
         }
 
         ret = this.skipPost(ret);

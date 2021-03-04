@@ -1,0 +1,51 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRangeAnytype extends SysRange
+{
+    anytype start;
+    anytype end;
+
+    public SysRange clone()
+    {
+        SysRangeAnytype range = SysRangeAnytype::construct(this.start(), this.end());
+
+        return range;
+    }
+
+    public anytype end()
+    {
+        return end;
+    }
+
+    public void new(anytype _start, anytype _end)
+    {
+        start = _start;
+        end = _end;
+    }
+
+    public SysRange reverse()
+    {
+        SysRangeAnytype range = SysRangeAnytype::construct(this.end(), this.start());
+
+        return range;
+    }
+
+    public anytype start()
+    {
+        return start;
+    }
+
+    public str toString()
+    {
+        // SysQuery::range() is not nice
+        return strfmt('%1..%2', this.start(), this.end());
+    }
+
+    public static SysRangeAnytype construct(anytype start, anytype end)
+    {
+        SysRangeAnytype range = new SysRangeAnytype(start, end);
+
+        return range;
+    }
+}

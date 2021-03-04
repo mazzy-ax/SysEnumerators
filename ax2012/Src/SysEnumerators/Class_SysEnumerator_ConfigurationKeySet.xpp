@@ -1,0 +1,87 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_ConfigurationKeySet extends SysEnumerator_Indexed
+{
+    ConfigurationKeySet base;
+
+    public ConfigurationKeySet base()
+    {
+        return base;
+    }
+
+    protected ConfigurationKeySet baseOrDefault(ConfigurationKeySet _base = null)
+    {
+        if( _base == null )
+        {
+            _base = new ConfigurationKeySet();
+        }
+
+        return _base;
+    }
+
+    public configurationKeyId current()
+    {
+        int idx = this.currentIdx();
+        configurationKeyId ret = this.base().cnt2Id(idx);
+
+        return ret;
+    }
+
+    public int currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public SysDictConfigurationKey currentValue()
+    {
+        SysDictConfigurationKey configurationKey = new SysDictConfigurationKey(this.current());
+
+        return configurationKey;
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = 0;
+
+        if( this.base() )
+        {
+            ret = this.base().cnt();
+        }
+
+        return ret;
+    }
+
+    public void new(ConfigurationKeySet _base = null, SysSequenceInt _idx = null)
+    {
+        base = this.baseOrDefault();
+        super(_idx);
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_ConfigurationKeySet construct(ConfigurationKeySet base = null, SysSequenceInt idx = null)
+    {
+        SysEnumerator_ConfigurationKeySet enumerator = new SysEnumerator_ConfigurationKeySet(base, idx);
+
+        return enumerator;
+    }
+}

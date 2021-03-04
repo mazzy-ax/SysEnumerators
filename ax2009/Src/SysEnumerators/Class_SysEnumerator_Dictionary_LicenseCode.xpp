@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public class SysEnumerator_Dictionary_LicenseCode extends SysEnumerator_Dictionary
@@ -22,7 +22,7 @@ public class SysEnumerator_Dictionary_LicenseCode extends SysEnumerator_Dictiona
         return true;
     }
 
-    //TODO mazzy: SysDictClass??
+    //TODO mazzy: SysDictLicenseCode??
     public DictLicenseCode currentValue()
     {
         return this.base().licenseCodeObject(this.current());

@@ -1,0 +1,67 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictFieldGroup extends SysEnumerator_Indexed
+{
+    DictFieldGroup base;
+
+    public DictFieldGroup base()
+    {
+        return base;
+    }
+
+    public fieldId current()
+    {
+        int idx = this.currentIdx();
+        fieldId ret = this.base().field(idx);
+
+        return ret;
+    }
+
+    public fieldId currentKey()
+    {
+        return this.current();
+    }
+
+    public fieldId currentValue()
+    {
+        return this.current();
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().numberOfFields();
+
+        return ret;
+    }
+
+    public void new(DictFieldGroup _base, SysSequenceInt _idx = null)
+    {;
+        Debug::assert(_base != null);
+
+        base = _base;
+        super(_idx);
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_DictFieldGroup construct(DictFieldGroup base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_DictFieldGroup enumerator = new SysEnumerator_DictFieldGroup(base, idx);
+
+        return enumerator;
+    }
+}

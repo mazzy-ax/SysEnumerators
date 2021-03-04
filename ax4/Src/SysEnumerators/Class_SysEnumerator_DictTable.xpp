@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public abstract class SysEnumerator_DictTable extends SysEnumerator_Indexed

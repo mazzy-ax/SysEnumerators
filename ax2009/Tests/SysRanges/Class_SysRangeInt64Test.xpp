@@ -1,0 +1,289 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRangeInt64Test extends SysTestCase
+{
+
+    void test1st()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(start, range.start());
+        this.assertEquals(end, range.end());
+    }
+
+    void test1stDefault()
+    {
+        SysRangeInt64 range = SysRangeInt64::construct();
+        int64 zero64;
+
+        this.assertNotNull(range);
+
+        this.assertEquals(zero64 + 1, range.start());
+        this.assertEquals(int64Max(), range.end());
+    }
+
+    void testClone()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+        SysRangeInt64 clone = range.clone();
+
+        this.assertNotNull(range);
+        this.assertNotNull(clone);
+
+        this.assertEquals(range.start(), clone.start());
+        this.assertEquals(range.end(), clone.end());
+        this.assertEquals(range.distance(), clone.distance());
+        this.assertEquals(range.reversed(), clone.reversed());
+    }
+
+    void testContains()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.contains(start));
+        this.assertTrue(range.contains(end));
+        this.assertTrue(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testContainsEmpty()
+    {
+        Int64 start = 5;
+        Int64 end = 2;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.contains(start));
+        this.assertFalse(range.contains(end));
+        this.assertFalse(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testContainsZero()
+    {
+        Int64 start = -5;
+        Int64 end = 2;
+        Int64 middle = 0;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.contains(start));
+        this.assertTrue(range.contains(end));
+        this.assertTrue(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testCover()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertTrue(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testCoverEmpty()
+    {
+        Int64 start = 5;
+        Int64 end = 2;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertFalse(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testCoverZero()
+    {
+        Int64 start = -5;
+        Int64 end = 2;
+        Int64 middle = 0;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertTrue(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testDistance()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceDefault()
+    {
+        SysRangeInt64 range = SysRangeInt64::construct();
+
+        this.assertNotNull(range);
+
+        this.assertEquals(int64Max()-1, range.distance());
+    }
+
+    void testDistanceEmpty()
+    {
+        Int64 start = 5;
+        Int64 end = 2;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceMaxMin()
+    {
+        SysRangeInt64 range = SysRangeInt64::construct(int64Max(), int64Min());
+        int64 zero64;
+
+        this.assertNotNull(range);
+
+        this.assertEquals(zero64 + 1, range.distance());
+    }
+
+    void testDistanceMinMax()
+    {
+        SysRangeInt64 range = SysRangeInt64::construct(int64Min(), int64Max());
+        int64 zero64;
+
+        this.assertNotNull(range);
+
+        this.assertEquals(zero64 -1, range.distance());
+    }
+
+    void testEqual()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+        SysRangeInt64 middleRange = SysRangeInt64::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.equal(range));
+        this.assertTrue(range.equal(range.clone()));
+        this.assertTrue(range.equal(range.reverse().reverse()));
+        this.assertFalse(range.equal(middleRange));
+        this.assertFalse(range.equal(null));
+    }
+
+    void testIn()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+        SysRangeInt64 middleRange = SysRangeInt64::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.in(range));
+        this.assertTrue(middleRange.in(range));
+        this.assertFalse(range.in(middleRange));
+        this.assertFalse(range.in(null));
+    }
+
+    void testIsBoundary()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.isBoundary(start));
+        this.assertTrue(range.isBoundary(end));
+        this.assertFalse(range.isBoundary(middle));
+    }
+
+    void testReverse()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+        SysRangeInt64 reverseRange = range.reverse();
+
+        this.assertNotNull(range);
+        this.assertNotNull(reverseRange);
+
+        this.assertFalse(range.reversed());
+        this.assertTrue(reverseRange.reversed());
+        this.assertEquals(range.start(), reverseRange.end());
+        this.assertEquals(range.end(), reverseRange.start());
+        this.assertEquals(-range.distance(), reverseRange.distance());
+    }
+
+    void testToString()
+    {
+        Int64 start = 2;
+        Int64 end = 5;
+        Int64 middle = 3;
+
+        SysRangeInt64 range = SysRangeInt64::construct(start, end);
+
+        this.assertNotNull(range);
+        this.assertEquals(strfmt('%1..%2', start, end), range.toString());
+    }
+}

@@ -1,6 +1,7 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
+// TODO добавить SysEnumerator_SequenceDate, SysEnumerator_SequenceInt, SysEnumerator_SequenceInt64
 public class SysEnumerator_Sequence extends xSysEnumerator
 {
     ISysSequence    sequence;

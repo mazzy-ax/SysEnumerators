@@ -1,0 +1,76 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public abstract class SysEnumerator_FillSet extends xSysEnumerator
+{
+    Set values;
+    SysEnumeratorGroup enumeratorGroup;
+
+    /// <summary>
+    /// Метод возвращает Set
+    /// </summary>
+    /// <remarks>
+    /// Тип реально хранимых значений мы узнаем только в moveNext. Поэтому инициализация выполняется здесь.
+    /// </remarks>
+    public Set base(types t = types::AnyType)
+    {
+        if( values == null )
+        {
+            Debug::assert(t != Types::AnyType);
+            values = new Set(t);
+        }
+
+        return values;
+    }
+
+    public Set current()
+    {
+        return values;
+    }
+
+    public Set currentIdx()
+    {
+        return this.current();
+    }
+
+    public Set currentKey()
+    {
+        return this.current();
+    }
+
+    public Set currentValue()
+    {
+        return this.current();
+    }
+
+    protected void eventAddedToGroup(SysEnumeratorGroup _enumeratorGroup)
+    {;
+        enumeratorGroup = _enumeratorGroup;
+        super(enumeratorGroup);
+    }
+
+    protected void init()
+    {
+        super();
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+}

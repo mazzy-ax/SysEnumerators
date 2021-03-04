@@ -1,0 +1,126 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public abstract class SysSequence //implements Enumerable #TODO ???
+{
+    SysRange range;
+
+    public abstract SysSequence clone()
+    {
+    }
+
+    public boolean contains(anytype value)
+    {
+        boolean ret = this.range().contains(value);
+
+        return ret;
+    }
+
+    public boolean cover(anytype value)
+    {
+        boolean ret = this.range().cover(value);
+
+        return ret;
+    }
+
+    // переполнение в аксапте не возбуждает исключение, а возвращает значение с отброшенными битами
+    public anytype distance()
+    {
+        anytype ret = this.range().distance();
+
+        return ret;
+    }
+
+    public anytype end()
+    {
+        anytype ret = this.range().end();
+
+        return ret;
+    }
+
+    public boolean equal(SysSequence sequence)
+    {
+        boolean ret = this.range().equal(sequence.range()) && (this.step() == sequence.step());
+
+        return ret;
+    }
+
+    public int64 estimatedIterations()
+    {
+        int64 ret = int64Max();
+
+        return ret;
+    }
+
+    public SysEnumerator getEnumerator()
+    {
+        return SysEnumerator::newFromSequence(this);
+    }
+
+    public abstract anytype getNext(anytype value)
+    {
+    }
+
+    public boolean in(SysSequence sequence)
+    {
+        boolean ret = sequence && (sequence.start() <= this.start()) && (this.end() <= sequence.end());
+        return ret;
+    }
+
+    public boolean isBoundary(anytype value)
+    {
+        return (value == this.range().start()) || (value == this.range().end());
+    }
+
+    public SysSequence normalize()
+    {
+        SysSequence sequence;
+
+        if( this.reversed() )
+        {
+            sequence = this.reverse();
+        }
+        else
+        {
+            sequence = this.clone();
+        }
+
+        return sequence;
+    }
+
+    protected SysRange range()
+    {
+        return range;
+    }
+
+    public abstract SysSequence reverse()
+    {
+    }
+
+    public boolean reversed()
+    {
+        boolean ret = this.range().start() > this.range().end();
+
+        return ret;
+    }
+
+    public abstract anytype reverseStep()
+    {
+    }
+
+    public anytype start()
+    {
+        anytype ret = this.range().start();
+
+        return ret;
+    }
+
+    public abstract anytype step()
+    {
+    }
+
+    public str toString()
+    {
+        return strfmt('%1:[%2]', this.step(), this.range().toString());
+    }
+}

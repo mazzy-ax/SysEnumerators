@@ -1,0 +1,40 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public interface ISysEnumerator
+{
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+    }
+
+    public boolean moveNext()
+    {
+    }
+
+    //TODO mazzy: extract to special interface?
+    public void reset()
+    {
+    }
+
+    // TODO int64?
+    public boolean skip(int items = 1)
+    {
+    }
+
+    public anytype xCurrent()
+    {
+    }
+
+    public anytype xCurrentIdx()
+    {
+    }
+
+    public anytype xCurrentKey()
+    {
+    }
+
+    public anytype xCurrentValue()
+    {
+    }
+}

@@ -1,0 +1,99 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+
+/// <summary>
+/// Базовый энумератор для CommaIo, AsciiIo, TextIo, BynaryIo, CommaTxtIo
+/// </summary>
+abstract public class SysEnumerator_IoBase extends xSysEnumerator
+{
+    container current;
+
+    protected boolean begin()
+    {
+        boolean ret = super() && this.next();
+
+        return ret;
+    }
+
+    public container current()
+    {
+        return current;
+    }
+
+    public container currentIdx()
+    {
+        return this.current();
+    }
+
+    public container currentKey()
+    {
+        return this.current();
+    }
+
+    public container currentValue()
+    {
+        return this.current();
+    }
+
+    protected boolean currentValueProvided()
+    {
+        return true;
+    }
+
+    protected boolean more()
+    {
+        boolean ret = this.xBase() && (this.xBase().status() == IO_Status::Ok);
+
+        return ret;
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret && this.xBase() )
+        {
+            current = this.xBase().read();
+        }
+
+        return ret;
+    }
+
+    public void reset()
+    {
+        throw error(Error::wrongUseOfFunction(funcname()));
+    }
+
+    abstract public Io xBase()
+    {
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_Io construct(Io base = null)
+    {
+        SysEnumerator_Io enumerator = new SysEnumerator_Io(base);
+
+        return enumerator;
+    }
+
+}

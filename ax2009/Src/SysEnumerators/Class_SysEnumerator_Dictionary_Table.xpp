@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public class SysEnumerator_Dictionary_Table extends SysEnumerator_Dictionary
@@ -22,7 +22,7 @@ public class SysEnumerator_Dictionary_Table extends SysEnumerator_Dictionary
         return true;
     }
 
-    //TODO mazzy: SysDictClass??
+    //TODO mazzy: SysDictTable??
     public DictTable currentValue()
     {
         return this.base().tableObject(this.current());

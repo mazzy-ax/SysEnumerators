@@ -1,0 +1,67 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_DictRelation extends SysEnumerator_Indexed
+{
+    DictRelation base;
+
+    public DictRelation base()
+    {
+        return base;
+    }
+
+    public fieldId current()
+    {
+        int idx = this.currentIdx();
+        fieldId ret = this.base().lineTableValue(idx);
+
+        return ret;
+    }
+
+    public fieldId currentKey()
+    {
+        return this.current();
+    }
+
+    public fieldId currentValue()
+    {
+        return this.current();
+    }
+
+    protected int defaultEnd()
+    {
+        int ret = this.base().lines();
+
+        return ret;
+    }
+
+    public void new(DictRelation _base, SysSequenceInt _idx = null)
+    {;
+        Debug::assert(_base != null);
+
+        base = _base;
+        super(_idx);
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_DictRelation construct(DictRelation base, SysSequenceInt idx = null)
+    {
+        SysEnumerator_DictRelation enumerator = new SysEnumerator_DictRelation(base, idx);
+
+        return enumerator;
+    }
+}

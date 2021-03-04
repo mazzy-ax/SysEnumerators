@@ -1,0 +1,45 @@
+﻿//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysRangeReal extends SysRange
+{
+    real start;
+    real end;
+
+    public SysRange clone()
+    {
+        SysRangeReal range = SysRangeReal::construct(this.start(), this.end());
+
+        return range;
+    }
+
+    public anytype end()
+    {
+        return end;
+    }
+
+    public void new(real _start = 0, real _end = RealMax())
+    {
+        start = _start;
+        end = _end;
+    }
+
+    public SysRange reverse()
+    {
+        SysRangeReal range = SysRangeReal::construct(end, start);
+
+        return range;
+    }
+
+    public anytype start()
+    {
+        return start;
+    }
+
+    public static SysRangeReal construct(real _start = 0, real _end = RealMax())
+    {
+        SysRangeReal range = new SysRangeReal(_start, _end);
+
+        return range;
+    }
+}

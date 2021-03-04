@@ -1,0 +1,653 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysSequenceRealTest extends SysTestCase
+{
+
+    void test1st()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real step = 1.0;
+        int64 iterations = 4;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void test1stDefault()
+    {
+        SysSequenceReal range = SysSequenceReal::construct();
+
+        this.assertNotNull(range);
+
+        this.assertEquals(1, range.start());
+        this.assertEquals(RealMax(), range.end());
+    }
+
+    void test3()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real step = 3.0;
+        int64 iterations = 2;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void test9()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real step = 9.0;
+        int64 iterations = 1;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testClone()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+        SysSequenceReal clone = range.clone();
+
+        this.assertNotNull(range);
+        this.assertNotNull(clone);
+
+        this.assertEquals(range.start(), clone.start());
+        this.assertEquals(range.end(), clone.end());
+        this.assertEquals(range.distance(), clone.distance());
+        this.assertEquals(range.reversed(), clone.reversed());
+    }
+
+    void testContains()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.contains(start));
+        this.assertTrue(range.contains(end));
+        this.assertTrue(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testContainsEmpty()
+    {
+        Real start = 5.0;
+        Real end = 2.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.contains(start));
+        this.assertFalse(range.contains(end));
+        this.assertFalse(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testContainsZero()
+    {
+        Real start = -5.0;
+        Real end = 2.0;
+        Real middle = 0.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.contains(start));
+        this.assertTrue(range.contains(end));
+        this.assertTrue(range.contains(middle));
+        this.assertFalse(range.contains(start - 1));
+        this.assertFalse(range.contains(end + 1));
+    }
+
+    void testCover()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertTrue(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testCoverEmpty()
+    {
+        Real start = 5.0;
+        Real end = 2.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertFalse(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testCoverZero()
+    {
+        Real start = -5.0;
+        Real end = 2.0;
+        Real middle = 0.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertFalse(range.cover(start));
+        this.assertFalse(range.cover(end));
+        this.assertTrue(range.cover(middle));
+        this.assertFalse(range.cover(start - 1));
+        this.assertFalse(range.cover(end + 1));
+    }
+
+    void testDefault()
+    {
+        SysSequenceReal sequence = SysSequenceReal::construct();
+
+        this.assertNotNull(sequence);
+        this.assertEquals(1.0, sequence.start());
+        this.assertEquals(RealMax(), sequence.end());
+        //this.assertEquals(RealMax(), sequence.distance());
+        this.assertEquals(1.0, sequence.step());
+
+        //this.assertEquals(int64Max()-1, sequence.estimatedIterations());
+    }
+
+    void testDistance()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceDefault()
+    {
+        SysSequenceReal range = SysSequenceReal::construct();
+
+        this.assertNotNull(range);
+
+        this.assertEquals(RealMax()-1, range.distance());
+    }
+
+    void testDistanceEmpty()
+    {
+        Real start = 5.0;
+        Real end = 2.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertEquals(end - start, range.distance());
+    }
+
+    void testDistanceMaxMin()
+    {
+        SysSequenceReal range = SysSequenceReal::construct(RealMax(), RealMin());
+
+        this.assertNotNull(range);
+
+        //this.assertEquals(0.00, round(range.distance(),4));
+    }
+
+    void testDistanceMinMax()
+    {
+        SysSequenceReal range = SysSequenceReal::construct(RealMin(), RealMax());
+
+        this.assertNotNull(range);
+
+        //this.assertEquals(0.00, round(range.distance(),4));
+    }
+
+    void testEmpty()
+    {
+        Real start = 5.0;
+        Real end = 2.0;
+        Real step = 1.0;
+        int64 iterations = 0;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testEqual()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+        SysSequenceReal middleRange = SysSequenceReal::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.equal(range));
+        this.assertTrue(range.equal(range.clone()));
+        this.assertTrue(range.equal(range.reverse().reverse()));
+        this.assertFalse(range.equal(middleRange));
+        this.assertFalse(range.equal(null));
+    }
+
+    void testGetEnumerator()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real step = 1.0;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+        SysEnumerator se = sequence.getEnumerator();
+
+        this.assertNotNull(se);
+        this.assertNotNull(se.enumerators());
+    }
+
+    void testGetNext()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real step = 1.0;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertEquals(start + step, sequence.getNext(start));
+        this.assertEquals(end + step, sequence.getNext(end));
+    }
+
+    void testIn()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+        SysSequenceReal middleRange = SysSequenceReal::construct(middle, end);
+
+        this.assertNotNull(range);
+        this.assertNotNull(middleRange);
+
+        this.assertTrue(range.in(range));
+        this.assertTrue(middleRange.in(range));
+        this.assertFalse(range.in(middleRange));
+        this.assertFalse(range.in(null));
+    }
+
+    void testIsBoundary()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+
+        this.assertNotNull(range);
+
+        this.assertTrue(range.isBoundary(start));
+        this.assertTrue(range.isBoundary(end));
+        this.assertFalse(range.isBoundary(middle));
+    }
+
+    void testMaxMin1()
+    {
+        Real start = RealMax();
+        Real end = RealMin();
+        Real step = 1.0;
+        int64 iterations = 0;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMaxMin2()
+    {
+        Real start = RealMax();
+        Real end = RealMin();
+        Real step = 2.0;
+        int64 iterations = 0;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMaxMin3()
+    {
+        Real start = RealMax();
+        Real end = RealMin();
+        Real step = 3.0;
+        int64 iterations = 0;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinMax1()
+    {
+        Real start = RealMin();
+        Real end = RealMax();
+        Real step = 1.0;
+        int64 iterations = int64Max();
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        //this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinMax2()
+    {
+        Real start = RealMin();
+        Real end = RealMax();
+        Real step = 2.0;
+        int64 iterations = int64Max();
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        //this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinMax3()
+    {
+        Real start = RealMin();
+        Real end = RealMax();
+        Real step = 3.0;
+        int64 iterations = int64Max();
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        //this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinusMax1()
+    {
+        Real start = -1;
+        Real end = RealMax();
+        Real step = 1.0;
+        int64 iterations = int64Max();
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        //this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinusMax2()
+    {
+        Real start = -1;
+        Real end = RealMax();
+        Real step = 2.0;
+        int64 iterations = int64Max();
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        //this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testMinusMax3()
+    {
+        Real start = -1;
+        Real end = RealMax();
+        Real step = 3.0;
+        int64 iterations = int64Max();
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        //this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testNegative1()
+    {
+        Real start = -5.0;
+        Real end = 2.0;
+        Real step = 1.0;
+        int64 iterations = 8;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testNegative3()
+    {
+        Real start = -5.0;
+        Real end = 2.0;
+        Real step = 3.0;
+        int64 iterations = 3;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testNegative9()
+    {
+        Real start = -5.0;
+        Real end = 2.0;
+        Real step = 9.0;
+        int64 iterations = 1;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        this.assertEquals(start, sequence.start());
+        this.assertEquals(end, sequence.end());
+        this.assertEquals(end - start, sequence.distance());
+        this.assertEquals(step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testReverse()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real middle = 3.0;
+
+        SysSequenceReal range = SysSequenceReal::construct(start, end);
+        SysSequenceReal reverseRange = range.reverse();
+
+        this.assertNotNull(range);
+        this.assertNotNull(reverseRange);
+
+        this.assertFalse(range.reversed());
+        this.assertTrue(reverseRange.reversed());
+        this.assertEquals(range.start(), reverseRange.end());
+        this.assertEquals(range.end(), reverseRange.start());
+        this.assertEquals(-range.distance(), reverseRange.distance());
+    }
+
+    void testReverse1()
+    {
+        Real start = -5.0;
+        Real end = 2.0;
+        Real step = 1.0;
+        int64 iterations = 8;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step).reverse();
+
+        this.assertNotNull(sequence);
+        this.assertEquals(end, sequence.start());
+        this.assertEquals(start, sequence.end());
+        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(-step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testReverse3()
+    {
+        Real start = -5.0;
+        Real end = 2.0;
+        Real step = 3.0;
+        int64 iterations = 3;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step).reverse();
+
+        this.assertNotNull(sequence);
+        this.assertEquals(end, sequence.start());
+        this.assertEquals(start, sequence.end());
+        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(-step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testReverse9()
+    {
+        Real start = -5.0;
+        Real end = 2.0;
+        Real step = 9.0;
+        int64 iterations = 1;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step).reverse();
+
+        this.assertNotNull(sequence);
+        this.assertEquals(end, sequence.start());
+        this.assertEquals(start, sequence.end());
+        this.assertEquals(start - end, sequence.distance());
+        this.assertEquals(-step, sequence.step());
+
+        this.assertEquals(iterations, sequence.estimatedIterations());
+    }
+
+    void testToString()
+    {
+        Real start = 2.0;
+        Real end = 5.0;
+        Real step = 1.0;
+        int64 iterations = 4;
+
+        SysSequenceReal sequence = SysSequenceReal::construct(start, end, step);
+
+        this.assertNotNull(sequence);
+        //this.assertEquals(strfmt('%3:[%1..%2]', start, end, step), sequence.toString());
+    }
+}

@@ -1,0 +1,128 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_XmlNodeList extends xSysEnumerator
+{
+    XmlNodeList base;
+    XmlNode node;
+    int idx;
+
+    public XmlNodeList base()
+    {
+        return base;
+    }
+
+    protected boolean begin()
+    {
+        boolean ret = super() && this.next();
+
+        return ret;
+    }
+
+    public XmlNode current()
+    {
+        return node;
+    }
+
+    public int currentIdx()
+    {
+        return idx;
+    }
+
+    public int currentKey()
+    {
+        return this.currentIdx();
+    }
+
+    public XmlNode currentValue()
+    {
+        return this.current();
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        int64 ret = this.base().length();
+
+        return ret;
+    }
+
+    protected void init()
+    {
+        idx = -1;
+        super();
+    }
+
+    protected boolean more()
+    {
+        boolean ret = super() && (node != null);
+
+        return ret;
+    }
+
+    public void new(XmlNodeList _base = null)
+    {
+        if( _base == null )
+        {
+            _base = XmlDocument::newBlank().root().selectNodes('');
+        }
+
+        base = _base;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            if( this.base() )
+            {
+                node = this.base().nextNode();
+                idx++;
+            }
+            else
+            {
+                node = null;
+            }
+        }
+
+        return ret;
+    }
+
+    public void reset()
+    {
+        if( this.base() )
+        {
+            this.base().reset();
+        }
+        super();
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_XmlNodeList construct(XmlNodeList base)
+    {
+        SysEnumerator_XmlNodeList enumerator = new SysEnumerator_XmlNodeList(base);
+
+        return enumerator;
+    }
+}

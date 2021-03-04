@@ -1,7 +1,7 @@
-﻿Exportfile for AOT version 1.0 or later
+Exportfile for AOT version 1.0 or later
 Formatversion: 1
 
-***Element: DBE
+DBE
 
 ; Microsoft Dynamics AX Enumtype : SysEnumeratorPosition unloaded
 ; --------------------------------------------------------------------------------
@@ -39,4 +39,4 @@ Formatversion: 1
   ENDENUMTYPE
   
 
-***Element: END
+END

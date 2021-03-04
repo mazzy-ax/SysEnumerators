@@ -1,0 +1,70 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public interface ISysSequence
+{
+
+    public int64 estimatedIterations()
+    {
+    }
+
+    public ISysSequence xClone()
+    {
+    }
+
+    public boolean xContains(anytype value)
+    {
+    }
+
+    public boolean xCover(anytype value)
+    {
+    }
+
+    public anytype xDistance()
+    {
+    }
+
+    public anyType xEnd()
+    {
+    }
+
+    public boolean xEqual(ISysSequence range)
+    {
+    }
+
+    public anytype xGetNext(anytype value)
+    {
+    }
+
+    public boolean xIn(ISysSequence otherSequence)
+    {
+    }
+
+    public boolean xIsBoundary(anytype value)
+    {
+    }
+
+    public ISysSequence xNormalize()
+    {
+    }
+
+    public ISysSequence xReverse()
+    {
+    }
+
+    public boolean xReversed()
+    {
+    }
+
+    public anytype xReverseStep()
+    {
+    }
+
+    public anytype xStart()
+    {
+    }
+
+    public anytype xStep()
+    {
+    }
+}

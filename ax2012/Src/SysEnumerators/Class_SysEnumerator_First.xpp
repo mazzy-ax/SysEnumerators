@@ -1,0 +1,134 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+
+/// <summary>
+/// Прекращает итерацию после пербора N первых элементов.
+/// Можно вызывать reset энумератора.
+/// </summary>
+public class SysEnumerator_First extends xSysEnumerator
+{
+    int first;
+    int remains;
+
+    protected boolean begin()
+    {
+        boolean ret = super() && this.next();
+
+        return ret;
+    }
+
+    public int current()
+    {
+        return this.first() - this.remains();
+    }
+
+    public int currentIdx()
+    {
+        return this.current();
+    }
+
+    public int currentKey()
+    {
+        return this.current();
+    }
+
+    public int currentValue()
+    {
+        return this.current();
+    }
+
+    public int64 estimatedIterations(int64 estimatedIterations = -1)
+    {
+        return this.first();
+    }
+
+    /// <summary>
+    /// Метод возвращает число итераций, которые нужно оставить в последовательности
+    /// </summary>
+    /// <remarks>
+    /// Метод можно вызвать и в цикле, и после завершения цикла
+    /// </remarks>
+    public int first()
+    {
+        return first;
+    }
+
+    protected void init()
+    {
+        remains = first;
+    }
+
+    protected boolean more()
+    {
+        return remains >= 0;
+    }
+
+    public void new(int items = 1)
+    {
+        if( items < 0 )
+        {
+            items = 0;
+        }
+
+        first = items;
+        super();
+    }
+
+    protected boolean next()
+    {
+        boolean ret = super();
+
+        if( ret )
+        {
+            --remains;
+        }
+
+        return ret;
+    }
+
+    /// <summary>
+    /// Метод возвращает число оставщихся невыполненными итераций
+    /// </summary>
+    /// <remarks>
+    /// Метод можно вызвать и в цикле, и после завершения цикла
+    /// </remarks>
+    public int remains()
+    {
+        int ret = 0;
+
+        if( this.position() != SysEnumeratorPosition::Outside )
+        {
+            ret = remains;
+        }
+
+        return ret;
+    }
+
+    public anytype xCurrent()
+    {
+        return this.current();
+    }
+
+    public anytype xCurrentIdx()
+    {
+        return this.currentIdx();
+    }
+
+    public anytype xCurrentKey()
+    {
+        return this.currentKey();
+    }
+
+    public anytype xCurrentValue()
+    {
+        return this.currentValue();
+    }
+
+    public static SysEnumerator_First construct(int items = 1)
+    {
+        SysEnumerator_First enumerator = new SysEnumerator_First(items);
+
+        return enumerator;
+    }
+}

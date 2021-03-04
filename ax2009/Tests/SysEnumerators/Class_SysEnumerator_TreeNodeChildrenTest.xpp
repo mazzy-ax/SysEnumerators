@@ -1,0 +1,135 @@
+//
+// mazzy, https://github.com/mazzy-ax/SysEnumerators
+//
+public class SysEnumerator_TreeNodeChildrenTest extends SysTestCase
+{
+
+    public void testChildNodes()
+    {
+        SysDictTable sysDictTable = new SysDictTable(tablenum(CustTable));
+        SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictTable.treeNode());
+        int64 zero64;
+
+        this.assertNotNull(se);
+        this.assertEquals(zero64 + 6, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('Fields', se.current().AOTname());
+        this.assertEquals('Fields', se.currentValue().AOTname());
+        this.assertEquals('Fields', se.currentIdx().AOTname());
+        this.assertEquals('Fields', se.currentKey().AOTname());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('Field Groups', se.current().AOTname());
+        this.assertEquals('Field Groups', se.currentValue().AOTname());
+        this.assertEquals('Field Groups', se.currentIdx().AOTname());
+        this.assertEquals('Field Groups', se.currentKey().AOTname());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('Indexes', se.current().AOTname());
+        this.assertEquals('Indexes', se.currentValue().AOTname());
+        this.assertEquals('Indexes', se.currentIdx().AOTname());
+        this.assertEquals('Indexes', se.currentKey().AOTname());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('Relations', se.current().AOTname());
+        this.assertEquals('Relations', se.currentValue().AOTname());
+        this.assertEquals('Relations', se.currentIdx().AOTname());
+        this.assertEquals('Relations', se.currentKey().AOTname());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('DeleteActions', se.current().AOTname());
+        this.assertEquals('DeleteActions', se.currentValue().AOTname());
+        this.assertEquals('DeleteActions', se.currentIdx().AOTname());
+        this.assertEquals('DeleteActions', se.currentKey().AOTname());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('Methods', se.current().AOTname());
+        this.assertEquals('Methods', se.currentValue().AOTname());
+        this.assertEquals('Methods', se.currentIdx().AOTname());
+        this.assertEquals('Methods', se.currentKey().AOTname());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(zero64 + 6, se.estimatedIterations());
+    }
+
+    public void testEmpty()
+    {
+        SysDictClass sysDictClass = new SysDictClass(classnum(Global));
+        SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictClass.treeNode().AOTfirstChild());
+        int64 zero64;
+
+        this.assertNotNull(se);
+        this.assertEquals(0, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(0, se.estimatedIterations());
+    }
+
+    public void testFindChildNodes()
+    {
+        SysDictTable    sysDictTable = new SysDictTable(tablenum(CustTable));
+        SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(sysDictTable.treeNode(), 'Indexes');
+        int64 zero64;
+
+        this.assertNotNull(se);
+        this.assertEquals(zero64 + 6, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('Indexes', se.current().AOTname());
+        this.assertEquals('Indexes', se.currentValue().AOTname());
+        this.assertEquals('Indexes', se.currentIdx().AOTname());
+        this.assertEquals('Indexes', se.currentKey().AOTname());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('Relations', se.current().AOTname());
+        this.assertEquals('Relations', se.currentValue().AOTname());
+        this.assertEquals('Relations', se.currentIdx().AOTname());
+        this.assertEquals('Relations', se.currentKey().AOTname());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('DeleteActions', se.current().AOTname());
+        this.assertEquals('DeleteActions', se.currentValue().AOTname());
+        this.assertEquals('DeleteActions', se.currentIdx().AOTname());
+        this.assertEquals('DeleteActions', se.currentKey().AOTname());
+
+        this.assertTrue(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Inside, se.position());
+        this.assertEquals('Methods', se.current().AOTname());
+        this.assertEquals('Methods', se.currentValue().AOTname());
+        this.assertEquals('Methods', se.currentIdx().AOTname());
+        this.assertEquals('Methods', se.currentKey().AOTname());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(zero64 + 6, se.estimatedIterations());
+    }
+
+    public void testNull()
+    {
+        SysEnumerator_TreeNodeChildren se = SysEnumerator_TreeNodeChildren::construct(null);
+        int64 zero64;
+
+        this.assertNotNull(se);
+        this.assertEquals(0, se.estimatedIterations());
+        this.assertEquals(SysEnumeratorPosition::BeforeFirstElement, se.position());
+
+        this.assertFalse(se.moveNext());
+        this.assertEquals(SysEnumeratorPosition::Outside, se.position());
+        this.assertEquals(0, se.estimatedIterations());
+    }
+}

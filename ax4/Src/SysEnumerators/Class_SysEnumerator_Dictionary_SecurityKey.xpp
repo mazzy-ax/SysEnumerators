@@ -1,4 +1,4 @@
-﻿//
+//
 // mazzy, https://github.com/mazzy-ax/SysEnumerators
 //
 public class SysEnumerator_Dictionary_SecurityKey extends SysEnumerator_Dictionary
@@ -22,7 +22,6 @@ public class SysEnumerator_Dictionary_SecurityKey extends SysEnumerator_Dictiona
         return true;
     }
 
-    //TODO mazzy: SysDictClass??
     public DictSecurityKey currentValue()
     {
         return this.base().securityKeyObject(this.current());
