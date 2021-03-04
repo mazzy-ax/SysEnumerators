@@ -13,7 +13,7 @@ see also [Releases on GitHub](https://github.com/mazzy-ax/SysEnumerators/release
 
 * исправлены неточные TODO
 * исправлена неправильная передача параметра при инициализации в `SysEnumerator_ConfigurationKeySet`
-* исправлено поведение `SysEnumerator_Sleep` - код метода `next` перенесен в метод `moveNextPost` - теперь `sleep` выполняется после того, как отработают все энумераторы в группе -
+* исправлено поведение `SysEnumerator_Sleep` - код метода `next` перенесен в метод `moveNextPost` - теперь `sleep` выполняется после того, как отработают все энумераторы в группе
 * исправлена инициализация `SysEnumerator_SysOperationProgress` в случае, если передан null параметр
 
 ## CRLF в .xpo-файлах - 2020-03-02
